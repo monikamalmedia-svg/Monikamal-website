@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import { getLocale } from "next-intl/server";
+import { Analytics } from "@vercel/analytics/next";
 import { SITE_URL } from "@/lib/site";
 import { CSPostHogProvider } from "./providers";
 import "./globals.css";
@@ -87,6 +88,7 @@ export default async function RootLayout({ children }: Props) {
         <CSPostHogProvider>
           {children}
         </CSPostHogProvider>
+        <Analytics />
       </body>
     </html>
   );
