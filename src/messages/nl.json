@@ -1,0 +1,416 @@
+{
+  "Metadata": {
+    "title": "Monika Mal — AI Visual Director",
+    "description": "Cinematische visuals en AI-commercials voor merken met hoge conversie.",
+    "ogTitle": "Monika Mal — AI Visual Director",
+    "ogDescription": "Cinematische visuals en AI-commercials voor merken met hoge conversie.",
+    "keywords": [
+      "AI-videoproductie",
+      "e-commerce commercials",
+      "AI-commercials",
+      "productvideo ads",
+      "Meta ads video",
+      "TikTok ads video",
+      "custom AI-avatar",
+      "AI-fotografie"
+    ]
+  },
+  "Hero": {
+    "kicker": "AI-Driven Video Production",
+    "title": "AI Commercials",
+    "subtitle": "Cinematische visual assets voor e-commerce merken met hoge conversie.",
+    "cta": "Boek een project",
+    "ctaSecondary": "Bekijk werk",
+    "scrollHint": "Scroll naar beneden"
+  },
+  "Showreel": {
+    "ariaLabel": "Monika Mal showreel",
+    "unmute": "Geluid aan",
+    "mute": "Geluid uit"
+  },
+  "Portfolio": {
+    "label": "Portfolio",
+    "title": "Werk voor merken",
+    "close": "Sluiten",
+    "play": "Video afspelen",
+    "pause": "Video pauzeren",
+    "mute": "Geluid uit",
+    "unmute": "Geluid aan",
+    "filterLabel": "Werk filteren",
+    "filterVideos": "AI-video's",
+    "filterPhotos": "AI-foto's",
+    "items": {
+      "1": {
+        "title": "Lumina Skin",
+        "category": "E-commerce / Beauty"
+      },
+      "2": {
+        "title": "Nord Weave",
+        "category": "E-commerce / Mode"
+      },
+      "3": {
+        "title": "Atelier Noir",
+        "category": "AI-commercial / Luxe"
+      },
+      "4": {
+        "title": "Velvet Home",
+        "category": "E-commerce / Interieur"
+      },
+      "5": {
+        "title": "Pulse Active",
+        "category": "E-commerce / Sport"
+      },
+      "6": {
+        "title": "Saffron Market",
+        "category": "E-commerce / Food"
+      },
+      "7": {
+        "title": "Aurelia Serum",
+        "category": "AI-fotografie / Beauty"
+      },
+      "8": {
+        "title": "Maison Linen",
+        "category": "AI-fotografie / Mode"
+      },
+      "9": {
+        "title": "Nocturne Glass",
+        "category": "AI-fotografie / Luxe"
+      },
+      "10": {
+        "title": "Holm Table",
+        "category": "AI-fotografie / Interieur"
+      },
+      "11": {
+        "title": "Apex Run",
+        "category": "AI-fotografie / Sport"
+      },
+      "12": {
+        "title": "Citrus Grove",
+        "category": "AI-fotografie / Food"
+      }
+    }
+  },
+  "LanguageSwitcher": {
+    "label": "Taal",
+    "en": "EN",
+    "nl": "NL"
+  },
+  "Navbar": {
+    "brand": "Monika Mal",
+    "navLabel": "Hoofdnavigatie",
+    "portfolio": "Portfolio",
+    "about": "Over mij",
+    "pipeline": "Hoe ik werk",
+    "pricing": "Prijzen",
+    "faq": "FAQ",
+    "cta": "Neem contact op",
+    "openMenu": "Menu openen",
+    "closeMenu": "Menu sluiten"
+  },
+  "GetInTouch": {
+    "title": "Een custom verzoek of project?",
+    "subtitle": "Stuur me een bericht — ik reageer zo snel mogelijk.",
+    "name": "Naam",
+    "email": "E-mail",
+    "message": "Projectdetails",
+    "cta": "Bericht versturen",
+    "sending": "Versturen...",
+    "success": "Dank je. Ik bekijk je briefing en reageer binnen 24 uur.",
+    "error": "Er ging iets mis. Probeer het over een moment opnieuw.",
+    "invalidEmail": "Vul een geldig e-mailadres in.",
+    "required": "Vul alle verplichte velden in.",
+    "close": "Sluiten",
+    "packageLabel": "Custom verzoek"
+  },
+  "TrustBar": {
+    "title": "Vertrouwd door merken"
+  },
+  "Pricing": {
+    "kicker": "Prijzen",
+    "title": "Prijs & Pakketten",
+    "badge": "Populair",
+    "packages": {
+      "starter": {
+        "name": "Starter",
+        "price": "€400",
+        "cta": "Kies pakket",
+        "features": {
+          "video": "1 AI-commercial (tot 30 seconden)",
+          "avatar": "1 custom AI-avatar",
+          "revisions": "2 revisierondes",
+          "delivery": "Levering binnen 3–5 dagen"
+        }
+      },
+      "growth": {
+        "name": "Growth",
+        "price": "€700",
+        "cta": "Kies pakket",
+        "features": {
+          "videos": "2 video’s met individuele hooks",
+          "craft": "ASMR-geluid en signature craft-technieken",
+          "revisions": "2 revisierondes",
+          "delivery": "Levering binnen 6–10 werkdagen"
+        }
+      },
+      "partnership": {
+        "name": "Samenwerking",
+        "price": "€1.200/maand",
+        "perUnit": "€300 / video",
+        "cta": "Kies pakket",
+        "features": {
+          "videos": "4 AI-video’s per maand",
+          "priority": "Prioriteit in planning — productie buiten de wachtrij",
+          "slot": "Een vast slot in de agenda — gegarandeerde maandelijkse productie",
+          "revisions": "2 revisierondes per video"
+        }
+      }
+    }
+  },
+  "Photography": {
+    "kicker": "AI Photography",
+    "title": "Professionele foto’s voor productpagina’s en socials",
+    "intro": "AI-fotografie voor merken — een sneller alternatief voor klassieke productfotografie, met dezelfde cinematische uitstraling als mijn videowerk.",
+    "badge": "Voordeliger",
+    "cta": "Kies pakket",
+    "packages": {
+      "five": {
+        "name": "5 foto’s",
+        "price": "€100",
+        "perPhoto": "€20 / foto",
+        "features": {
+          "count": "5 AI-gegenereerde merkfoto’s",
+          "formats": "Vierkant & verticaal voor productkaarten en socials",
+          "revisions": "1 revisieronde inbegrepen",
+          "delivery": "Levering binnen 2–4 werkdagen"
+        }
+      },
+      "ten": {
+        "name": "10 foto’s",
+        "price": "€150",
+        "perPhoto": "€15 / foto",
+        "features": {
+          "count": "10 AI-gegenereerde merkfoto’s",
+          "formats": "Vierkant & verticaal voor productkaarten en socials",
+          "revisions": "1 revisieronde inbegrepen",
+          "delivery": "Levering binnen 2–4 werkdagen"
+        }
+      }
+    }
+  },
+  "Pipeline": {
+    "kicker": "Hoe ik werk",
+    "title": "Van concept tot commercial",
+    "intro": "Een strak proces in vier stappen — cinematische kwaliteit, zonder klassieke productiecrew.",
+    "steps": {
+      "brief": {
+        "title": "Briefing",
+        "body": "Ik breng merk, doelgroep en aanbod in kaart — en zet de creatieve koers vast vóór de eerste frame."
+      },
+      "concept": {
+        "title": "Concept",
+        "body": "Sfeer, hooks en storyboard. Jij keurt de look goed, zodat productie gericht en snel blijft."
+      },
+      "production": {
+        "title": "Productie",
+        "body": "AI-video, custom avatars, sound design en signature craft — als afgewerkte commercial."
+      },
+      "delivery": {
+        "title": "Oplevering",
+        "body": "Revisies volgens je pakket, daarna bestanden klaar voor ads, productpagina’s en socials."
+      }
+    }
+  },
+  "Contact": {
+    "kicker": "Contact",
+    "title": "Vertel me over het merk",
+    "intro": "Deel product, deadline en format. Ik reageer met een heldere volgende stap en het juiste pakket.",
+    "name": "Naam",
+    "email": "E-mail",
+    "brand": "Merk",
+    "package": "Gewenst pakket",
+    "packageNone": "Niet gekozen — bespreken in een gesprek",
+    "packageOptions": {
+      "none": "Niet gekozen — bespreken in een gesprek",
+      "starter": "Starter — €400",
+      "growth": "Growth — €700",
+      "partnership": "Samenwerking — €1.200/maand",
+      "photographyFive": "Fotografie — 5 foto’s (€100)",
+      "photographyTen": "Fotografie — 10 foto’s (€150)"
+    },
+    "message": "Project",
+    "cta": "Brief versturen",
+    "sending": "Versturen...",
+    "success": "Dank je. Ik bekijk je briefing en reageer binnen 24 uur.",
+    "error": "Er ging iets mis. Probeer het opnieuw of mail me rechtstreeks.",
+    "invalidEmail": "Vul een geldig e-mailadres in.",
+    "required": "Vul alle verplichte velden in."
+  },
+  "About": {
+    "kicker": "Over mij",
+    "title": "Over mij",
+    "photoPlaceholder": "Foto volgt binnenkort",
+    "videoPlaceholder": "Video volgt binnenkort",
+    "mute": "Geluid uit",
+    "unmute": "Geluid aan",
+    "play": "Video afspelen",
+    "pause": "Video pauzeren",
+    "replay": "Opnieuw",
+    "lead": "Ik ben Monika, <specialist>AI Visual Director</specialist> — ik maak high-end commercials voor e-commerce merken.",
+    "body1": "Ik maak overtuigende video’s die <customers>kijkers in klanten veranderen</customers>.",
+    "body2": "<fiveYears>Vijf jaar geleden</fiveYears> pakte ik een camera en begon ik <ugc>UGC-content</ugc> te maken: mezelf, mensen en de schoonheid om me heen — emoties, verhalen en vluchtige momenten door mijn lens. In de loop der jaren heb ik visuele storytelling meester gemaakt, met licht, beweging en narratief, zodat elke video levendig en engaging aanvoelt.",
+    "body3": "De <twoYears>afgelopen twee jaar</twoYears> ben ik volledig toegewijd aan <aiCreation>AI-videoproductie</aiCreation>: mijn achtergrond in productie gecombineerd met cutting-edge artificial intelligence. Die combinatie laat me frisse hoeken vinden, high-converting visuals bouwen en sfeer op een nieuw niveau overbrengen. Als video creator help ik merken aan engaging, social-first content die echt verbindt. Van AI-commercials en productvideo’s tot UGC- en lifestylecampagnes begeleid ik het hele creatieve proces — van concept en storyboard tot film, AI-generatie, editing en oplevering.",
+    "worksTitle": "Mijn werk",
+    "works": {
+      "one": "Werk placeholder 01",
+      "two": "Werk placeholder 02",
+      "three": "Werk placeholder 03"
+    },
+    "ctaTitle": "Laten we je volgende AI-commercial maken",
+    "ctaBody": "Deel je product en deadline — ik start vanuit een heldere briefing.",
+    "cta": "Neem contact op"
+  },
+  "Footer": {
+    "brand": "Monika Mal",
+    "tagline": "Cinematische commercials voor e-commerce merken",
+    "navLabel": "Footer",
+    "portfolio": "Portfolio",
+    "about": "Over mij",
+    "pipeline": "Hoe ik werk",
+    "pricing": "Prijzen",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "tiktok": "TikTok",
+    "privacy": "Privacybeleid",
+    "copyright": "© {year} Monika Mal. Alle rechten voorbehouden."
+  },
+  "Faq": {
+    "kicker": "FAQ",
+    "title": "Vragen voordat we starten",
+    "intro": "Heldere antwoorden voor e-commerce teams die AI-commercials en ads plannen.",
+    "items": {
+      "turnaround": {
+        "question": "Wat is de gebruikelijke doorlooptijd?",
+        "answer": "Starter-projecten lever ik in <hl>3–5 werkdagen</hl>. Growth- en Commercial-pakketten duren <hl>6–10 werkdagen</hl>. Retainer-partners krijgen prioriteitsslots in mijn agenda."
+      },
+      "product": {
+        "question": "Weerspiegelt de AI-video mijn fysieke product nauwkeurig?",
+        "answer": "<hl>100% precisie</hl>. Ik integreer high-res 3D- of fotobronbestanden van je product in custom AI-engines, zodat de look realistisch blijft — zonder digitale vervormingen."
+      },
+      "ads": {
+        "question": "Kan ik deze video’s inzetten als Meta-, TikTok- en TV-ads?",
+        "answer": "Ja. Je krijgt <hl>volledige commerciële rechten</hl> op alle gegenereerde video- en foto-assets, wereldwijd voor digitale advertising en broadcast."
+      },
+      "revisions": {
+        "question": "Hoeveel revisierondes zitten erbij?",
+        "answer": "Elk project bevat <hl>2 revisierondes</hl> voor timing, color grading, sound design en typografie."
+      },
+      "payment": {
+        "question": "Hoe werken betaling en onboarding?",
+        "answer": "Ik werk met <hl>50% aanbetaling</hl> om productie te starten. De resterende 50% is verschuldigd bij finale goedkeuring en 4K-oplevering."
+      }
+    }
+  },
+  "Cookies": {
+    "title": "Cookies",
+    "barBody": "Ik gebruik cookies om je ervaring op deze website te verbeteren. Door verder te browsen, ga je akkoord met mijn gebruik van cookies.",
+    "learnMore": "Meer informatie",
+    "accept": "Accepteren",
+    "body": "Ik gebruik cookies om de site te laten werken en je voorkeuren te onthouden. Optionele analytics- en marketingcookies worden alleen geplaatst als je dat toestaat. Details staan in mijn",
+    "privacy": "Privacybeleid",
+    "acceptAll": "Alles accepteren",
+    "necessaryOnly": "Alleen noodzakelijk",
+    "customize": "Aanpassen",
+    "settingsTitle": "Cookie-instellingen",
+    "settingsIntro": "Noodzakelijke cookies blijven altijd aan. Analytics en marketing kun je hieronder toestaan of uitzetten.",
+    "settingsLink": "Cookie-instellingen",
+    "required": "Verplicht",
+    "save": "Voorkeuren opslaan",
+    "back": "Terug",
+    "close": "Sluiten",
+    "categories": {
+      "necessary": {
+        "title": "Noodzakelijk",
+        "short": "technische cookies voor de site, de sessie en het onthouden van je toestemming (cookie_consent_status).",
+        "body": "Nodig om de site te laten werken: beveiliging, basisfuncties en het bewaren van deze cookiekeuze via cookie_consent_status."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "short": "helpt mij te begrijpen hoe bezoekers de site gebruiken. Er zijn momenteel geen analysetools actief — deze categorie is gereserveerd voor wanneer ik er een toevoeg.",
+        "body": "Helpt mij te begrijpen hoe bezoekers de site gebruiken. Er zijn momenteel geen analysetools actief — deze categorie is gereserveerd voor wanneer ik er een toevoeg."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "short": "gebruikt om de prestaties van advertentiecampagnes te meten. Er zijn momenteel geen marketingpixels actief.",
+        "body": "Gebruikt om de prestaties van advertentiecampagnes te meten. Er zijn momenteel geen marketingpixels actief."
+      }
+    }
+  },
+  "Privacy": {
+    "kicker": "Juridisch",
+    "title": "Privacybeleid",
+    "updated": "Laatst bijgewerkt: september 2026",
+    "intro": "Monika Mal verwerkt alleen de gegevens die je me stuurt — meestal via het contactformulier of e-mail — zodat ik kan reageren en je project kan uitvoeren.",
+    "sections": {
+      "data": {
+        "title": "Wat ik verzamel",
+        "body": "Naam, e-mail, merkinformatie, projectbriefings en alle media-assets (beelden, logo’s, referentiebestanden) die je met mij deelt. Deze informatie gebruik ik uitsluitend om aanvragen te beoordelen, betalingen te verwerken en op maat gemaakte AI-video’s en -foto’s voor jouw project te maken. Ik verkoop, verhuur of toon je privé-projectassets niet publiekelijk."
+      },
+      "intellectual": {
+        "title": "Intellectuele eigendom en videocontent",
+        "body": "Alle videomaterialen, visuele ontwerpen, merkelementen, mockups en portfolio-items op deze website zijn exclusief eigendom van Monika Mal, tenzij anders vermeld. Ongeautoriseerd downloaden, kopiëren, reproduceren, herverdelen of commercieel gebruik van deze video’s en materialen zonder uitdrukkelijke schriftelijke toestemming is strikt verboden en beschermd door internationale auteursrechten."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "Ik gebruik een first-party cookie om je toestemming te bewaren. Optionele analysetools (Vercel Analytics en PostHog) laden alleen als je de analytics-categorie toestaat in de cookie-instellingen."
+      },
+      "analytics": {
+        "title": "Analytics en gegevensverzameling",
+        "body": "Ik gebruik privacyvriendelijke analysetools (Vercel Analytics en PostHog) om bezoekersinteracties te begrijpen en de gebruikerservaring te verbeteren. Alle session replays en invoervelden worden automatisch gemaskeerd om je persoonsgegevens te beschermen. Er worden geen persoonsgegevens verkocht of met derden gedeeld."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Vragen over je gegevens of de privacy van je project: monikamalmedia@gmail.com."
+      }
+    },
+    "categories": {
+      "necessary": {
+        "title": "Noodzakelijk",
+        "body": "Technische cookies die de website nodig heeft, inclusief sessiegedrag en het bewaren van je cookievoorkeur (`cookie_consent_status`). Deze kun je niet uitzetten."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "body": "Helpt mij te begrijpen hoe bezoekers de site gebruiken. Als je deze categorie toestaat, kunnen Vercel Analytics en PostHog actief zijn. Session replays en formulierinvoer worden gemaskeerd."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "body": "Gebruikt om de prestaties van advertentiecampagnes te meten. Er zijn momenteel geen marketingpixels actief."
+      }
+    },
+    "cookieTable": {
+      "title": "Cookielijst",
+      "intro": "De tabel toont cookies die deze site daadwerkelijk gebruikt. Optionele analytics-cookies voor PostHog verschijnen wanneer je analytics toestaat.",
+      "headers": {
+        "name": "Cookienaam",
+        "provider": "Aanbieder",
+        "purpose": "Doel",
+        "expiry": "Bewaartermijn"
+      },
+      "purposes": {
+        "consent": "Bewaart je cookievoorkeur (noodzakelijk, analytics, marketing).",
+        "locale": "Onthoudt je taalkeuze (EN / NL)"
+      },
+      "expiry": {
+        "months12": "12 maanden"
+      }
+    }
+  },
+  "NotFound": {
+    "kicker": "Frame kwijt",
+    "body": "Deze pagina staat niet op het storyboard.",
+    "cta": "Terug naar home"
+  },
+  "WhatsApp": {
+    "label": "Chat via WhatsApp",
+    "greeting": "Hoi Monika, ik ben geïnteresseerd in AI-videoproductie voor mijn merk"
+  }
+}

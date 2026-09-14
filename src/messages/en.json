@@ -1,0 +1,416 @@
+{
+  "Metadata": {
+    "title": "Monika Mal — AI Visual Director",
+    "description": "Cinematic visual assets & AI commercials for high-converting brands.",
+    "ogTitle": "Monika Mal — AI Visual Director",
+    "ogDescription": "Cinematic visual assets & AI commercials for high-converting brands.",
+    "keywords": [
+      "AI video production",
+      "e-commerce commercials",
+      "AI commercials",
+      "product video ads",
+      "Meta ads video",
+      "TikTok ads video",
+      "custom AI avatar",
+      "AI photography"
+    ]
+  },
+  "Hero": {
+    "kicker": "AI-Driven Video Production",
+    "title": "AI Commercials",
+    "subtitle": "Cinematic visual assets built for high-converting e-commerce brands.",
+    "cta": "Book a project",
+    "ctaSecondary": "View work",
+    "scrollHint": "Scroll down"
+  },
+  "Showreel": {
+    "ariaLabel": "Monika Mal showreel",
+    "unmute": "Unmute",
+    "mute": "Mute"
+  },
+  "Portfolio": {
+    "label": "Portfolio",
+    "title": "Work for brands",
+    "close": "Close",
+    "play": "Play video",
+    "pause": "Pause video",
+    "mute": "Mute video",
+    "unmute": "Unmute video",
+    "filterLabel": "Filter work",
+    "filterVideos": "AI Videos",
+    "filterPhotos": "AI Photos",
+    "items": {
+      "1": {
+        "title": "Lumina Skin",
+        "category": "E-commerce / Beauty"
+      },
+      "2": {
+        "title": "Nord Weave",
+        "category": "E-commerce / Fashion"
+      },
+      "3": {
+        "title": "Atelier Noir",
+        "category": "AI Commercial / Luxury"
+      },
+      "4": {
+        "title": "Velvet Home",
+        "category": "E-commerce / Interior"
+      },
+      "5": {
+        "title": "Pulse Active",
+        "category": "E-commerce / Sport"
+      },
+      "6": {
+        "title": "Saffron Market",
+        "category": "E-commerce / Food"
+      },
+      "7": {
+        "title": "Aurelia Serum",
+        "category": "AI Photography / Beauty"
+      },
+      "8": {
+        "title": "Maison Linen",
+        "category": "AI Photography / Fashion"
+      },
+      "9": {
+        "title": "Nocturne Glass",
+        "category": "AI Photography / Luxury"
+      },
+      "10": {
+        "title": "Holm Table",
+        "category": "AI Photography / Interior"
+      },
+      "11": {
+        "title": "Apex Run",
+        "category": "AI Photography / Sport"
+      },
+      "12": {
+        "title": "Citrus Grove",
+        "category": "AI Photography / Food"
+      }
+    }
+  },
+  "LanguageSwitcher": {
+    "label": "Language",
+    "en": "EN",
+    "nl": "NL"
+  },
+  "Navbar": {
+    "brand": "Monika Mal",
+    "navLabel": "Primary",
+    "portfolio": "Portfolio",
+    "about": "About me",
+    "pipeline": "How I work",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "cta": "Get in touch",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "GetInTouch": {
+    "title": "Have a custom request or project?",
+    "subtitle": "Send me a message and I’ll get back to you shortly.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Project details",
+    "cta": "Send Message",
+    "sending": "Sending...",
+    "success": "Thank you. I’ll review your brief and get back to you within 24 hours.",
+    "error": "Something went wrong. Please try again in a moment.",
+    "invalidEmail": "Please enter a valid email address.",
+    "required": "Please fill in all required fields.",
+    "close": "Close",
+    "packageLabel": "Custom request"
+  },
+  "TrustBar": {
+    "title": "Trusted by brands"
+  },
+  "Pricing": {
+    "kicker": "Pricing",
+    "title": "Price & Packages",
+    "badge": "Popular",
+    "packages": {
+      "starter": {
+        "name": "Starter",
+        "price": "€400",
+        "cta": "Choose package",
+        "features": {
+          "video": "1 AI commercial (up to 30 seconds)",
+          "avatar": "1 custom AI avatar",
+          "revisions": "2 rounds of revisions",
+          "delivery": "Delivery in 3–5 days"
+        }
+      },
+      "growth": {
+        "name": "Growth",
+        "price": "€700",
+        "cta": "Choose package",
+        "features": {
+          "videos": "2 videos with individual hooks",
+          "craft": "ASMR sound design and signature craft techniques",
+          "revisions": "2 rounds of revisions",
+          "delivery": "Delivery in 6–10 business days"
+        }
+      },
+      "partnership": {
+        "name": "Partnership",
+        "price": "€1,200/month",
+        "perUnit": "€300 / video",
+        "cta": "Choose package",
+        "features": {
+          "videos": "4 AI videos per month",
+          "priority": "Priority timing — produced ahead of the queue",
+          "slot": "A dedicated calendar slot — guaranteed regular production every month",
+          "revisions": "2 rounds of revisions on each video"
+        }
+      }
+    }
+  },
+  "Photography": {
+    "kicker": "AI Photography",
+    "title": "Professional photos for product pages and social",
+    "intro": "AI photo generation for brands — a fast alternative to classic product shoots, with the same cinematic look as my video work.",
+    "badge": "Better value",
+    "cta": "Choose package",
+    "packages": {
+      "five": {
+        "name": "5 photos",
+        "price": "€100",
+        "perPhoto": "€20 / photo",
+        "features": {
+          "count": "5 AI-generated brand photos",
+          "formats": "Square & vertical formats for product cards and social",
+          "revisions": "1 round of revisions included",
+          "delivery": "Delivery in 2–4 business days"
+        }
+      },
+      "ten": {
+        "name": "10 photos",
+        "price": "€150",
+        "perPhoto": "€15 / photo",
+        "features": {
+          "count": "10 AI-generated brand photos",
+          "formats": "Square & vertical formats for product cards and social",
+          "revisions": "1 round of revisions included",
+          "delivery": "Delivery in 2–4 business days"
+        }
+      }
+    }
+  },
+  "Pipeline": {
+    "kicker": "How I work",
+    "title": "From concept to commercial",
+    "intro": "A focused four-step process — cinematic quality without a traditional production crew.",
+    "steps": {
+      "brief": {
+        "title": "Brief",
+        "body": "I map the brand, audience, and offer — then lock the creative direction before a single frame is generated."
+      },
+      "concept": {
+        "title": "Concept",
+        "body": "Mood, hooks, and storyboard. You approve the look so production stays precise and fast."
+      },
+      "production": {
+        "title": "Production",
+        "body": "AI video, custom avatars, sound design, and signature craft — assembled as a finished commercial."
+      },
+      "delivery": {
+        "title": "Delivery",
+        "body": "Revisions as included in your package, then files ready for ads, product pages, and social."
+      }
+    }
+  },
+  "Contact": {
+    "kicker": "Contact",
+    "title": "Tell me about the brand",
+    "intro": "Share the product, the deadline, and the format. I reply with a clear next step and the right package.",
+    "name": "Name",
+    "email": "Email",
+    "brand": "Brand",
+    "package": "Package of interest",
+    "packageNone": "Not selected — to discuss on a call",
+    "packageOptions": {
+      "none": "Not selected — to discuss on a call",
+      "starter": "Starter — €400",
+      "growth": "Growth — €700",
+      "partnership": "Partnership — €1,200/month",
+      "photographyFive": "Photography — 5 photos (€100)",
+      "photographyTen": "Photography — 10 photos (€150)"
+    },
+    "message": "Project",
+    "cta": "Send brief",
+    "sending": "Sending...",
+    "success": "Thank you. I’ll review your brief and get back to you within 24 hours.",
+    "error": "Something went wrong. Please try again or email me directly.",
+    "invalidEmail": "Please enter a valid email address.",
+    "required": "Please fill in all required fields."
+  },
+  "About": {
+    "kicker": "About me",
+    "title": "About me",
+    "photoPlaceholder": "Photo coming soon",
+    "videoPlaceholder": "Video coming soon",
+    "mute": "Mute video",
+    "unmute": "Unmute video",
+    "play": "Play video",
+    "pause": "Pause video",
+    "replay": "Replay",
+    "lead": "I'm Monika, an <specialist>AI Visual Director</specialist> creating high-end commercials for e-commerce brands.",
+    "body1": "I create compelling videos that <customers>turn viewers into customers</customers>.",
+    "body2": "<fiveYears>Five years ago</fiveYears>, I picked up a camera and started creating <ugc>UGC content</ugc>, filming myself, people, and the beauty around me — capturing emotions, stories, and fleeting moments through my lens. Over the years, I’ve mastered visual storytelling, playing with light, movement, and narrative to make every video feel alive and engaging.",
+    "body3": "For the <twoYears>past two years</twoYears>, I’ve been fully dedicated to <aiCreation>AI video creation</aiCreation>, merging my deep background in production with cutting-edge artificial intelligence. This unique combination allows me to find fresh angles, build high-converting visuals, and convey atmosphere at a whole new level. As a video creator, I help brands create engaging, social-first content that genuinely connects with their audience. From AI commercials and product videos to UGC and lifestyle campaigns, I manage the entire creative process — from concept development and storyboarding to filming, AI generation, editing, and final delivery.",
+    "worksTitle": "Selected work",
+    "works": {
+      "one": "Work placeholder 01",
+      "two": "Work placeholder 02",
+      "three": "Work placeholder 03"
+    },
+    "ctaTitle": "Let’s make the next AI commercial",
+    "ctaBody": "Share the product and the deadline — I start from a clear brief.",
+    "cta": "Get in touch"
+  },
+  "Footer": {
+    "brand": "Monika Mal",
+    "tagline": "Cinematic AI commercials for e-commerce brands",
+    "navLabel": "Footer",
+    "portfolio": "Portfolio",
+    "about": "About me",
+    "pipeline": "How I work",
+    "pricing": "Pricing",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "tiktok": "TikTok",
+    "privacy": "Privacy Policy",
+    "copyright": "© {year} Monika Mal. All rights reserved."
+  },
+  "Faq": {
+    "kicker": "FAQ",
+    "title": "Questions before we start",
+    "intro": "Clear answers for e-commerce teams planning AI commercials and ads.",
+    "items": {
+      "turnaround": {
+        "question": "What is the typical turnaround time?",
+        "answer": "Starter projects deliver in <hl>3–5 business days</hl>. Growth & Commercial packages take <hl>6–10 business days</hl>. Retainer partners receive priority scheduling slots in my calendar."
+      },
+      "product": {
+        "question": "Will the AI video accurately reflect my physical product?",
+        "answer": "<hl>100% precision</hl>. I integrate high-res 3D or photo source files of your product into custom AI engines, ensuring complete visual realism without digital distortions."
+      },
+      "ads": {
+        "question": "Can I run these videos as Meta, TikTok, and TV Ads?",
+        "answer": "Yes. You receive <hl>full commercial rights</hl> for all generated video & photo assets across all global digital advertising and broadcast channels."
+      },
+      "revisions": {
+        "question": "How many revision rounds are included?",
+        "answer": "Each project includes <hl>2 revision rounds</hl> covering video timing, color grading, sound design, and typography adjustments."
+      },
+      "payment": {
+        "question": "How does payment and onboarding work?",
+        "answer": "I operate on a <hl>50% deposit</hl> to initiate production, with the remaining 50% due upon final approval and 4K asset delivery."
+      }
+    }
+  },
+  "Cookies": {
+    "title": "Cookies",
+    "barBody": "I use cookies to improve your experience on this website. By continuing to browse, you agree to my use of cookies.",
+    "learnMore": "Learn more",
+    "accept": "Accept",
+    "body": "I use cookies to run the site and remember your preferences. Optional analytics and marketing cookies are only set if you allow them. Full details are in my",
+    "privacy": "Privacy Policy",
+    "acceptAll": "Accept All",
+    "necessaryOnly": "Necessary Only",
+    "customize": "Customize",
+    "settingsTitle": "Cookie settings",
+    "settingsIntro": "Necessary cookies always stay on. You can allow or block analytics and marketing cookies below.",
+    "settingsLink": "Cookie settings",
+    "required": "Required",
+    "save": "Save preferences",
+    "back": "Back",
+    "close": "Close",
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "short": "technical cookies for the site, session, and storing your consent (cookie_consent_status).",
+        "body": "Required for the site to work: security, basic functions, and remembering this cookie choice via cookie_consent_status."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "short": "helps me understand how visitors use the site. No analytics tools are currently active — this category is reserved for when I add one.",
+        "body": "Helps me understand how visitors use the site. No analytics tools are currently active — this category is reserved for when I add one."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "short": "used to measure ad campaign performance. No marketing pixels are currently active.",
+        "body": "Used to measure ad campaign performance. No marketing pixels are currently active."
+      }
+    }
+  },
+  "Privacy": {
+    "kicker": "Legal",
+    "title": "Privacy Policy",
+    "updated": "Last updated: September 2026",
+    "intro": "Monika Mal processes only the information you send me — typically via the contact form or email — so I can reply and deliver your project.",
+    "sections": {
+      "data": {
+        "title": "What I collect",
+        "body": "Name, email, brand details, project briefs, and any media assets (images, logos, reference files) you share with me. This information is used solely to evaluate enquiries, process payments, and generate custom AI video/photo content for your project. I do not sell, rent, or publicly display your private project assets."
+      },
+      "intellectual": {
+        "title": "Intellectual Property & Video Content",
+        "body": "All video materials, visual designs, brand assets, mockups, and portfolio items displayed on this website are the exclusive property of Monika Mal unless otherwise stated. Unauthorized downloading, copying, reproduction, redistribution, or commercial use of these videos and materials without explicit written permission is strictly prohibited and protected by international copyright laws."
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": "I use a first-party cookie to store your consent. Optional analytics tools (Vercel Analytics and PostHog) load only if you allow the analytics category in cookie settings."
+      },
+      "analytics": {
+        "title": "Analytics & Data Collection",
+        "body": "We use privacy-friendly analytics tools (Vercel Analytics and PostHog) to understand visitor interactions and improve user experience. All session replays and inputs are automatically masked to protect your personal data. No personal data is sold or shared with third parties."
+      },
+      "contact": {
+        "title": "Contact",
+        "body": "Questions about your data or project privacy: monikamalmedia@gmail.com."
+      }
+    },
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "body": "Technical cookies required for the website to function, including session behaviour and storing your cookie consent (`cookie_consent_status`). These cannot be switched off."
+      },
+      "analytics": {
+        "title": "Analytics",
+        "body": "Helps me understand how visitors use the site. When you allow this category, Vercel Analytics and PostHog may run. Session replays and form inputs are masked."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "body": "Used to measure ad campaign performance. No marketing pixels are currently active."
+      }
+    },
+    "cookieTable": {
+      "title": "Cookie list",
+      "intro": "The table lists cookies actually used on this site. Optional analytics cookies for PostHog appear when you allow analytics.",
+      "headers": {
+        "name": "Cookie name",
+        "provider": "Provider",
+        "purpose": "Purpose",
+        "expiry": "Expiry"
+      },
+      "purposes": {
+        "consent": "Stores your cookie preference (necessary, analytics, marketing).",
+        "locale": "Remembers your selected language preference (EN / NL)"
+      },
+      "expiry": {
+        "months12": "12 months"
+      }
+    }
+  },
+  "NotFound": {
+    "kicker": "Lost frame",
+    "body": "This page isn’t on the storyboard.",
+    "cta": "Back to Home"
+  },
+  "WhatsApp": {
+    "label": "Chat on WhatsApp",
+    "greeting": "Hi Monika, I'm interested in AI video production for my brand"
+  }
+}
