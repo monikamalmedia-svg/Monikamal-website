@@ -71,7 +71,7 @@ function PipelineStep({
 
   const { scrollYProgress } = useScroll({
     target: stepRef,
-    offset: STEP_SCROLL_OFFSET,
+    offset: STEP_SCROLL_OFFSET as [any, any],
   });
 
   const opacity = useTransform(
