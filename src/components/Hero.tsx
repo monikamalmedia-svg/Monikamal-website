@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ProtectedImage } from "@/components/ProtectedImage";
@@ -40,107 +39,27 @@ type HeroProps = {
   headline: string;
   subheadline: string;
   videoUrl: string | null;
-  posterUrl?: string | null;
 };
 
-export function Hero({
-  kicker,
-  headline,
-  subheadline,
-  videoUrl,
-  posterUrl,
-}: HeroProps) {
+export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
   const t = useTranslations("Hero");
   const showreel = useTranslations("Showreel");
   const reduceMotion = useReducedMotion();
   const mediaSrc = videoUrl?.trim() || null;
-  const cmsPoster = posterUrl?.trim() || undefined;
-  const posterSrc = cmsPoster ?? "/og-image.jpg";
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !mediaSrc) return;
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.autoplay = true;
-    video.loop = true;
-    video.playsInline = true;
-    video.setAttribute("muted", "");
-    video.setAttribute("autoplay", "");
-    video.setAttribute("loop", "");
-    video.setAttribute("playsinline", "");
-    video.setAttribute("webkit-playsinline", "true");
-    if (posterSrc) video.setAttribute("poster", posterSrc);
-
-    const tryPlay = () => {
-      void videoRef.current?.play().catch(() => {});
-    };
-
-    const capturePoster = () => {
-      const node = videoRef.current;
-      if (!node || node.videoWidth === 0 || cmsPoster) return;
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = node.videoWidth;
-        canvas.height = node.videoHeight;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
-        ctx.drawImage(node, 0, 0);
-        node.setAttribute("poster", canvas.toDataURL("image/jpeg", 0.92));
-      } catch {
-        /* CORS-tainted canvas — keep existing poster */
-      }
-    };
-
-    video.addEventListener("loadeddata", tryPlay);
-    video.addEventListener("canplay", tryPlay);
-    video.addEventListener("loadeddata", capturePoster);
-    tryPlay();
-
-    return () => {
-      video.removeEventListener("loadeddata", tryPlay);
-      video.removeEventListener("canplay", tryPlay);
-      video.removeEventListener("loadeddata", capturePoster);
-    };
-  }, [mediaSrc, posterSrc, cmsPoster]);
-
-  useEffect(() => {
-    if (!mediaSrc) return;
-
-    const unlockAutoplay = () => {
-      void videoRef.current?.play().catch(() => {});
-      window.removeEventListener("touchstart", unlockAutoplay);
-      window.removeEventListener("click", unlockAutoplay);
-    };
-
-    window.addEventListener("touchstart", unlockAutoplay, { passive: true });
-    window.addEventListener("click", unlockAutoplay);
-
-    return () => {
-      window.removeEventListener("touchstart", unlockAutoplay);
-      window.removeEventListener("click", unlockAutoplay);
-    };
-  }, [mediaSrc]);
 
   return (
-    <section className="relative z-20 h-[100dvh] min-h-[100dvh] w-full shrink-0 overflow-hidden bg-[#0d0509] md:h-screen md:min-h-[650px] md:max-h-[1080px]">
-      <div className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-hidden bg-[#0d0509]">
+    <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
+      <div className="pointer-events-none absolute inset-0 z-[2]">
         {mediaSrc ? (
           <ProtectedVideo
-            ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
             src={mediaSrc}
-            poster={posterSrc}
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
-            crossOrigin="anonymous"
+            preload="metadata"
             aria-label={showreel("ariaLabel")}
-            {...{ "webkit-playsinline": "true" }}
           />
         ) : (
           <ProtectedImage

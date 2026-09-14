@@ -28,7 +28,6 @@ type HeroSectionDoc = {
   subheadlineEn?: string | null;
   subheadlineNl?: string | null;
   videoUrl?: string | null;
-  showreelPoster?: unknown;
 };
 
 type CaseStudyDoc = {
@@ -47,7 +46,7 @@ type CaseStudyDoc = {
   thumbnail?: unknown;
 };
 
-const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{kickerEn, kickerNl, headlineEn, headlineNl, subheadlineEn, subheadlineNl, "videoUrl": showreelVideo.asset->url, showreelPoster}`;
+const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{kickerEn, kickerNl, headlineEn, headlineNl, subheadlineEn, subheadlineNl, "videoUrl": showreelVideo.asset->url}`;
 
 const CASE_STUDIES_QUERY = `*[_type == "caseStudy"] | order(displayOrder asc) {
   _id,
@@ -121,7 +120,6 @@ export default async function Home({ params }: Props) {
   const subheadline =
     (isNl ? hero?.subheadlineNl : hero?.subheadlineEn)?.trim() || t("subtitle");
   const videoUrl = hero?.videoUrl?.trim() || null;
-  const posterUrl = resolveSanityImageUrl(hero?.showreelPoster);
 
   return (
     <main className="relative z-20 flex-1">
@@ -131,7 +129,6 @@ export default async function Home({ params }: Props) {
         headline={headline}
         subheadline={subheadline}
         videoUrl={videoUrl}
-        posterUrl={posterUrl}
       />
       <TrustBar />
       <CommercialPortfolio items={portfolioItems} sanityDocs={caseStudies} />

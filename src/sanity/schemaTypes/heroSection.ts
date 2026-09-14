@@ -49,16 +49,6 @@ export const heroSection = defineType({
         accept: "video/*",
       },
     }),
-    defineField({
-      name: "showreelPoster",
-      title: "Showreel poster",
-      type: "image",
-      description:
-        "High-quality still from the showreel. Shown before the video starts on mobile.",
-      options: {
-        hotspot: true,
-      },
-    }),
   ],
   preview: {
     select: {
