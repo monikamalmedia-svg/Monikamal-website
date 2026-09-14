@@ -40,13 +40,22 @@ type HeroProps = {
   headline: string;
   subheadline: string;
   videoUrl: string | null;
+  posterUrl?: string | null;
 };
 
-export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
+export function Hero({
+  kicker,
+  headline,
+  subheadline,
+  videoUrl,
+  posterUrl,
+}: HeroProps) {
   const t = useTranslations("Hero");
   const showreel = useTranslations("Showreel");
   const reduceMotion = useReducedMotion();
   const mediaSrc = videoUrl?.trim() || null;
+  const cmsPoster = posterUrl?.trim() || undefined;
+  const posterSrc = cmsPoster ?? "/og-image.jpg";
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -63,18 +72,55 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
     video.setAttribute("loop", "");
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "true");
+    if (posterSrc) video.setAttribute("poster", posterSrc);
 
     const tryPlay = () => {
       void videoRef.current?.play().catch(() => {});
     };
 
+    const capturePoster = () => {
+      const node = videoRef.current;
+      if (!node || node.videoWidth === 0 || cmsPoster) return;
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = node.videoWidth;
+        canvas.height = node.videoHeight;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return;
+        ctx.drawImage(node, 0, 0);
+        node.setAttribute("poster", canvas.toDataURL("image/jpeg", 0.92));
+      } catch {
+        /* CORS-tainted canvas — keep existing poster */
+      }
+    };
+
     video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
+    video.addEventListener("loadeddata", capturePoster);
     tryPlay();
 
     return () => {
       video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("loadeddata", capturePoster);
+    };
+  }, [mediaSrc, posterSrc, cmsPoster]);
+
+  useEffect(() => {
+    if (!mediaSrc) return;
+
+    const unlockAutoplay = () => {
+      void videoRef.current?.play().catch(() => {});
+      window.removeEventListener("touchstart", unlockAutoplay);
+      window.removeEventListener("click", unlockAutoplay);
+    };
+
+    window.addEventListener("touchstart", unlockAutoplay, { passive: true });
+    window.addEventListener("click", unlockAutoplay);
+
+    return () => {
+      window.removeEventListener("touchstart", unlockAutoplay);
+      window.removeEventListener("click", unlockAutoplay);
     };
   }, [mediaSrc]);
 
@@ -86,11 +132,13 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
             ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
             src={mediaSrc}
+            poster={posterSrc}
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
+            crossOrigin="anonymous"
             aria-label={showreel("ariaLabel")}
             {...{ "webkit-playsinline": "true" }}
           />
