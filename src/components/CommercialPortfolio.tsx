@@ -9,7 +9,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Pause, Play, Volume2, VolumeX, X } from "lucide-react";
+import { Play, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
 import { isPlayableVideoUrl } from "@/lib/sanity-media";
@@ -73,61 +73,6 @@ const FILTERS: { id: PortfolioType; labelKey: "filterVideos" | "filterPhotos" }[
 
 const LG_MQ = "(min-width: 1024px)";
 const MD_MQ = "(min-width: 768px)";
-const GRID_STILL_TIME = 1.75;
-
-function hasThumbnail(item: PortfolioItem) {
-  return Boolean(item.imageUrl?.trim());
-}
-
-function previewStillTime(video: HTMLVideoElement) {
-  const duration = video.duration;
-  if (!Number.isFinite(duration) || duration <= 0) return GRID_STILL_TIME;
-  if (duration <= GRID_STILL_TIME) return Math.max(0, duration * 0.35);
-  return GRID_STILL_TIME;
-}
-
-function showGridStillFrame(video: HTMLVideoElement, onReady?: () => void) {
-  video.pause();
-  video.muted = true;
-
-  const finish = () => {
-    video.pause();
-    video.muted = true;
-    onReady?.();
-  };
-
-  const seek = () => {
-    const next = previewStillTime(video);
-    if (!Number.isFinite(next)) {
-      finish();
-      return;
-    }
-
-    const onSeeked = () => {
-      video.removeEventListener("seeked", onSeeked);
-      finish();
-    };
-
-    if (Math.abs(video.currentTime - next) < 0.05 && video.readyState >= 2) {
-      finish();
-      return;
-    }
-
-    video.addEventListener("seeked", onSeeked);
-    video.currentTime = next;
-  };
-
-  if (video.readyState >= 1) {
-    seek();
-    return;
-  }
-
-  const onMeta = () => {
-    video.removeEventListener("loadedmetadata", onMeta);
-    seek();
-  };
-  video.addEventListener("loadedmetadata", onMeta);
-}
 
 function chunkItems<T>(items: T[], size: number): T[][] {
   const groups: T[][] = [];
@@ -169,21 +114,18 @@ function PortfolioMedia({
   className = "w-full h-full object-cover rounded-2xl",
   videoRef,
   isHovering = false,
-  loop = true,
 }: {
   item: PortfolioItem;
   alt: string;
   className?: string;
   videoRef?: Ref<HTMLVideoElement>;
   isHovering?: boolean;
-  loop?: boolean;
 }) {
   const [videoFailed, setVideoFailed] = useState(false);
   const imageUrl = item.imageUrl?.trim() || "";
   const videoUrl = isPlayableVideoUrl(item.videoUrl) ? item.videoUrl : null;
   const showVideo =
     item.mediaType === "video" && Boolean(videoUrl) && !videoFailed;
-  const showStillOverlay = showVideo && Boolean(imageUrl);
 
   if (showVideo && videoUrl) {
     return (
@@ -192,26 +134,18 @@ function PortfolioMedia({
           ref={videoRef}
           src={videoUrl}
           poster={imageUrl || undefined}
-          crossOrigin="anonymous"
-          preload={imageUrl ? "metadata" : "auto"}
-          playsInline
           muted
-          loop={loop}
+          loop
+          playsInline
+          preload="auto"
           controls={false}
-          className={className}
-          onLoadedData={(event) => {
-            event.currentTarget.muted = true;
-            if (!isHovering) {
-              event.currentTarget.pause();
-              if (!imageUrl) showGridStillFrame(event.currentTarget);
-            }
-          }}
+          className={`pointer-events-none ${className} [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden`}
           onError={(event) => {
             console.error("Video load error:", event);
             setVideoFailed(true);
           }}
         />
-        {showStillOverlay ? (
+        {imageUrl ? (
           <ProtectedImage
             src={imageUrl}
             alt={alt}
@@ -246,23 +180,11 @@ function PortfolioModal({
 }) {
   const t = useTranslations("Portfolio");
   const videoRef = useRef<HTMLVideoElement>(null);
-  const hideTimerRef = useRef<number | null>(null);
-  const isPausedRef = useRef(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isMuted, setIsMuted] = useState(true);
-  const [controlsVisible, setControlsVisible] = useState(true);
   const videoUrl = isPlayableVideoUrl(item.videoUrl) ? item.videoUrl : null;
   const imageUrl = item.imageUrl?.trim() || "";
   const isVideo = item.mediaType === "video" && Boolean(videoUrl);
-
-  const revealControls = useCallback(() => {
-    setControlsVisible(true);
-    if (hideTimerRef.current) window.clearTimeout(hideTimerRef.current);
-    if (isPausedRef.current) return;
-    hideTimerRef.current = window.setTimeout(() => {
-      if (!isPausedRef.current) setControlsVisible(false);
-    }, 2800);
-  }, []);
+  const [isPaused, setIsPaused] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
 
   useEffect(() => {
     const previous = document.body.style.overflow;
@@ -273,25 +195,28 @@ function PortfolioModal({
     };
 
     window.addEventListener("keydown", onKeyDown);
-    revealControls();
 
     return () => {
       document.body.style.overflow = previous;
       window.removeEventListener("keydown", onKeyDown);
-      if (hideTimerRef.current) window.clearTimeout(hideTimerRef.current);
+      videoRef.current?.pause();
     };
-  }, [onClose, revealControls]);
+  }, [onClose]);
 
-  const setPausedState = (paused: boolean) => {
-    isPausedRef.current = paused;
-    setIsPaused(paused);
-    if (paused) {
-      setControlsVisible(true);
-      if (hideTimerRef.current) window.clearTimeout(hideTimerRef.current);
-      return;
-    }
-    revealControls();
-  };
+  useEffect(() => {
+    if (!isVideo) return;
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    setIsMuted(true);
+    const attempt = video.play();
+    if (!attempt) return;
+    void attempt.catch(() => {
+      video.muted = true;
+      void video.play().catch(() => setIsPaused(true));
+    });
+  }, [isVideo, videoUrl]);
 
   const togglePlay = (event?: MouseEvent<HTMLElement>) => {
     event?.stopPropagation();
@@ -302,7 +227,7 @@ function PortfolioModal({
       void video.play().catch(() => {
         video.muted = true;
         setIsMuted(true);
-        void video.play().catch(() => setPausedState(true));
+        void video.play().catch(() => setIsPaused(true));
       });
       return;
     }
@@ -312,18 +237,11 @@ function PortfolioModal({
 
   const toggleMute = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
-    revealControls();
     const video = videoRef.current;
     if (!video) return;
     const next = !video.muted;
     video.muted = next;
     setIsMuted(next);
-  };
-
-  const onStageClick = (event: MouseEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    if (!isVideo) return;
-    togglePlay();
   };
 
   return (
@@ -337,7 +255,6 @@ function PortfolioModal({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
       onClick={onClose}
-      onMouseMove={isVideo ? revealControls : undefined}
     >
       <button
         type="button"
@@ -351,77 +268,47 @@ function PortfolioModal({
       <motion.div
         className={`relative select-none overflow-hidden rounded-2xl border border-glass-border ${
           isVideo
-            ? `aspect-[9/16] h-[min(85vh,720px)] w-auto max-w-[min(100%,420px)] ${
-                !controlsVisible && !isPaused ? "cursor-none" : "cursor-pointer"
-              }`
+            ? "aspect-[9/16] h-[min(85vh,720px)] w-auto max-w-[min(100%,420px)] cursor-pointer bg-[#0d0509]"
             : "flex max-h-[90vh] w-auto max-w-[min(100%,1100px)] cursor-default items-center justify-center bg-[#0d0509]"
         }`}
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        onClick={onStageClick}
+        onClick={isVideo ? togglePlay : (event) => event.stopPropagation()}
         onDragStart={(event) => event.preventDefault()}
-        onMouseMove={isVideo ? revealControls : undefined}
       >
         {isVideo && videoUrl ? (
-          <ProtectedVideo
-            ref={videoRef}
-            src={videoUrl}
-            poster={imageUrl || undefined}
-            autoPlay
-            muted
-            playsInline
-            preload="metadata"
-            crossOrigin="anonymous"
-            controls={false}
-            className="pointer-events-none h-full w-full rounded-2xl object-cover"
-            onLoadedData={(event) => {
-              event.currentTarget.muted = true;
-              setIsMuted(true);
-              void event.currentTarget.play().catch(() => setPausedState(true));
-            }}
-            onPlay={() => setPausedState(false)}
-            onPause={() => setPausedState(true)}
-          />
-        ) : (
-          <PortfolioMedia
-            item={item}
-            alt={title}
-            className="max-h-[90vh] w-auto max-w-full object-contain"
-          />
-        )}
+          <>
+            <ProtectedVideo
+              ref={videoRef}
+              src={videoUrl}
+              poster={imageUrl || undefined}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+              controls={false}
+              className="pointer-events-none h-full w-full rounded-2xl object-cover [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden"
+              onPlay={() => setIsPaused(false)}
+              onPause={() => setIsPaused(true)}
+            />
 
-        {isVideo ? (
-          <motion.div
-            className={`absolute inset-0 z-20 ${
-              controlsVisible || isPaused ? "pointer-events-auto" : "pointer-events-none"
-            }`}
-            initial={false}
-            animate={{ opacity: controlsVisible || isPaused ? 1 : 0 }}
-            transition={{ duration: 0.35, ease: "easeInOut" }}
-          >
-            <button
-              type="button"
-              onClick={togglePlay}
-              onMouseEnter={revealControls}
-              aria-label={isPaused ? t("play") : t("pause")}
-              className={`absolute top-1/2 left-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 ${videoControlButtonClass}`}
-            >
-              {isPaused ? (
-                <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={1.25} />
-              ) : (
-                <Pause className="h-6 w-6 fill-current" strokeWidth={1.25} />
-              )}
-            </button>
+            {isPaused ? (
+              <span className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center">
+                <span className={`h-16 w-16 ${videoControlButtonClass}`}>
+                  <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={1.25} />
+                </span>
+              </span>
+            ) : null}
 
             <button
               type="button"
               onClick={toggleMute}
-              onMouseEnter={revealControls}
               aria-pressed={!isMuted}
               aria-label={isMuted ? t("unmute") : t("mute")}
-              className={`absolute right-3 bottom-3 h-11 w-11 md:right-4 md:bottom-4 ${videoControlButtonClass}`}
+              className={`absolute right-3 bottom-3 z-20 h-11 w-11 md:right-4 md:bottom-4 ${videoControlButtonClass}`}
             >
               {isMuted ? (
                 <VolumeX className="h-5 w-5" strokeWidth={1.5} />
@@ -429,8 +316,14 @@ function PortfolioModal({
                 <Volume2 className="h-5 w-5" strokeWidth={1.5} />
               )}
             </button>
-          </motion.div>
-        ) : null}
+          </>
+        ) : (
+          <PortfolioMedia
+            item={item}
+            alt={title}
+            className="max-h-[90vh] w-auto max-w-full object-contain"
+          />
+        )}
       </motion.div>
     </motion.div>
   );
@@ -445,14 +338,12 @@ function PortfolioCard({
   sticky: boolean;
   onOpen: (item: PortfolioItem) => void;
 }) {
+  const t = useTranslations("Portfolio");
   const videoRef = useRef<HTMLVideoElement>(null);
-  const hoveringRef = useRef(false);
-  const [hovered, setHovered] = useState(false);
   const [canHover, setCanHover] = useState(true);
-  const isVideo = item.mediaType === "video";
+  const [hovered, setHovered] = useState(false);
+  const isVideo = item.mediaType === "video" && isPlayableVideoUrl(item.videoUrl);
   const isPhoto = item.mediaType === "photo";
-  const usesThumbnail = isVideo && hasThumbnail(item);
-  const [stillReady, setStillReady] = useState(!isVideo || usesThumbnail);
 
   useEffect(() => {
     const media = window.matchMedia("(hover: hover)");
@@ -462,56 +353,13 @@ function PortfolioCard({
     return () => media.removeEventListener("change", sync);
   }, []);
 
-  useEffect(() => {
-    hoveringRef.current = hovered;
-  }, [hovered]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !isVideo) return;
-
-    video.muted = true;
-    video.loop = true;
-    video.pause();
-
-    if (usesThumbnail) {
-      setStillReady(true);
-      return;
-    }
-
-    let cancelled = false;
-    const timeout = window.setTimeout(() => {
-      if (!cancelled) setStillReady(true);
-    }, 2500);
-
-    const applyStill = () => {
-      if (cancelled || hoveringRef.current) return;
-      showGridStillFrame(video, () => {
-        if (!cancelled) setStillReady(true);
-      });
-    };
-
-    video.addEventListener("loadedmetadata", applyStill);
-    video.addEventListener("loadeddata", applyStill);
-    if (video.readyState >= 1) applyStill();
-
-    return () => {
-      cancelled = true;
-      window.clearTimeout(timeout);
-      video.removeEventListener("loadedmetadata", applyStill);
-      video.removeEventListener("loadeddata", applyStill);
-    };
-  }, [item.id, isVideo, usesThumbnail]);
-
   const onMouseEnter = () => {
+    if (!canHover || !isVideo) return;
     setHovered(true);
-    hoveringRef.current = true;
-    if (!canHover) return;
     const video = videoRef.current;
     if (!video) return;
     video.muted = true;
     video.loop = true;
-    video.currentTime = 0;
     void video.play().catch(() => {
       video.muted = true;
       void video.play().catch(() => undefined);
@@ -520,12 +368,11 @@ function PortfolioCard({
 
   const onMouseLeave = () => {
     setHovered(false);
-    hoveringRef.current = false;
     const video = videoRef.current;
     if (!video) return;
     video.pause();
     video.muted = true;
-    if (!usesThumbnail) showGridStillFrame(video);
+    video.currentTime = 0;
   };
 
   return (
@@ -541,8 +388,9 @@ function PortfolioCard({
           if (video) {
             video.pause();
             video.muted = true;
-            if (!usesThumbnail) showGridStillFrame(video);
+            video.currentTime = 0;
           }
+          setHovered(false);
           onOpen(item);
         }}
         onMouseEnter={onMouseEnter}
@@ -553,59 +401,39 @@ function PortfolioCard({
         className={`relative aspect-[9/16] w-full origin-center select-none overflow-hidden rounded-2xl border border-glass-border bg-glass/10 text-left shadow-none transition-[border-color] duration-500 hover:border-gold/30 focus-visible:outline-none ${
           isPhoto ? "cursor-zoom-in" : ""
         }`}
+        aria-label={isVideo ? `${item.title}. ${t("play")}` : item.title}
       >
         <div className="absolute inset-0 overflow-hidden rounded-2xl bg-[#0d0509]">
-          <div
-            className={`h-full w-full ${
-              isPhoto
-                ? "opacity-100"
-                : `transition-opacity duration-300 ${
-                    stillReady || hovered || usesThumbnail
-                      ? "opacity-100"
-                      : "opacity-0"
-                  }`
-            }`}
-          >
-            <PortfolioMedia
-              item={item}
-              alt={item.title}
-              videoRef={videoRef}
-              isHovering={hovered}
-              loop
-              className="h-full w-full rounded-2xl object-cover"
-            />
-          </div>
+          <PortfolioMedia
+            item={item}
+            alt={item.title}
+            videoRef={videoRef}
+            isHovering={hovered}
+            className="h-full w-full rounded-2xl object-cover"
+          />
 
           {isVideo ? (
             <>
-              <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_62%,rgba(15,2,6,0.28)_100%)] md:bg-[linear-gradient(180deg,transparent_45%,rgba(15,2,6,0.45)_100%)]" />
-              <div
-                className={`pointer-events-none absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent transition-opacity duration-300 ${
-                  hovered ? "opacity-100" : "opacity-0"
-                }`}
-              />
-            </>
-          ) : null}
-
-          {isVideo ? (
-            <motion.span
-              className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center"
-              initial={false}
-              animate={{
-                opacity: hovered ? 0 : 0.85,
-                scale: hovered ? 0.85 : 1,
-              }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <span
-                className={`h-10 w-10 shrink-0 md:h-14 md:w-14 ${videoControlButtonClass}`}
+              <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(180deg,transparent_62%,rgba(15,2,6,0.28)_100%)] md:bg-[linear-gradient(180deg,transparent_45%,rgba(15,2,6,0.45)_100%)]" />
+              <motion.span
+                className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center"
+                initial={false}
+                animate={{
+                  opacity: hovered ? 0 : 0.85,
+                  scale: hovered ? 0.85 : 1,
+                }}
+                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
               >
-                <Play
-                  className="ml-px h-3.5 w-3.5 fill-current md:ml-0.5 md:h-5 md:w-5"
-                  strokeWidth={1.25}
-                />
-              </span>
-            </motion.span>
+                <span
+                  className={`h-10 w-10 shrink-0 md:h-14 md:w-14 ${videoControlButtonClass}`}
+                >
+                  <Play
+                    className="ml-px h-3.5 w-3.5 fill-current md:ml-0.5 md:h-5 md:w-5"
+                    strokeWidth={1.25}
+                  />
+                </span>
+              </motion.span>
+            </>
           ) : null}
         </div>
       </motion.button>

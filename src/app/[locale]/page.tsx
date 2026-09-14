@@ -58,9 +58,9 @@ const CASE_STUDIES_QUERY = `*[_type == "caseStudy"] | order(displayOrder asc) {
   caseVideo,
   videoFile,
   thumbnail,
-  "videoUrl": caseVideo.asset->url,
+  "videoUrl": coalesce(caseVideo.asset->url, videoFile.asset->url),
   "videoFileUrl": videoFile.asset->url,
-  "videoAssetRef": coalesce(caseVideo.asset._ref, videoFile.asset._ref),
+  "videoAssetRef": coalesce(caseVideo.asset._ref, videoFile.asset._ref, caseVideo.asset->_id, videoFile.asset->_id),
   "imageUrl": thumbnail.asset->url
 }`;
 
