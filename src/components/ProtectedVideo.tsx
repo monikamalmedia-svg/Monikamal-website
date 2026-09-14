@@ -5,26 +5,84 @@
  * Полноценная защита от скачивания через DevTools/Network tab технически невозможна без платного DRM-сервиса (Mux, Cloudflare Stream с подписанными URL).
  */
 
-import { forwardRef, type DragEvent, type VideoHTMLAttributes } from "react";
+import {
+  forwardRef,
+  useEffect,
+  useRef,
+  type DragEvent,
+  type Ref,
+  type VideoHTMLAttributes,
+} from "react";
 
 function preventDrag(event: DragEvent<HTMLElement>) {
   event.preventDefault();
+}
+
+function assignRef<T>(ref: Ref<T> | undefined, node: T | null) {
+  if (!ref) return;
+  if (typeof ref === "function") {
+    ref(node);
+    return;
+  }
+  ref.current = node;
 }
 
 export const ProtectedVideo = forwardRef<
   HTMLVideoElement,
   VideoHTMLAttributes<HTMLVideoElement>
 >(function ProtectedVideo(
-  { className, onDragStart, muted, defaultMuted, ...props },
+  {
+    className,
+    onDragStart,
+    muted,
+    defaultMuted,
+    autoPlay,
+    loop,
+    playsInline,
+    ...props
+  },
   ref,
 ) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const isMuted = muted ?? Boolean(defaultMuted);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (isMuted) {
+      video.muted = true;
+      video.setAttribute("muted", "");
+    }
+    if (playsInline) {
+      video.playsInline = true;
+      video.setAttribute("playsinline", "");
+      video.setAttribute("webkit-playsinline", "true");
+    }
+    if (loop) {
+      video.loop = true;
+      video.setAttribute("loop", "");
+    }
+    if (autoPlay) {
+      video.autoplay = true;
+      video.setAttribute("autoplay", "");
+      void videoRef.current.play().catch(() => {});
+    }
+  }, [autoPlay, isMuted, loop, playsInline, props.src]);
+
   return (
     <div className="h-full w-full" onDragStart={preventDrag}>
       <video
         {...props}
-        ref={ref}
-        muted={muted ?? Boolean(defaultMuted)}
+        ref={(node) => {
+          videoRef.current = node;
+          assignRef(ref, node);
+        }}
         className={className}
+        autoPlay={autoPlay}
+        muted={isMuted}
+        loop={loop}
+        playsInline={playsInline}
         controlsList="nodownload noremoteplayback nofullscreen"
         disablePictureInPicture
         disableRemotePlayback
