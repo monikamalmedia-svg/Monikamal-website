@@ -35,7 +35,6 @@ export const ProtectedVideo = forwardRef<
     className,
     onDragStart,
     muted,
-    defaultMuted,
     autoPlay,
     loop,
     playsInline,
@@ -44,13 +43,12 @@ export const ProtectedVideo = forwardRef<
   ref,
 ) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const isMuted = muted ?? Boolean(defaultMuted);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    if (isMuted) {
+    if (muted) {
       video.muted = true;
       video.setAttribute("muted", "");
     }
@@ -66,9 +64,9 @@ export const ProtectedVideo = forwardRef<
     if (autoPlay) {
       video.autoplay = true;
       video.setAttribute("autoplay", "");
-      void videoRef.current.play().catch(() => {});
+      void videoRef.current?.play()?.catch(() => {});
     }
-  }, [autoPlay, isMuted, loop, playsInline, props.src]);
+  }, [autoPlay, muted, loop, playsInline, props.src]);
 
   return (
     <div className="h-full w-full" onDragStart={preventDrag}>
@@ -80,7 +78,7 @@ export const ProtectedVideo = forwardRef<
         }}
         className={className}
         autoPlay={autoPlay}
-        muted={isMuted}
+        muted={muted}
         loop={loop}
         playsInline={playsInline}
         controlsList="nodownload noremoteplayback nofullscreen"
