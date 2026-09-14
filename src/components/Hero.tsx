@@ -63,7 +63,19 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
     video.setAttribute("loop", "");
     video.setAttribute("playsinline", "");
     video.setAttribute("webkit-playsinline", "true");
-    void video.play().catch(() => undefined);
+
+    const tryPlay = () => {
+      void videoRef.current?.play().catch(() => {});
+    };
+
+    video.addEventListener("loadeddata", tryPlay);
+    video.addEventListener("canplay", tryPlay);
+    tryPlay();
+
+    return () => {
+      video.removeEventListener("loadeddata", tryPlay);
+      video.removeEventListener("canplay", tryPlay);
+    };
   }, [mediaSrc]);
 
   return (
