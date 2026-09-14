@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ProtectedImage } from "@/components/ProtectedImage";
@@ -46,12 +47,32 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
   const showreel = useTranslations("Showreel");
   const reduceMotion = useReducedMotion();
   const mediaSrc = videoUrl?.trim() || null;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (!mediaSrc) return;
+
+    const unlockAutoplay = () => {
+      void videoRef.current?.play()?.catch(() => {});
+      window.removeEventListener("touchstart", unlockAutoplay);
+      window.removeEventListener("click", unlockAutoplay);
+    };
+
+    window.addEventListener("touchstart", unlockAutoplay, { passive: true });
+    window.addEventListener("click", unlockAutoplay);
+
+    return () => {
+      window.removeEventListener("touchstart", unlockAutoplay);
+      window.removeEventListener("click", unlockAutoplay);
+    };
+  }, [mediaSrc]);
 
   return (
     <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
       <div className="pointer-events-none absolute inset-0 z-[2]">
         {mediaSrc ? (
           <ProtectedVideo
+            ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
             src={mediaSrc}
             autoPlay
