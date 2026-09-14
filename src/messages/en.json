@@ -36,6 +36,8 @@
     "pause": "Pause video",
     "mute": "Mute video",
     "unmute": "Unmute video",
+    "fullscreen": "Enter fullscreen",
+    "exitFullscreen": "Exit fullscreen",
     "filterLabel": "Filter work",
     "filterVideos": "AI Videos",
     "filterPhotos": "AI Photos",
@@ -260,6 +262,7 @@
     "body2": "<fiveYears>Five years ago</fiveYears>, I picked up a camera and started creating <ugc>UGC content</ugc>, filming myself, people, and the beauty around me — capturing emotions, stories, and fleeting moments through my lens. Over the years, I’ve mastered visual storytelling, playing with light, movement, and narrative to make every video feel alive and engaging.",
     "body3": "For the <twoYears>past two years</twoYears>, I’ve been fully dedicated to <aiCreation>AI video creation</aiCreation>, merging my deep background in production with cutting-edge artificial intelligence. This unique combination allows me to find fresh angles, build high-converting visuals, and convey atmosphere at a whole new level. As a video creator, I help brands create engaging, social-first content that genuinely connects with their audience. From AI commercials and product videos to UGC and lifestyle campaigns, I manage the entire creative process — from concept development and storyboarding to filming, AI generation, editing, and final delivery.",
     "worksTitle": "Selected work",
+    "close": "Close",
     "works": {
       "one": "Work placeholder 01",
       "two": "Work placeholder 02",

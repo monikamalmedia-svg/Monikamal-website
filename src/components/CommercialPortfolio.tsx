@@ -73,6 +73,8 @@ const FILTERS: { id: PortfolioType; labelKey: "filterVideos" | "filterPhotos" }[
 
 const LG_MQ = "(min-width: 1024px)";
 const MD_MQ = "(min-width: 768px)";
+const videoHiddenNativeControls =
+  "[&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-timeline]:hidden [&::-webkit-media-controls-current-time-display]:hidden [&::-webkit-media-controls-time-remaining-display]:hidden";
 
 function chunkItems<T>(items: T[], size: number): T[][] {
   const groups: T[][] = [];
@@ -114,12 +116,16 @@ function PortfolioMedia({
   className = "w-full h-full object-cover rounded-2xl",
   videoRef,
   isHovering = false,
+  onPlay,
+  onPause,
 }: {
   item: PortfolioItem;
   alt: string;
   className?: string;
   videoRef?: Ref<HTMLVideoElement>;
   isHovering?: boolean;
+  onPlay?: () => void;
+  onPause?: () => void;
 }) {
   const [videoFailed, setVideoFailed] = useState(false);
   const imageUrl = item.imageUrl?.trim() || "";
@@ -139,7 +145,9 @@ function PortfolioMedia({
           playsInline
           preload="auto"
           controls={false}
-          className={`pointer-events-none ${className} [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden`}
+          className={`pointer-events-none ${className} ${videoHiddenNativeControls}`}
+          onPlay={onPlay}
+          onPause={onPause}
           onError={(event) => {
             console.error("Video load error:", event);
             setVideoFailed(true);
@@ -290,7 +298,7 @@ function PortfolioModal({
               playsInline
               preload="auto"
               controls={false}
-              className="pointer-events-none h-full w-full rounded-2xl object-cover [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden"
+              className={`pointer-events-none h-full w-full rounded-2xl object-cover ${videoHiddenNativeControls}`}
               onPlay={() => setIsPaused(false)}
               onPause={() => setIsPaused(true)}
             />
@@ -308,7 +316,7 @@ function PortfolioModal({
               onClick={toggleMute}
               aria-pressed={!isMuted}
               aria-label={isMuted ? t("unmute") : t("mute")}
-              className={`absolute right-3 bottom-3 z-20 h-11 w-11 md:right-4 md:bottom-4 ${videoControlButtonClass}`}
+              className={`absolute right-3 bottom-3 z-20 h-11 w-11 ${videoControlButtonClass}`}
             >
               {isMuted ? (
                 <VolumeX className="h-5 w-5" strokeWidth={1.5} />
@@ -338,10 +346,10 @@ function PortfolioCard({
   sticky: boolean;
   onOpen: (item: PortfolioItem) => void;
 }) {
-  const t = useTranslations("Portfolio");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canHover, setCanHover] = useState(true);
   const [hovered, setHovered] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
   const isVideo = item.mediaType === "video" && isPlayableVideoUrl(item.videoUrl);
   const isPhoto = item.mediaType === "photo";
 
@@ -358,12 +366,9 @@ function PortfolioCard({
     setHovered(true);
     const video = videoRef.current;
     if (!video) return;
-    video.muted = true;
     video.loop = true;
-    void video.play().catch(() => {
-      video.muted = true;
-      void video.play().catch(() => undefined);
-    });
+    video.muted = true;
+    void video.play().catch(() => undefined);
   };
 
   const onMouseLeave = () => {
@@ -371,87 +376,58 @@ function PortfolioCard({
     const video = videoRef.current;
     if (!video) return;
     video.pause();
-    video.muted = true;
     video.currentTime = 0;
   };
 
   return (
     <article
-      className={`group mx-auto flex w-full shrink-0 flex-col gap-3 md:mx-0 md:w-[280px] md:max-w-none lg:w-[320px] ${
+      className={`group mx-auto flex w-full shrink-0 flex-col md:mx-0 md:w-[280px] md:max-w-none lg:w-[320px] ${
         isVideo ? "max-w-[16.5rem] sm:max-w-[17.5rem]" : "max-w-sm"
       }`}
     >
-      <motion.button
-        type="button"
-        onClick={() => {
-          const video = videoRef.current;
-          if (video) {
-            video.pause();
-            video.muted = true;
-            video.currentTime = 0;
-          }
-          setHovered(false);
-          onOpen(item);
-        }}
-        onMouseEnter={onMouseEnter}
-        onMouseLeave={onMouseLeave}
-        onDragStart={(event) => event.preventDefault()}
+      <motion.div
         whileHover={canHover && !sticky ? { scale: 1.05 } : undefined}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className={`relative aspect-[9/16] w-full origin-center select-none overflow-hidden rounded-2xl border border-glass-border bg-glass/10 text-left shadow-none transition-[border-color] duration-500 hover:border-gold/30 focus-visible:outline-none ${
-          isPhoto ? "cursor-zoom-in" : ""
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+        className={`relative aspect-[9/16] w-full origin-center overflow-hidden rounded-2xl border border-glass-border bg-glass/10 shadow-none transition-[border-color] duration-500 hover:border-gold/30 ${
+          isPhoto ? "cursor-zoom-in" : "cursor-pointer"
         }`}
-        aria-label={isVideo ? `${item.title}. ${t("play")}` : item.title}
       >
-        <div className="absolute inset-0 overflow-hidden rounded-2xl bg-[#0d0509]">
+        <button
+          type="button"
+          onClick={() => {
+            const video = videoRef.current;
+            if (video) {
+              video.pause();
+              video.currentTime = 0;
+            }
+            setHovered(false);
+            onOpen(item);
+          }}
+          onDragStart={(event) => event.preventDefault()}
+          className="absolute inset-0 z-[1] text-left focus-visible:outline-none"
+          aria-label={item.title}
+        >
           <PortfolioMedia
             item={item}
             alt={item.title}
             videoRef={videoRef}
-            isHovering={hovered}
+            isHovering={hovered || !isPaused}
+            onPlay={() => setIsPaused(false)}
+            onPause={() => setIsPaused(true)}
             className="h-full w-full rounded-2xl object-cover"
           />
+        </button>
 
-          {isVideo ? (
-            <>
-              <div className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(180deg,transparent_62%,rgba(15,2,6,0.28)_100%)] md:bg-[linear-gradient(180deg,transparent_45%,rgba(15,2,6,0.45)_100%)]" />
-              <motion.span
-                className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center"
-                initial={false}
-                animate={{
-                  opacity: hovered ? 0 : 0.85,
-                  scale: hovered ? 0.85 : 1,
-                }}
-                transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <span
-                  className={`h-10 w-10 shrink-0 md:h-14 md:w-14 ${videoControlButtonClass}`}
-                >
-                  <Play
-                    className="ml-px h-3.5 w-3.5 fill-current md:ml-0.5 md:h-5 md:w-5"
-                    strokeWidth={1.25}
-                  />
-                </span>
-              </motion.span>
-            </>
-          ) : null}
-        </div>
-      </motion.button>
-
-      <div className="px-1 text-center md:text-left">
-        <h3
-          className={`font-display font-medium tracking-tight text-foreground md:text-2xl ${
-            isVideo ? "text-lg" : "text-xl"
-          }`}
-        >
-          {item.title}
-        </h3>
-        <p className="mt-1 text-sm text-foreground-muted">
-          {item.category}
-          <span className="mx-2 text-foreground-muted/50">·</span>
-          {item.year}
-        </p>
-      </div>
+        {isVideo && isPaused ? (
+          <span className="pointer-events-none absolute inset-0 z-[2] flex items-center justify-center">
+            <span className={`h-14 w-14 ${videoControlButtonClass}`}>
+              <Play className="ml-0.5 h-5 w-5 fill-current" strokeWidth={1.25} />
+            </span>
+          </span>
+        ) : null}
+      </motion.div>
     </article>
   );
 }
@@ -583,15 +559,10 @@ export function CommercialPortfolio({
         className="relative z-20 scroll-mt-24 bg-transparent px-6 py-24 md:px-10 md:py-32 lg:px-12"
       >
         <div className="mx-auto max-w-6xl">
-          <header className="relative z-20 mb-12 flex flex-col items-center gap-8 rounded-xl text-center backdrop-blur-sm md:mb-20 md:flex-row md:items-end md:justify-between md:gap-10 md:text-left">
-            <div className="w-full max-w-2xl md:text-left">
-              <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
-                {t("label")}
-              </p>
-              <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-medium tracking-tight text-foreground">
-                {t("title")}
-              </h2>
-            </div>
+          <header className="relative z-20 mb-12 flex flex-col items-center gap-6 rounded-xl text-center backdrop-blur-sm md:mb-16 md:flex-row md:items-center md:justify-between md:text-left">
+            <p className="text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
+              {t("label")}
+            </p>
 
             <div
               role="tablist"

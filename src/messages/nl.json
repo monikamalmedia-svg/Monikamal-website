@@ -36,6 +36,8 @@
     "pause": "Video pauzeren",
     "mute": "Geluid uit",
     "unmute": "Geluid aan",
+    "fullscreen": "Volledig scherm",
+    "exitFullscreen": "Sluit volledig scherm",
     "filterLabel": "Werk filteren",
     "filterVideos": "AI-video's",
     "filterPhotos": "AI-foto's",
@@ -259,7 +261,8 @@
     "body1": "Ik maak overtuigende video’s die <customers>kijkers in klanten veranderen</customers>.",
     "body2": "<fiveYears>Vijf jaar geleden</fiveYears> pakte ik een camera en begon ik <ugc>UGC-content</ugc> te maken: mezelf, mensen en de schoonheid om me heen — emoties, verhalen en vluchtige momenten door mijn lens. In de loop der jaren heb ik visuele storytelling meester gemaakt, met licht, beweging en narratief, zodat elke video levendig en engaging aanvoelt.",
     "body3": "De <twoYears>afgelopen twee jaar</twoYears> ben ik volledig toegewijd aan <aiCreation>AI-videoproductie</aiCreation>: mijn achtergrond in productie gecombineerd met cutting-edge artificial intelligence. Die combinatie laat me frisse hoeken vinden, high-converting visuals bouwen en sfeer op een nieuw niveau overbrengen. Als video creator help ik merken aan engaging, social-first content die echt verbindt. Van AI-commercials en productvideo’s tot UGC- en lifestylecampagnes begeleid ik het hele creatieve proces — van concept en storyboard tot film, AI-generatie, editing en oplevering.",
-    "worksTitle": "Mijn werk",
+    "worksTitle": "Mijn werken",
+    "close": "Sluiten",
     "works": {
       "one": "Werk placeholder 01",
       "two": "Werk placeholder 02",

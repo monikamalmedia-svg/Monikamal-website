@@ -135,7 +135,7 @@ export function FooterView({
               rel="noopener noreferrer"
               className="text-sm text-gray-400 transition-colors hover:text-white"
             >
-              Designed & Built by Savo
+              Crafted by Savo
             </a>
           </p>
         </div>

@@ -1,18 +1,23 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import type { SanityImageSource } from "@sanity/image-url";
 import { AboutMeVideoPlayer } from "@/components/AboutMeVideoPlayer";
-import { ProtectedImage } from "@/components/ProtectedImage";
-import { ProtectedVideo } from "@/components/ProtectedVideo";
+import { AboutWorkGrid } from "@/components/AboutWorkGrid";
 import { Link } from "@/i18n/navigation";
-import { client, urlFor } from "@/lib/sanity";
+import { client } from "@/lib/sanity";
+import {
+  isPlayableVideoUrl,
+  resolveSanityFileUrl,
+  resolveSanityImageUrl,
+} from "@/lib/sanity-media";
 
 type Props = {
   params: Promise<{ locale: string }>;
 };
 
 type AboutWorkSample = {
+  video?: unknown;
+  image?: unknown;
   videoUrl?: string | null;
-  image?: SanityImageSource | null;
+  videoAssetRef?: string | null;
   titleEn?: string | null;
   titleNl?: string | null;
 };
@@ -34,21 +39,19 @@ const ABOUT_PAGE_QUERY = `*[_type == "aboutPage"][0]{
   "videoUrl": video.asset->url,
   workSamples[]{
     image,
+    video,
     titleEn,
     titleNl,
-    "videoUrl": video.asset->url
+    "videoUrl": video.asset->url,
+    "videoAssetRef": coalesce(video.asset._ref, video.asset->_id)
   }
 }`;
 
-function imageUrl(source: SanityImageSource | null | undefined) {
-  if (!source || typeof source !== "object") return null;
-  if (!("asset" in source) || !source.asset) return null;
-  return urlFor(source).width(1400).url();
-}
-
 async function fetchAboutPage(): Promise<AboutPageDoc | null> {
   try {
-    return await client.fetch<AboutPageDoc | null>(ABOUT_PAGE_QUERY);
+    return await client
+      .withConfig({ useCdn: false })
+      .fetch<AboutPageDoc | null>(ABOUT_PAGE_QUERY, {}, { cache: "no-store" });
   } catch {
     return null;
   }
@@ -65,11 +68,16 @@ export default async function AboutPage({ params }: Props) {
     (isNl ? about?.headingNl : about?.headingEn)?.trim() || t("title");
   const videoUrl = about?.videoUrl?.trim() || null;
 
-  const cmsSamples = (about?.workSamples ?? []).filter(
-    (sample) =>
-      sample &&
-      (sample.videoUrl || sample.image || sample.titleEn || sample.titleNl),
-  );
+  const cmsSamples = (about?.workSamples ?? []).filter((sample) => {
+    if (!sample) return false;
+    const videoUrl =
+      resolveSanityFileUrl(sample.videoUrl) ??
+      resolveSanityFileUrl(sample.video) ??
+      resolveSanityFileUrl(sample.videoAssetRef);
+    return Boolean(
+      videoUrl || sample.image || sample.titleEn || sample.titleNl,
+    );
+  });
 
   const fallbackWorks = [
     {
@@ -101,8 +109,14 @@ export default async function AboutPage({ params }: Props) {
             sample.titleEn?.trim() ||
             sample.titleNl?.trim() ||
             t("worksTitle"),
-          videoUrl: sample.videoUrl?.trim() || null,
-          imageUrl: imageUrl(sample.image),
+          videoUrl: (() => {
+            const url =
+              resolveSanityFileUrl(sample.videoUrl) ??
+              resolveSanityFileUrl(sample.video) ??
+              resolveSanityFileUrl(sample.videoAssetRef);
+            return isPlayableVideoUrl(url) ? url : null;
+          })(),
+          imageUrl: resolveSanityImageUrl(sample.image),
         }))
       : fallbackWorks;
 
@@ -178,55 +192,12 @@ export default async function AboutPage({ params }: Props) {
 
       <section className="relative z-20 px-6 pb-20 md:px-10 lg:px-12">
         <div className="mx-auto max-w-6xl">
-          <h2 className="font-display relative z-20 mb-10 rounded-xl text-[clamp(2rem,4vw,3rem)] font-medium tracking-tight text-foreground backdrop-blur-sm">
-            {t("worksTitle")}
-          </h2>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {works.map((item) => {
-              const hasMedia = Boolean(item.videoUrl || item.imageUrl);
-
-              return (
-                <article
-                  key={item.key}
-                  className="relative flex aspect-video items-end overflow-hidden rounded-2xl border border-glass-border bg-glass/10"
-                >
-                  {item.videoUrl ? (
-                    <ProtectedVideo
-                      src={item.videoUrl}
-                      className="absolute inset-0 h-full w-full rounded-xl object-cover"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="metadata"
-                      aria-label={item.title}
-                    />
-                  ) : item.imageUrl ? (
-                    <ProtectedImage
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="absolute inset-0 h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center bg-[#0d0509]">
-                      <div
-                        aria-hidden
-                        className="pointer-events-none absolute inset-x-6 bottom-8 h-24 rounded-full bg-amber-500/15 blur-[60px]"
-                      />
-                      <p className="relative z-10 font-mono text-[10px] tracking-[0.22em] text-white/50 uppercase">
-                        {t("videoPlaceholder")}
-                      </p>
-                    </div>
-                  )}
-                  <div
-                    className={`relative z-10 w-full p-5 ${hasMedia ? "bg-gradient-to-t from-graphite/90 to-transparent" : ""}`}
-                  >
-                    <p className="text-sm text-foreground-muted">{item.title}</p>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
+          <header className="relative z-20 mb-10 md:mb-12">
+            <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-medium tracking-tight text-foreground">
+              {t("worksTitle")}
+            </h2>
+          </header>
+          <AboutWorkGrid items={works} placeholderLabel={t("videoPlaceholder")} />
         </div>
       </section>
 
