@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { ProtectedImage } from "@/components/ProtectedImage";
@@ -46,12 +47,31 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
   const showreel = useTranslations("Showreel");
   const reduceMotion = useReducedMotion();
   const mediaSrc = videoUrl?.trim() || null;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !mediaSrc) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.autoplay = true;
+    video.loop = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("loop", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "true");
+    void video.play().catch(() => undefined);
+  }, [mediaSrc]);
 
   return (
     <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
       <div className="pointer-events-none absolute inset-0 z-[2]">
         {mediaSrc ? (
           <ProtectedVideo
+            ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
             src={mediaSrc}
             autoPlay
@@ -60,6 +80,7 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
             playsInline
             preload="metadata"
             aria-label={showreel("ariaLabel")}
+            {...{ "webkit-playsinline": "true" }}
           />
         ) : (
           <ProtectedImage
