@@ -125,8 +125,8 @@ export function Hero({
   }, [mediaSrc]);
 
   return (
-    <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
-      <div className="pointer-events-none absolute inset-0 z-[2]">
+    <section className="relative z-20 h-[100dvh] min-h-[100dvh] w-full max-h-[1080px] shrink-0 overflow-hidden bg-[#0d0509]">
+      <div className="pointer-events-none absolute inset-0 z-[2] h-full w-full overflow-hidden bg-[#0d0509]">
         {mediaSrc ? (
           <ProtectedVideo
             ref={videoRef}

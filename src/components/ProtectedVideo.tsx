@@ -69,7 +69,7 @@ export const ProtectedVideo = forwardRef<
   }, [autoPlay, muted, loop, playsInline, props.src]);
 
   return (
-    <div className="h-full w-full" onDragStart={preventDrag}>
+    <div className="relative h-full min-h-full w-full overflow-hidden bg-[#0d0509]" onDragStart={preventDrag}>
       <video
         {...props}
         ref={(node) => {
