@@ -316,7 +316,8 @@
   "Cookies": {
     "title": "Cookies",
     "barBody": "I use cookies to improve your experience on this website. By continuing to browse, you agree to my use of cookies.",
-    "learnMore": "Learn more",
+    "learnMore": "More info",
+    "reject": "Reject",
     "accept": "Accept",
     "body": "I use cookies to run the site and remember your preferences. Optional analytics and marketing cookies are only set if you allow them. Full details are in my",
     "privacy": "Privacy Policy",

@@ -1,6 +1,8 @@
 "use client";
 
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { useCookieConsent } from "@/context/CookieConsentContext";
 import {
   GA_MEASUREMENT_ID,
@@ -18,6 +20,13 @@ export function ConsentScripts() {
 
   return (
     <>
+      {loadAnalytics ? (
+        <>
+          <Analytics />
+          <SpeedInsights />
+        </>
+      ) : null}
+
       {loadAnalytics && GA_MEASUREMENT_ID ? (
         <>
           <Script
