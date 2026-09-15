@@ -128,14 +128,15 @@ export function FooterView({
             </Link>
             <CookieSettingsButton className={legalLinkClass} />
           </p>
-          <p className="mt-4 text-center">
+          <p className="mt-4 text-center text-xs leading-relaxed text-neutral-500">
+            © {new Date().getFullYear()} Monika Mal ·{" "}
             <a
               href="https://wa.me/31620329683"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm text-gray-400 transition-colors hover:text-white"
+              className="text-neutral-500 transition-colors hover:text-neutral-400"
             >
-              Crafted by Savo
+              Site by Savo
             </a>
           </p>
         </div>
