@@ -21,49 +21,34 @@ type Props = {
   children: ReactNode;
 };
 
+const DEFAULT_TITLE = "Custom E-Commerce Commercials | Monika Mal";
+const DEFAULT_DESCRIPTION =
+  "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Monika Mal — AI Visual Director",
+  title: "Monika Mal | Global AI Video Production, UGC & Commercials for US & Europe",
   description:
-    "Cinematic visual assets & AI commercials for high-converting brands.",
-  icons: {
-    icon: [
-      { url: "/favicon.ico?v=4" },
-      { url: "/favicon-32x32.png?v=4", sizes: "32x32", type: "image/png" },
-      { url: "/favicon-16x16.png?v=4", sizes: "16x16", type: "image/png" },
-    ],
-    apple: [
-      {
-        url: "/apple-touch-icon.png?v=4",
-        sizes: "180x180",
-        type: "image/png",
-      },
-    ],
-  },
-  manifest: "/site.webmanifest",
+    "Cinematic AI video production, high-converting UGC, and product visuals for premium e-commerce brands and agencies across the US, Netherlands, and Europe. Elevate your brand with next-gen AI commercials.",
+  keywords: [
+    "AI video production",
+    "AI commercials",
+    "AI UGC video agency",
+    "Product video production US and Europe",
+    "E-commerce video production",
+    "Cinematic AI assets",
+    "AI video agency US and Europe",
+    "Global AI commercial production",
+    "High-end AI video director",
+    "UGC content for brands"
+  ],
   openGraph: {
-    title: "Monika Mal — AI Visual Director",
-    description:
-      "Cinematic visual assets & AI commercials for high-converting brands.",
+    title: "Monika Mal | Global AI Video Production, UGC & Commercials for US & Europe",
+    description: "Cinematic AI video production, high-converting UGC & AI-driven commercials for global brands across the US and Europe.",
     url: SITE_URL,
     siteName: "Monika Mal",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Monika Mal — AI Visual Director",
-      },
-    ],
     locale: "en_US",
     type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Monika Mal — AI Visual Director",
-    description:
-      "Cinematic visual assets & AI commercials for high-converting brands.",
-    images: ["/og-image.jpg"],
   },
 };
 

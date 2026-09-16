@@ -18,6 +18,33 @@ async function fetchFaqSection(): Promise<FaqSectionDoc | null> {
   }
 }
 
+function overlayFaqCopy(
+  items: DisplayFaqItem[],
+  t: Awaited<ReturnType<typeof getTranslations>>,
+): DisplayFaqItem[] {
+  return items.map((item) => {
+    const hay = item.question.toLowerCase();
+    if (
+      hay.includes("physical product") ||
+      hay.includes("fysieke product")
+    ) {
+      return {
+        ...item,
+        question: t("items.product.question"),
+        answer: t.raw("items.product.answer") as string,
+      };
+    }
+    if (hay.includes("revision") || hay.includes("revisie")) {
+      return {
+        ...item,
+        question: t("items.revisions.question"),
+        answer: t.raw("items.revisions.answer") as string,
+      };
+    }
+    return item;
+  });
+}
+
 export async function Faq() {
   const locale = await getLocale();
   const isNl = locale === "nl";
@@ -34,13 +61,17 @@ export async function Faq() {
   const heading = cmsHeading(isNl, doc?.headingEn, doc?.headingNl) || t("title");
   const subheading =
     cmsHeading(isNl, doc?.subheadingEn, doc?.subheadingNl) || t("intro");
+  const items = overlayFaqCopy(
+    cmsItems.length > 0 ? cmsItems : fallbackItems,
+    t,
+  );
 
   return (
     <FaqView
       kicker={t("kicker")}
       heading={heading}
       subheading={subheading}
-      items={cmsItems.length > 0 ? cmsItems : fallbackItems}
+      items={items}
     />
   );
 }

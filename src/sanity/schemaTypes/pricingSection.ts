@@ -9,7 +9,7 @@ export const pricingSection = defineType({
       name: "headingEn",
       title: "Heading (English)",
       type: "string",
-      description: 'Section title, e.g. "Price & Packages"',
+      description: 'Section title, e.g. "Prices & Packages"',
     }),
     defineField({
       name: "headingNl",

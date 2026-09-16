@@ -84,7 +84,6 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("Hero");
-  const isNl = locale === "nl";
   const [hero, caseStudies] = await Promise.all([
     fetchHeroSection(),
     fetchCaseStudies(),
@@ -112,13 +111,9 @@ export default async function Home({ params }: Props) {
     };
   });
 
-  const kicker =
-    (isNl ? hero?.kickerNl : hero?.kickerEn)?.trim() || t("kicker");
-  const headline = (
-    (isNl ? hero?.headlineNl : hero?.headlineEn)?.trim() || t("title")
-  ).replace(/\.$/, "");
-  const subheadline =
-    (isNl ? hero?.subheadlineNl : hero?.subheadlineEn)?.trim() || t("subtitle");
+  const kicker = t("kicker");
+  const headline = t("title");
+  const subheadline = t("subtitle");
   const videoUrl = hero?.videoUrl?.trim() || null;
 
   return (

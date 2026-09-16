@@ -1,13 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState, type MouseEvent, type Ref } from "react";
-import {
-  AnimatePresence,
-  motion,
-  useInView,
-  useScroll,
-  useTransform,
-} from "framer-motion";
+import { useCallback, useEffect, useRef, useState, type MouseEvent, type Ref } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
 import { Play, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
@@ -60,55 +54,14 @@ const PHOTO_PLACEHOLDERS: PortfolioItem[] = [
   },
 ];
 
-type PortfolioLayout = {
-  sticky: boolean;
-  groupSize: number;
-};
-
 const FILTERS: { id: PortfolioType; labelKey: "filterVideos" | "filterPhotos" }[] =
   [
     { id: "video", labelKey: "filterVideos" },
     { id: "photo", labelKey: "filterPhotos" },
   ];
 
-const LG_MQ = "(min-width: 1024px)";
-const MD_MQ = "(min-width: 768px)";
 const videoHiddenNativeControls =
   "[&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-timeline]:hidden [&::-webkit-media-controls-current-time-display]:hidden [&::-webkit-media-controls-time-remaining-display]:hidden";
-
-function chunkItems<T>(items: T[], size: number): T[][] {
-  const groups: T[][] = [];
-  for (let i = 0; i < items.length; i += size) {
-    groups.push(items.slice(i, i + size));
-  }
-  return groups;
-}
-
-function usePortfolioLayout(): PortfolioLayout {
-  const [layout, setLayout] = useState<PortfolioLayout>({
-    sticky: false,
-    groupSize: 1,
-  });
-
-  useLayoutEffect(() => {
-    const lg = window.matchMedia(LG_MQ);
-    const md = window.matchMedia(MD_MQ);
-    const sync = () => {
-      if (lg.matches) setLayout({ sticky: true, groupSize: 3 });
-      else if (md.matches) setLayout({ sticky: true, groupSize: 2 });
-      else setLayout({ sticky: false, groupSize: 1 });
-    };
-    sync();
-    lg.addEventListener("change", sync);
-    md.addEventListener("change", sync);
-    return () => {
-      lg.removeEventListener("change", sync);
-      md.removeEventListener("change", sync);
-    };
-  }, []);
-
-  return layout;
-}
 
 function PortfolioMedia({
   item,
@@ -339,11 +292,9 @@ function PortfolioModal({
 
 function PortfolioCard({
   item,
-  sticky,
   onOpen,
 }: {
   item: PortfolioItem;
-  sticky: boolean;
   onOpen: (item: PortfolioItem) => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -352,6 +303,9 @@ function PortfolioCard({
   const [isPaused, setIsPaused] = useState(true);
   const isVideo = item.mediaType === "video" && isPlayableVideoUrl(item.videoUrl);
   const isPhoto = item.mediaType === "photo";
+  const category = item.category.trim();
+  const year = item.year.trim();
+  const meta = [item.title, year].filter(Boolean).join(" · ");
 
   useEffect(() => {
     const media = window.matchMedia("(hover: hover)");
@@ -380,17 +334,12 @@ function PortfolioCard({
   };
 
   return (
-    <article
-      className={`group mx-auto flex w-full shrink-0 flex-col md:mx-0 md:w-[280px] md:max-w-none lg:w-[320px] ${
-        isVideo ? "max-w-[16.5rem] sm:max-w-[17.5rem]" : "max-w-sm"
-      }`}
-    >
-      <motion.div
-        whileHover={canHover && !sticky ? { scale: 1.05 } : undefined}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+    <article className="group mx-auto flex w-full max-w-[20rem] flex-col items-center lg:max-w-[22rem]">
+      <div className="flex w-max max-w-full flex-col items-center">
+      <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className={`relative aspect-[9/16] w-full origin-center overflow-hidden rounded-2xl border border-glass-border bg-glass/10 shadow-none transition-[border-color] duration-500 hover:border-gold/30 ${
+        className={`relative mx-auto aspect-[9/16] h-[min(70svh,31.25rem)] w-auto max-w-full overflow-hidden rounded-2xl border border-glass-border bg-glass/10 transition-[border-color] duration-500 hover:border-gold/30 sm:h-[500px] lg:h-[550px] ${
           isPhoto ? "cursor-zoom-in" : "cursor-pointer"
         }`}
       >
@@ -427,90 +376,22 @@ function PortfolioCard({
             </span>
           </span>
         ) : null}
-      </motion.div>
+      </div>
+
+      <div className="mt-3 w-full shrink-0 text-center">
+        {category ? (
+          <p className="text-[10px] font-medium tracking-[0.18em] text-gray-300 uppercase">
+            {category}
+          </p>
+        ) : null}
+        {meta ? (
+          <p className={`text-sm font-medium tracking-wide text-white ${category ? "mt-1" : ""}`}>
+            {meta}
+          </p>
+        ) : null}
+      </div>
+      </div>
     </article>
-  );
-}
-
-function PortfolioGroup({
-  items,
-  index,
-  isLast,
-  sticky,
-  onOpen,
-}: {
-  items: PortfolioItem[];
-  index: number;
-  isLast: boolean;
-  sticky: boolean;
-  onOpen: (item: PortfolioItem) => void;
-}) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const groupRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const opacity = useTransform(
-    scrollYProgress,
-    isLast ? [0, 1] : [0, 0.55, 1],
-    isLast ? [1, 1] : [1, 1, 0],
-  );
-  const scale = useTransform(
-    scrollYProgress,
-    isLast ? [0, 0.12, 1] : [0, 0.12, 0.55, 1],
-    isLast ? [0.92, 1, 1] : [0.92, 1, 1, 0.92],
-  );
-
-  const entered = useInView(groupRef, { once: true, amount: 0.3 });
-
-  return (
-    <div ref={sectionRef} className={`relative ${sticky ? "md:min-h-[100vh]" : ""}`}>
-      <motion.div
-        ref={groupRef}
-        className={`relative z-20 flex w-full justify-center will-change-transform ${
-          sticky
-            ? "md:sticky md:top-[20vh]"
-            : ""
-        }`}
-        style={
-          sticky
-            ? {
-                opacity,
-                scale,
-                transformOrigin: "center top",
-                zIndex: 20 + index,
-              }
-            : { zIndex: 20 + index }
-        }
-        initial={false}
-        animate={
-          sticky
-            ? { y: 0 }
-            : entered
-              ? { opacity: 1, y: 0 }
-              : { opacity: 0, y: 28 }
-        }
-        transition={
-          sticky
-            ? { duration: 0 }
-            : { duration: 0.7, ease: [0.22, 1, 0.36, 1] }
-        }
-      >
-        <div className="grid w-full grid-cols-1 justify-items-center gap-10 md:flex md:flex-row md:flex-wrap md:items-start md:justify-center md:gap-6 lg:gap-8">
-          {items.map((item) => (
-            <PortfolioCard
-              key={item.id}
-              item={item}
-              sticky={sticky}
-              onOpen={onOpen}
-            />
-          ))}
-        </div>
-      </motion.div>
-    </div>
   );
 }
 
@@ -522,7 +403,6 @@ export function CommercialPortfolio({
   sanityDocs?: unknown;
 }) {
   const t = useTranslations("Portfolio");
-  const layout = usePortfolioLayout();
   const [filter, setFilter] = useState<PortfolioType>("video");
   const [active, setActive] = useState<PortfolioItem | null>(null);
 
@@ -537,7 +417,6 @@ export function CommercialPortfolio({
     }
     return matched;
   })();
-  const groups = chunkItems(visibleItems, layout.groupSize);
 
   const openItem = useCallback((item: PortfolioItem) => {
     setActive(item);
@@ -556,10 +435,10 @@ export function CommercialPortfolio({
     <>
       <section
         id="portfolio"
-        className="relative z-20 scroll-mt-24 bg-transparent px-6 py-24 md:px-10 md:py-32 lg:px-12"
+        className="relative z-20 scroll-mt-24 bg-transparent px-6 py-16 md:px-10 md:py-20 lg:px-12"
       >
-        <div className="mx-auto max-w-6xl">
-          <header className="relative z-20 mb-12 flex flex-col items-center gap-6 rounded-xl text-center backdrop-blur-sm md:mb-16 md:flex-row md:items-center md:justify-between md:text-left">
+        <div className="mx-auto max-w-7xl">
+          <header className="relative z-20 mb-8 flex flex-col items-center gap-6 rounded-xl text-center backdrop-blur-sm md:mb-10 md:flex-row md:items-center md:justify-between md:text-left">
             <p className="text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
               {t("label")}
             </p>
@@ -601,27 +480,11 @@ export function CommercialPortfolio({
           </header>
 
           <div id="portfolio-grid" role="tabpanel" aria-labelledby={`portfolio-tab-${filter}`}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`${filter}-${layout.groupSize}`}
-                className={`flex flex-col ${layout.sticky ? "gap-10 md:gap-0" : "gap-10"}`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, transition: { duration: 0.22 } }}
-                transition={{ duration: 0.35 }}
-              >
-                {groups.map((group, index) => (
-                  <PortfolioGroup
-                    key={group.map((item) => item.id).join("-")}
-                    items={group}
-                    index={index}
-                    isLast={index === groups.length - 1}
-                    sticky={layout.sticky}
-                    onOpen={openItem}
-                  />
-                ))}
-              </motion.div>
-            </AnimatePresence>
+            <div className="grid grid-cols-1 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-6">
+              {visibleItems.map((item) => (
+                <PortfolioCard key={item.id} item={item} onOpen={openItem} />
+              ))}
+            </div>
           </div>
         </div>
       </section>

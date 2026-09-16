@@ -18,7 +18,7 @@ export function PricingView({ heading, kicker, badge, cta, packages }: Props) {
   return (
     <section
       id="pricing"
-      className="relative z-20 scroll-mt-24 bg-transparent px-6 py-24 md:px-10 md:py-32 lg:px-12"
+      className="relative z-20 scroll-mt-24 bg-transparent px-6 pt-24 pb-8 md:px-10 md:pt-32 md:pb-10 lg:px-12"
     >
       <div className="mx-auto max-w-6xl">
         <header className="relative z-20 mb-12 max-w-2xl rounded-xl text-left backdrop-blur-sm md:mb-16">
@@ -56,6 +56,11 @@ export function PricingView({ heading, kicker, badge, cta, packages }: Props) {
                 <h3 className="font-display pr-20 text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
                   {pack.name}
                 </h3>
+                {pack.tagline ? (
+                  <p className="mt-2 max-w-[18rem] text-sm leading-relaxed text-foreground-muted">
+                    {pack.tagline}
+                  </p>
+                ) : null}
 
                 <div className="mt-4">
                   <p className="font-display text-4xl font-medium tracking-tight text-foreground md:text-5xl">
@@ -75,11 +80,11 @@ export function PricingView({ heading, kicker, badge, cta, packages }: Props) {
                       className="flex items-start gap-3 text-sm leading-relaxed text-foreground-muted"
                     >
                       <Check
-                        className="mt-0.5 h-4 w-4 shrink-0 text-gold"
+                        className="mt-[3px] h-4 w-4 shrink-0 text-gold"
                         strokeWidth={1.75}
                         aria-hidden
                       />
-                      <span>{feature}</span>
+                      <span className="min-w-0">{feature}</span>
                     </li>
                   ))}
                 </ul>

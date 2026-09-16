@@ -26,9 +26,9 @@ export function PhotoPricingView({
   return (
     <section
       id="photography"
-      className="relative z-20 scroll-mt-24 bg-transparent px-6 py-20 md:px-10 md:py-28 lg:px-12"
+      className="relative z-20 scroll-mt-24 bg-transparent px-6 pt-8 pb-12 text-left md:px-10 md:pt-10 md:pb-16 lg:px-12"
     >
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-6xl">
         <header className="relative z-20 mb-10 max-w-2xl rounded-xl text-left backdrop-blur-sm md:mb-14">
           <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
             {kicker}

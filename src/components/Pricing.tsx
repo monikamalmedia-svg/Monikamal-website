@@ -1,7 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { PricingView } from "@/components/PricingView";
 import {
-  cmsHeading,
   mapVideoPackages,
   PRICING_SECTION_QUERY,
   type DisplayPackage,
@@ -10,10 +9,33 @@ import {
 import { client } from "@/lib/sanity";
 
 const FEATURE_KEYS = {
-  starter: ["video", "avatar", "revisions", "delivery"] as const,
-  growth: ["videos", "craft", "revisions", "delivery"] as const,
-  partnership: ["videos", "priority", "slot", "revisions"] as const,
+  starter: ["video", "hook", "asmr", "revisions", "delivery"] as const,
+  growth: ["videos", "asmr", "post", "revisions", "delivery"] as const,
+  partnership: ["videos", "cycle", "priority", "slot", "revisions"] as const,
 };
+
+const TAGGED_PACKAGES = ["starter", "growth", "partnership"] as const;
+
+function withLocalizedPackageCopy(
+  packages: DisplayPackage[],
+  t: Awaited<ReturnType<typeof getTranslations>>,
+): DisplayPackage[] {
+  return packages.map((pack) => {
+    const tagged = TAGGED_PACKAGES.includes(
+      pack.key as (typeof TAGGED_PACKAGES)[number],
+    );
+    if (!tagged) return pack;
+
+    const keys = FEATURE_KEYS[pack.key as (typeof TAGGED_PACKAGES)[number]];
+    return {
+      ...pack,
+      tagline: t(`packages.${pack.key}.tagline`),
+      features: keys.map((feature) =>
+        t(`packages.${pack.key}.features.${feature}`),
+      ),
+    };
+  });
+}
 
 async function fetchPricingSection(): Promise<PricingSectionDoc | null> {
   try {
@@ -35,6 +57,7 @@ export async function Pricing() {
       name: t("packages.starter.name"),
       price: t("packages.starter.price"),
       pricePerUnit: null,
+      tagline: t("packages.starter.tagline"),
       features: FEATURE_KEYS.starter.map((feature) =>
         t(`packages.starter.features.${feature}`),
       ),
@@ -45,6 +68,7 @@ export async function Pricing() {
       name: t("packages.growth.name"),
       price: t("packages.growth.price"),
       pricePerUnit: null,
+      tagline: t("packages.growth.tagline"),
       features: FEATURE_KEYS.growth.map((feature) =>
         t(`packages.growth.features.${feature}`),
       ),
@@ -55,6 +79,7 @@ export async function Pricing() {
       name: t("packages.partnership.name"),
       price: t("packages.partnership.price"),
       pricePerUnit: t("packages.partnership.perUnit"),
+      tagline: t("packages.partnership.tagline"),
       features: FEATURE_KEYS.partnership.map((feature) =>
         t(`packages.partnership.features.${feature}`),
       ),
@@ -63,7 +88,11 @@ export async function Pricing() {
   ];
 
   const cmsPackages = mapVideoPackages(isNl, doc?.videoPackages);
-  const heading = cmsHeading(isNl, doc?.headingEn, doc?.headingNl) || t("title");
+  const heading = t("title");
+  const packages = withLocalizedPackageCopy(
+    cmsPackages.length > 0 ? cmsPackages : fallbackPackages,
+    t,
+  );
 
   return (
     <PricingView
@@ -71,7 +100,7 @@ export async function Pricing() {
       kicker={t("kicker")}
       badge={t("badge")}
       cta={t("packages.starter.cta")}
-      packages={cmsPackages.length > 0 ? cmsPackages : fallbackPackages}
+      packages={packages}
     />
   );
 }

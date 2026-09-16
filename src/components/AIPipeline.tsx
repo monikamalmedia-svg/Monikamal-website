@@ -13,7 +13,7 @@ import { useTranslations } from "next-intl";
 
 const STEPS = ["brief", "concept", "production", "delivery"] as const;
 const DESKTOP_MQ = "(min-width: 1024px)";
-const STEP_SCROLL_OFFSET = ["start 32%", "end 18%"] as const;
+const STEP_SCROLL_OFFSET: [string, string] = ["start 48%", "end 28%"];
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(false);
@@ -46,7 +46,9 @@ function ProgressRail({ progress }: { progress: MotionValue<number> }) {
         <span
           key={index}
           className="absolute left-1/2 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/60 bg-graphite"
-          style={{ top: `${(index / STEPS.length) * 100}%` }}
+          style={{
+            top: `${STEPS.length <= 1 ? 0 : (index / (STEPS.length - 1)) * 100}%`,
+          }}
         />
       ))}
     </div>
@@ -71,17 +73,18 @@ function PipelineStep({
 
   const { scrollYProgress } = useScroll({
     target: stepRef,
-    offset: STEP_SCROLL_OFFSET as ["start 32%", "end 18%"],
+    // @ts-ignore
+    offset: STEP_SCROLL_OFFSET,
   });
 
   const opacity = useTransform(
     scrollYProgress,
-    isLast ? [0, 1] : [0, 0.62, 1],
+    isLast ? [0, 1] : [0, 0.82, 1],
     isLast ? [1, 1] : [1, 1, 0],
   );
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
-    setScrollActive(value >= 0 && value < (isLast ? 1 : 0.62));
+    setScrollActive(value >= 0 && value < (isLast ? 1 : 0.82));
   });
 
   const inView = useInView(cardRef, {
@@ -93,11 +96,11 @@ function PipelineStep({
   return (
     <li
       ref={stepRef}
-      className={`relative ${isLast ? "lg:min-h-[62vh]" : "lg:min-h-[48vh]"}`}
+      className={`relative ${isLast ? "lg:min-h-[34vh]" : "lg:min-h-[24vh]"}`}
     >
       <motion.div
         ref={cardRef}
-        className={`relative z-20 ml-8 flex flex-col overflow-hidden rounded-2xl border bg-glass/10 p-6 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 md:p-7 lg:sticky lg:top-[26vh] lg:ml-12 lg:max-w-xl ${
+        className={`relative z-20 ml-8 flex flex-col overflow-hidden rounded-2xl border bg-glass/10 p-6 backdrop-blur-sm transition-[border-color,box-shadow,opacity] duration-500 ease-out md:p-7 lg:sticky lg:top-[20vh] lg:ml-12 lg:max-w-xl ${
           isActive
             ? "border-gold shadow-[0_0_18px_rgba(212,175,55,0.18)]"
             : "border-glass-border shadow-none"
@@ -145,7 +148,7 @@ export function AIPipeline() {
       className="relative z-20 scroll-mt-24 bg-transparent px-6 py-24 md:px-10 md:py-32 lg:px-12"
     >
       <div className="mx-auto max-w-6xl">
-        <header className="relative z-20 mb-14 max-w-2xl rounded-xl text-left backdrop-blur-sm md:mb-20">
+        <header className="relative z-20 mb-10 max-w-2xl rounded-xl text-left backdrop-blur-sm md:mb-12">
           <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
             {t("kicker")}
           </p>
@@ -160,7 +163,7 @@ export function AIPipeline() {
         <div ref={trackRef} className="relative">
           <ProgressRail progress={scrollYProgress} />
 
-          <ol className="relative z-10 flex flex-col gap-5 lg:gap-0">
+          <ol className="relative z-10 flex flex-col gap-3 lg:gap-1">
             {STEPS.map((step, index) => (
               <PipelineStep
                 key={step}

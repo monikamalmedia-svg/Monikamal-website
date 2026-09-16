@@ -1,14 +1,15 @@
 {
   "Metadata": {
-    "title": "Monika Mal — AI Visual Director",
-    "description": "Cinematic visual assets & AI commercials for high-converting brands.",
-    "ogTitle": "Monika Mal — AI Visual Director",
-    "ogDescription": "Cinematic visual assets & AI commercials for high-converting brands.",
+    "title": "Custom E-Commerce Commercials | Monika Mal",
+    "description": "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.",
+    "ogTitle": "Custom E-Commerce Commercials | Monika Mal",
+    "ogDescription": "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.",
     "keywords": [
-      "AI video production",
+      "AI-driven video production",
       "e-commerce commercials",
       "AI commercials",
       "product video ads",
+      "sales growth video",
       "Meta ads video",
       "TikTok ads video",
       "custom AI avatar",
@@ -16,12 +17,13 @@
     ]
   },
   "Hero": {
-    "kicker": "AI-Driven Video Production",
-    "title": "AI Commercials",
-    "subtitle": "Cinematic visual assets built for high-converting e-commerce brands.",
+    "kicker": "Custom E-Commerce Commercials",
+    "title": "Cinematic Commercials",
+    "subtitle": "High-converting AI commercials for e-commerce brands.",
     "cta": "Book a project",
     "ctaSecondary": "View work",
-    "scrollHint": "Scroll down"
+    "scrollHint": "Scroll down",
+    "adWatermark": "AI Advertisement Example"
   },
   "Showreel": {
     "ariaLabel": "Monika Mal showreel",
@@ -129,40 +131,46 @@
   },
   "Pricing": {
     "kicker": "Pricing",
-    "title": "Price & Packages",
+    "title": "Prices & Packages",
     "badge": "Popular",
     "packages": {
       "starter": {
         "name": "Starter",
+        "tagline": "Ideal for testing products on Meta and TikTok. Full cycle: from concept to final export-ready commercial.",
         "price": "€400",
         "cta": "Choose package",
         "features": {
           "video": "1 AI commercial (up to 30 seconds)",
-          "avatar": "1 custom AI avatar",
+          "hook": "High-converting hook & retention strategy",
+          "asmr": "ASMR sound design & cinematic color grading",
           "revisions": "2 rounds of revisions",
-          "delivery": "Delivery in 3–5 days"
+          "delivery": "Delivery in 3–5 business days"
         }
       },
       "growth": {
         "name": "Growth",
+        "tagline": "Scale winning creatives. Multiple hooks, advanced post-production, and direct creative oversight.",
         "price": "€700",
         "cta": "Choose package",
         "features": {
-          "videos": "2 videos with individual hooks",
-          "craft": "ASMR sound design and signature craft techniques",
+          "videos": "2 videos with high-converting hooks",
+          "asmr": "ASMR sound design & custom audio texture",
+          "post": "Advanced post-production & cinematic color grading",
           "revisions": "2 rounds of revisions",
           "delivery": "Delivery in 6–10 business days"
         }
       },
       "partnership": {
         "name": "Partnership",
+        "tagline": "A dedicated monthly production slot with priority execution and full-cycle management for consistent scaling.",
         "price": "€1,200/month",
         "perUnit": "€300 / video",
         "cta": "Choose package",
         "features": {
-          "videos": "4 AI videos per month",
-          "priority": "Priority timing — produced ahead of the queue",
-          "slot": "A dedicated calendar slot — guaranteed regular production every month",
+          "videos": "4 AI videos per month (€300 / video)",
+          "cycle": "Full-cycle production: hooks, editing, ASMR & color grading",
+          "priority": "Priority timing – produced ahead of the queue",
+          "slot": "Dedicated monthly production slot & creative oversight",
           "revisions": "2 rounds of revisions on each video"
         }
       }
@@ -206,19 +214,19 @@
     "steps": {
       "brief": {
         "title": "Brief",
-        "body": "I map the brand, audience, and offer — then lock the creative direction before a single frame is generated."
+        "body": "I map your brand, audience, and offer — locking the exact creative direction before a single frame is generated."
       },
       "concept": {
         "title": "Concept",
-        "body": "Mood, hooks, and storyboard. You approve the look so production stays precise and fast."
+        "body": "Strategic hooks, storyboards, and mood boards built for e-commerce performance. You approve the exact visual tone before production begins."
       },
       "production": {
         "title": "Production",
-        "body": "AI video, custom avatars, sound design, and signature craft — assembled as a finished commercial."
+        "body": "Advanced AI generation combined with professional post-production: precise color grading, custom sound design, rhythm editing, and polish to match high-end cinematic standards without a traditional crew."
       },
       "delivery": {
         "title": "Delivery",
-        "body": "Revisions as included in your package, then files ready for ads, product pages, and social."
+        "body": "Thorough revisions per your package, followed by export-ready assets optimized for high-converting Meta, TikTok, and web product pages."
       }
     }
   },
@@ -275,6 +283,7 @@
   "Footer": {
     "brand": "Monika Mal",
     "tagline": "Cinematic AI commercials for e-commerce brands",
+    "location": "Based in the Netherlands • Working globally",
     "navLabel": "Footer",
     "portfolio": "Portfolio",
     "about": "About me",
@@ -283,6 +292,7 @@
     "instagram": "Instagram",
     "linkedin": "LinkedIn",
     "tiktok": "TikTok",
+    "whatsapp": "WhatsApp",
     "privacy": "Privacy Policy",
     "copyright": "© {year} Monika Mal. All rights reserved."
   },
@@ -297,15 +307,15 @@
       },
       "product": {
         "question": "Will the AI video accurately reflect my physical product?",
-        "answer": "<hl>100% precision</hl>. I integrate high-res 3D or photo source files of your product into custom AI engines, ensuring complete visual realism without digital distortions."
+        "answer": "Yes. I manage the entire creative direction, brand alignment, and color grading so the product matches your exact standards before final polish."
       },
       "ads": {
         "question": "Can I run these videos as Meta, TikTok, and TV Ads?",
         "answer": "Yes. You receive <hl>full commercial rights</hl> for all generated video & photo assets across all global digital advertising and broadcast channels."
       },
       "revisions": {
-        "question": "How many revision rounds are included?",
-        "answer": "Each project includes <hl>2 revision rounds</hl> covering video timing, color grading, sound design, and typography adjustments."
+        "question": "How do revisions work?",
+        "answer": "Every package includes structured revision rounds. I guide the project from the initial brief through custom sound design and final export, ensuring you get a polished commercial ready to run."
       },
       "payment": {
         "question": "How does payment and onboarding work?",

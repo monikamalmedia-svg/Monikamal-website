@@ -1,14 +1,15 @@
 {
   "Metadata": {
-    "title": "Monika Mal — AI Visual Director",
-    "description": "Cinematische visuals en AI-commercials voor merken met hoge conversie.",
-    "ogTitle": "Monika Mal — AI Visual Director",
-    "ogDescription": "Cinematische visuals en AI-commercials voor merken met hoge conversie.",
+    "title": "Custom E-Commerce Commercials | Monika Mal",
+    "description": "Professionele e-commerce commercials op maat voor merken. Cinematic video's met hoge conversie voor Meta, TikTok en productpagina's zonder dure productiemaatschappij.",
+    "ogTitle": "Custom E-Commerce Commercials | Monika Mal",
+    "ogDescription": "Professionele e-commerce commercials op maat voor merken. Cinematic video's met hoge conversie voor Meta, TikTok en productpagina's zonder dure productiemaatschappij.",
     "keywords": [
-      "AI-videoproductie",
+      "AI-gedreven videoproductie",
       "e-commerce commercials",
       "AI-commercials",
       "productvideo ads",
+      "commercials voor meer verkoop",
       "Meta ads video",
       "TikTok ads video",
       "custom AI-avatar",
@@ -16,12 +17,13 @@
     ]
   },
   "Hero": {
-    "kicker": "AI-Driven Video Production",
-    "title": "AI Commercials",
-    "subtitle": "Cinematische visual assets voor e-commerce merken met hoge conversie.",
+    "kicker": "Custom E-Commerce Commercials",
+    "title": "Cinematic Commercials",
+    "subtitle": "AI-commercials met hoge conversie voor e-commerce merken.",
     "cta": "Boek een project",
     "ctaSecondary": "Bekijk werk",
-    "scrollHint": "Scroll naar beneden"
+    "scrollHint": "Scroll naar beneden",
+    "adWatermark": "AI Reclamevoorbeeld"
   },
   "Showreel": {
     "ariaLabel": "Monika Mal showreel",
@@ -134,35 +136,41 @@
     "packages": {
       "starter": {
         "name": "Starter",
+        "tagline": "Ideaal voor het testen van producten op Meta en TikTok. Volledige cyclus: van concept tot exportklare commercial.",
         "price": "€400",
         "cta": "Kies pakket",
         "features": {
           "video": "1 AI-commercial (tot 30 seconden)",
-          "avatar": "1 custom AI-avatar",
+          "hook": "High-converting hook & retentiestrategie",
+          "asmr": "ASMR sound design & cinematische color grading",
           "revisions": "2 revisierondes",
-          "delivery": "Levering binnen 3–5 dagen"
+          "delivery": "Levering binnen 3–5 werkdagen"
         }
       },
       "growth": {
         "name": "Growth",
+        "tagline": "Schaal winnende creatives. Meerdere hooks, geavanceerde post-production en directe creatieve aansturing.",
         "price": "€700",
         "cta": "Kies pakket",
         "features": {
-          "videos": "2 video’s met individuele hooks",
-          "craft": "ASMR-geluid en signature craft-technieken",
+          "videos": "2 video’s met high-converting hooks",
+          "asmr": "ASMR sound design & custom audio texture",
+          "post": "Advanced post-production & cinematische color grading",
           "revisions": "2 revisierondes",
           "delivery": "Levering binnen 6–10 werkdagen"
         }
       },
       "partnership": {
         "name": "Samenwerking",
+        "tagline": "Een gereserveerd maandelijks productieslot met prioriteit en full-cycle management voor consistente schaling.",
         "price": "€1.200/maand",
         "perUnit": "€300 / video",
         "cta": "Kies pakket",
         "features": {
-          "videos": "4 AI-video’s per maand",
-          "priority": "Prioriteit in planning — productie buiten de wachtrij",
-          "slot": "Een vast slot in de agenda — gegarandeerde maandelijkse productie",
+          "videos": "4 AI-video’s per maand (€300 / video)",
+          "cycle": "Full-cycle production: hooks, montage, ASMR & color grading",
+          "priority": "Prioriteit in planning – productie buiten de wachtrij",
+          "slot": "Dedicated maandelijks productieslot & creatieve aansturing",
           "revisions": "2 revisierondes per video"
         }
       }
@@ -206,19 +214,19 @@
     "steps": {
       "brief": {
         "title": "Briefing",
-        "body": "Ik breng merk, doelgroep en aanbod in kaart — en zet de creatieve koers vast vóór de eerste frame."
+        "body": "Ik breng je merk, doelgroep en aanbod in kaart — en leg de creatieve richting vast voordat er één frame wordt gegenereerd."
       },
       "concept": {
         "title": "Concept",
-        "body": "Sfeer, hooks en storyboard. Jij keurt de look goed, zodat productie gericht en snel blijft."
+        "body": "Strategische hooks, storyboards en moodboards gebaseerd op e-commerce conversie. Jij keurt de visuele toon goed voordat de productie start."
       },
       "production": {
         "title": "Productie",
-        "body": "AI-video, custom avatars, sound design en signature craft — als afgewerkte commercial."
+        "body": "Geavanceerde AI-generatie gecombineerd met professionele post-production: precieze color grading, custom sound design, ritmische montage en finishing touch op cinematischniveau, zonder traditionele crew."
       },
       "delivery": {
         "title": "Oplevering",
-        "body": "Revisies volgens je pakket, daarna bestanden klaar voor ads, productpagina’s en socials."
+        "body": "Grondige revisies volgens je pakket, gevolgd door exportklare assets die zijn geoptimaliseerd voor hoogconverterende Meta-, TikTok- en webpagina's."
       }
     }
   },
@@ -275,6 +283,7 @@
   "Footer": {
     "brand": "Monika Mal",
     "tagline": "Cinematische commercials voor e-commerce merken",
+    "location": "Gevestigd in Nederland • Werkt wereldwijd",
     "navLabel": "Footer",
     "portfolio": "Portfolio",
     "about": "Over mij",
@@ -283,6 +292,7 @@
     "instagram": "Instagram",
     "linkedin": "LinkedIn",
     "tiktok": "TikTok",
+    "whatsapp": "WhatsApp",
     "privacy": "Privacybeleid",
     "copyright": "© {year} Monika Mal. Alle rechten voorbehouden."
   },
@@ -296,16 +306,16 @@
         "answer": "Starter-projecten lever ik in <hl>3–5 werkdagen</hl>. Growth- en Commercial-pakketten duren <hl>6–10 werkdagen</hl>. Retainer-partners krijgen prioriteitsslots in mijn agenda."
       },
       "product": {
-        "question": "Weerspiegelt de AI-video mijn fysieke product nauwkeurig?",
-        "answer": "<hl>100% precisie</hl>. Ik integreer high-res 3D- of fotobronbestanden van je product in custom AI-engines, zodat de look realistisch blijft — zonder digitale vervormingen."
+        "question": "Komt de AI-video overeen met mijn fysieke product?",
+        "answer": "Ja. Ik beheers de volledige creatieve richting, merkaansluiting en color grading zodat het product exact aansluit bij jouw standaarden."
       },
       "ads": {
         "question": "Kan ik deze video’s inzetten als Meta-, TikTok- en TV-ads?",
         "answer": "Ja. Je krijgt <hl>volledige commerciële rechten</hl> op alle gegenereerde video- en foto-assets, wereldwijd voor digitale advertising en broadcast."
       },
       "revisions": {
-        "question": "Hoeveel revisierondes zitten erbij?",
-        "answer": "Elk project bevat <hl>2 revisierondes</hl> voor timing, color grading, sound design en typografie."
+        "question": "Hoe werken revisies?",
+        "answer": "Elk pakket bevat gestructureerde revisierondes. Ik begeleid het project vanaf de eerste brief tot aan de custom sound design en definitieve export."
       },
       "payment": {
         "question": "Hoe werken betaling en onboarding?",

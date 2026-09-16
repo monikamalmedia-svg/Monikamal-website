@@ -33,7 +33,7 @@ export const heroSection = defineType({
       type: "text",
       rows: 3,
       description:
-        'e.g. "Cinematic visual assets built for high-converting e-commerce brands."',
+        'e.g. "Cinematic commercials in 3× less time — without an expensive production crew."',
     }),
     defineField({
       name: "subheadlineNl",

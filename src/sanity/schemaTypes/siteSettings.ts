@@ -9,7 +9,7 @@ export const siteSettings = defineType({
       name: "whatsappNumber",
       title: "WhatsApp number",
       type: "string",
-      description: "Used by the floating WhatsApp button. Digits with or without +.",
+      description: "Used by the footer WhatsApp link. Digits with or without +.",
     }),
     defineField({
       name: "contactEmail",

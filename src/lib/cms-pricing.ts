@@ -37,6 +37,7 @@ export type DisplayPackage = {
   name: string;
   price: string;
   pricePerUnit: string | null;
+  tagline?: string | null;
   features: string[];
   featured: boolean;
 };

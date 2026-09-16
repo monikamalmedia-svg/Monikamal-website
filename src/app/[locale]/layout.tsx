@@ -10,7 +10,6 @@ import { FilmGrainOverlay } from "@/components/FilmGrainOverlay";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { ScrollRoot } from "@/components/ScrollRoot";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { SelectedPackageProvider } from "@/context/SelectedPackageContext";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import { routing } from "@/i18n/routing";
@@ -28,8 +27,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const path = locale === routing.defaultLocale ? "/" : `/${locale}`;
-  const url = new URL(path, SITE_URL).toString();
+  const englishUrl = new URL("/", SITE_URL).toString();
+  const dutchUrl = new URL("/nl", SITE_URL).toString();
+  const url = locale === "nl" ? dutchUrl : englishUrl;
   const keywords = t.raw("keywords") as string[];
 
   return {
@@ -55,14 +55,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     alternates: {
       canonical: url,
       languages: {
-        en: new URL("/", SITE_URL).toString(),
-        nl: new URL("/nl", SITE_URL).toString(),
+        en: englishUrl,
+        nl: dutchUrl,
+        "x-default": englishUrl,
       },
     },
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
       locale: locale === "nl" ? "nl_NL" : "en_US",
+      alternateLocale: locale === "nl" ? ["en_US"] : ["nl_NL"],
       url,
       title: t("ogTitle"),
       description: t("ogDescription"),
@@ -104,7 +106,6 @@ export default async function LocaleLayout({ children, params }: Props) {
               <Navbar />
               <div className="relative z-20 isolate flex flex-1 flex-col">{children}</div>
               <Footer />
-              <WhatsAppButton />
               <CookieBanner />
               <ConsentScripts />
             </ScrollRoot>

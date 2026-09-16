@@ -121,8 +121,8 @@ export default async function AboutPage({ params }: Props) {
       : fallbackWorks;
 
   return (
-    <main className="relative z-20 flex-1 pt-24 md:pt-28">
-      <section className="relative z-20 px-6 py-16 md:px-10 md:py-24 lg:px-12">
+    <main className="relative z-20 flex-1 pt-20 md:pt-24">
+      <section className="relative z-20 px-6 pt-8 pb-16 md:px-10 md:pt-10 md:pb-24 lg:px-12">
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_1.1fr] lg:items-start lg:gap-16">
           <div className="relative aspect-[3/4] select-none">
             {videoUrl ? (

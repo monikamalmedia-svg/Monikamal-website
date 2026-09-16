@@ -32,15 +32,15 @@ type Props = {
 };
 
 export function FaqView({ kicker, heading, subheading, items }: Props) {
-  const [openId, setOpenId] = useState<string | null>(items[0]?.id ?? null);
+  const [openId, setOpenId] = useState<string | null>(null);
 
   return (
     <section
       id="faq"
-      className="relative z-20 scroll-mt-28 bg-transparent px-6 pt-28 pb-24 md:px-10 md:pt-36 md:pb-32 lg:px-12"
+      className="relative z-20 scroll-mt-24 bg-transparent px-6 py-12 md:px-10 md:py-16 lg:px-12"
     >
       <div className="mx-auto max-w-6xl">
-        <header className="relative z-20 mb-12 max-w-2xl rounded-xl backdrop-blur-sm md:mb-16">
+        <header className="relative z-20 mb-10 max-w-2xl rounded-xl backdrop-blur-sm md:mb-12">
           <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
             {kicker}
           </p>
@@ -55,45 +55,38 @@ export function FaqView({ kicker, heading, subheading, items }: Props) {
         <div className="relative pl-6 md:pl-8">
           <div
             aria-hidden
-            className="pointer-events-none absolute top-0 bottom-0 left-0 w-[1px] bg-gradient-to-b from-amber-400/80 via-amber-400/20 to-transparent"
+            className="pointer-events-none absolute inset-y-0 left-0 w-px bg-gradient-to-b from-gold/80 via-gold/45 to-gold/40"
           />
 
-          <div className="relative z-20 flex flex-col gap-3">
-            {items.map((item, index) => {
+          <div className="relative z-20 flex flex-col gap-2.5">
+            {items.map((item) => {
               const open = openId === item.id;
               const panelId = `faq-panel-${item.id}`;
               const buttonId = `faq-button-${item.id}`;
 
               return (
-                <motion.div
+                <div
                   key={item.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{
-                    duration: 0.45,
-                    delay: index * 0.08,
-                    ease: [0.22, 1, 0.36, 1],
-                  }}
-                  className={`rounded-2xl border backdrop-blur-md transition-all duration-300 ${
+                  className={`overflow-hidden rounded-2xl border backdrop-blur-lg transition-[border-color,background-color,box-shadow] duration-300 ${
                     open
-                      ? "border-amber-400/50 bg-white/[0.04] shadow-[0_0_20px_rgba(251,191,36,0.15)]"
-                      : "border-white/10 bg-white/[0.02] hover:border-white/20"
+                      ? "border-gold/30 bg-[#1a0f16]/40 shadow-[0_8px_32px_rgba(212,175,55,0.12)]"
+                      : "border-gold/10 bg-[#1a0f16]/40 hover:border-gold/30 hover:bg-gold/5 hover:shadow-[0_8px_32px_rgba(212,175,55,0.1)]"
                   }`}
                 >
-                  <h3>
+                  <h3 className="m-0">
                     <button
                       type="button"
                       id={buttonId}
                       aria-expanded={open}
                       aria-controls={panelId}
                       onClick={() => setOpenId(open ? null : item.id)}
-                      className="flex w-full items-center justify-between gap-4 px-5 py-5 text-left md:px-7 md:py-6"
+                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-4 px-5 py-5 text-left md:px-7 md:py-6"
                     >
-                      <span className="font-display text-lg font-medium tracking-tight text-foreground md:text-xl">
+                      <span className="font-display text-lg leading-snug font-medium tracking-tight text-pretty text-foreground md:text-xl">
                         {item.question}
                       </span>
                       <ChevronDown
-                        className={`h-5 w-5 shrink-0 text-amber-400 transition-transform duration-300 ${
+                        className={`mt-0.5 h-5 w-5 shrink-0 text-amber-400 transition-transform duration-300 ${
                           open ? "rotate-180" : ""
                         }`}
                         strokeWidth={1.5}
@@ -111,18 +104,18 @@ export function FaqView({ kicker, heading, subheading, items }: Props) {
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{
-                          duration: 0.3,
+                          duration: 0.28,
                           ease: [0.22, 1, 0.36, 1],
                         }}
                         className="overflow-hidden"
                       >
-                        <p className="max-w-3xl px-5 pt-3 pb-1 text-sm leading-relaxed text-neutral-300 md:px-7 md:pb-6 md:text-base">
+                        <p className="max-w-3xl px-5 pt-0 pb-5 text-sm leading-relaxed text-neutral-300 md:px-7 md:pb-6 md:text-base">
                           <HighlightedText text={item.answer} />
                         </p>
                       </motion.div>
                     ) : null}
                   </AnimatePresence>
-                </motion.div>
+                </div>
               );
             })}
           </div>
