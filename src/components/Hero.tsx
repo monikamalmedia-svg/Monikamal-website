@@ -110,7 +110,7 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
 
       <p
         aria-hidden
-        className="pointer-events-none absolute right-0 bottom-10 z-[15] select-none pr-4 text-right font-sans text-[11px] leading-none font-medium tracking-widest whitespace-nowrap text-white/70 uppercase sm:pr-6 md:bottom-6"
+        className="pointer-events-none absolute right-0 bottom-14 z-[15] select-none pr-4 text-right font-sans text-[11px] leading-none font-medium tracking-widest whitespace-nowrap text-white/70 uppercase sm:pr-6 md:bottom-6"
       >
         {t("adWatermark")}
       </p>
