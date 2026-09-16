@@ -13,15 +13,22 @@ function preventDrag(event: DragEvent<HTMLElement>) {
 
 export const ProtectedVideo = forwardRef<
   HTMLVideoElement,
-  VideoHTMLAttributes<HTMLVideoElement>
->(function ProtectedVideo({ className, onDragStart, ...props }, ref) {
+  VideoHTMLAttributes<HTMLVideoElement> & { allowFullscreen?: boolean }
+>(function ProtectedVideo(
+  { className, onDragStart, allowFullscreen = false, ...props },
+  ref,
+) {
   return (
     <div className="h-full w-full" onDragStart={preventDrag}>
       <video
         {...props}
         ref={ref}
         className={className}
-        controlsList="nodownload noremoteplayback nofullscreen"
+        controlsList={
+          allowFullscreen
+            ? "nodownload noremoteplayback"
+            : "nodownload noremoteplayback nofullscreen"
+        }
         disablePictureInPicture
         disableRemotePlayback
         draggable={false}

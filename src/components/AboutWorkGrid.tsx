@@ -4,11 +4,15 @@ import { useCallback, useEffect, useRef, useState, type MouseEvent, type Pointer
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Pause, Play, Volume2, VolumeX, X } from "lucide-react";
+import { Pause, Play, Maximize2, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
 import { isPlayableVideoUrl } from "@/lib/sanity-media";
 import { videoControlButtonClass } from "@/components/videoControlStyles";
+import {
+  enterVideoFullscreen,
+  useAutoHideVideoControls,
+} from "@/hooks/useAutoHideVideoControls";
 
 export type AboutWorkItem = {
   key: string;
@@ -31,6 +35,8 @@ function AboutWorkModal({
   const [mounted, setMounted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const { visible: controlsVisible, canHover, reveal, onMouseEnter, onMouseLeave } =
+    useAutoHideVideoControls();
 
   useEffect(() => {
     setMounted(true);
@@ -91,6 +97,13 @@ function AboutWorkModal({
     setIsMuted(next);
   };
 
+  const goFullscreen = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    enterVideoFullscreen(video);
+  };
+
   const overlay = (
     <motion.div
       role="dialog"
@@ -118,7 +131,17 @@ function AboutWorkModal({
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.98 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        onClick={(event) => event.stopPropagation()}
+        onClick={(event) => {
+          event.stopPropagation();
+          if (!videoUrl) return;
+          if (!canHover && !controlsVisible) {
+            reveal();
+            return;
+          }
+          togglePlay(event);
+        }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
       >
         <div className="absolute inset-0">
           {videoUrl ? (
@@ -130,6 +153,7 @@ function AboutWorkModal({
                 muted={isMuted}
                 loop
                 playsInline
+                allowFullscreen
                 preload="auto"
                 controls={false}
                 className="h-full w-full rounded-2xl object-contain"
@@ -141,7 +165,9 @@ function AboutWorkModal({
                 type="button"
                 onClick={togglePlay}
                 aria-label={isPaused ? t("play") : t("pause")}
-                className={`absolute top-1/2 left-1/2 z-20 h-16 w-16 -translate-x-1/2 -translate-y-1/2 ${videoControlButtonClass}`}
+                className={`absolute top-1/2 left-1/2 z-20 h-16 w-16 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${videoControlButtonClass} ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
               >
                 {isPaused ? (
                   <Play className="ml-0.5 h-6 w-6 fill-current" strokeWidth={1.25} />
@@ -152,10 +178,23 @@ function AboutWorkModal({
 
               <button
                 type="button"
+                onClick={goFullscreen}
+                aria-label={t("fullscreen")}
+                className={`absolute right-14 bottom-3 z-20 h-11 w-11 md:hidden transition-opacity duration-300 ${videoControlButtonClass} ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <Maximize2 className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+
+              <button
+                type="button"
                 onClick={toggleMute}
                 aria-pressed={!isMuted}
                 aria-label={isMuted ? t("unmute") : t("mute")}
-                className={`absolute right-3 bottom-3 z-20 h-11 w-11 ${videoControlButtonClass}`}
+                className={`absolute right-3 bottom-3 z-20 h-11 w-11 transition-opacity duration-300 ${videoControlButtonClass} ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
               >
                 {isMuted ? (
                   <VolumeX className="h-5 w-5" strokeWidth={1.5} />
@@ -198,6 +237,8 @@ function AboutWorkCard({
   const [hovered, setHovered] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
+  const { visible: controlsVisible, onMouseEnter, onMouseLeave } =
+    useAutoHideVideoControls();
   const videoUrl = isPlayableVideoUrl(item.videoUrl) ? item.videoUrl : null;
   const imageUrl = item.imageUrl?.trim() || "";
 
@@ -265,6 +306,8 @@ function AboutWorkCard({
         <div
           onPointerEnter={playPreview}
           onPointerLeave={stopPreview}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           className="absolute inset-0"
         >
           <button
@@ -282,6 +325,7 @@ function AboutWorkCard({
                   muted={isMuted}
                   loop
                   playsInline
+                  allowFullscreen
                   preload="auto"
                   controls={false}
                   className="pointer-events-none h-full w-full rounded-xl object-cover"
@@ -308,7 +352,9 @@ function AboutWorkCard({
                 type="button"
                 onClick={togglePlay}
                 aria-label={isPaused ? t("play") : t("pause")}
-                className={`absolute top-1/2 left-1/2 z-20 h-12 w-12 -translate-x-1/2 -translate-y-1/2 ${videoControlButtonClass}`}
+                className={`absolute top-1/2 left-1/2 z-20 h-12 w-12 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300 ${videoControlButtonClass} ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
               >
                 {isPaused ? (
                   <Play className="ml-0.5 h-5 w-5 fill-current" strokeWidth={1.25} />
@@ -321,7 +367,9 @@ function AboutWorkCard({
                 onClick={toggleMute}
                 aria-pressed={!isMuted}
                 aria-label={isMuted ? t("unmute") : t("mute")}
-                className={`absolute right-3 bottom-3 z-20 h-10 w-10 ${videoControlButtonClass}`}
+                className={`absolute right-3 bottom-3 z-20 h-10 w-10 transition-opacity duration-300 ${videoControlButtonClass} ${
+                  controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
               >
                 {isMuted ? (
                   <VolumeX className="h-4 w-4" strokeWidth={1.5} />

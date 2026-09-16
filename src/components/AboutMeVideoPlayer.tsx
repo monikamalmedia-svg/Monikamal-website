@@ -3,9 +3,13 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
-import { Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
+import { Play, RotateCcw, Maximize2, Volume2, VolumeX } from "lucide-react";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
 import { videoControlButtonClass } from "@/components/videoControlStyles";
+import {
+  enterVideoFullscreen,
+  useAutoHideVideoControls,
+} from "@/hooks/useAutoHideVideoControls";
 
 type AboutMeVideoPlayerProps = {
   src: string;
@@ -27,6 +31,8 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
   const [isPaused, setIsPaused] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
   const [allowAutoPlay, setAllowAutoPlay] = useState(true);
+  const { visible: controlsVisible, canHover, reveal, onMouseEnter, onMouseLeave } =
+    useAutoHideVideoControls();
 
   const disableNativeRestart = useCallback((video: HTMLVideoElement) => {
     video.loop = false;
@@ -123,6 +129,13 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
     [playOnce],
   );
 
+  const goFullscreen = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    enterVideoFullscreen(video);
+  }, []);
+
   const replay = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
@@ -142,23 +155,30 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
   return (
     <div
       className="relative h-full w-full cursor-pointer overflow-hidden rounded-2xl select-none"
-      onClick={togglePlay}
+      onClick={(event) => {
+        if (!canHover && !controlsVisible) {
+          reveal();
+          return;
+        }
+        togglePlay(event);
+      }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
       onContextMenu={preventBrowserChrome}
-      onDoubleClick={preventBrowserChrome}
     >
       <ProtectedVideo
         ref={videoRef}
         src={src}
-        className="pointer-events-none h-full w-full rounded-2xl border border-white/10 object-cover shadow-[0_20px_50px_rgba(0,_0,_0,_0.8)] [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-mute-button]:hidden [&::-webkit-media-controls-fullscreen-button]:hidden"
+        className="pointer-events-none h-full w-full rounded-2xl border border-white/10 object-cover shadow-[0_20px_50px_rgba(0,_0,_0,_0.8)] [&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-mute-button]:hidden"
         autoPlay={allowAutoPlay}
         muted={isMuted}
         playsInline
+        allowFullscreen
         controls={false}
         disablePictureInPicture
         preload="auto"
         aria-label={label}
         onContextMenu={preventBrowserChrome}
-        onDoubleClick={preventBrowserChrome}
         onLoadedMetadata={(event) => {
           event.currentTarget.loop = false;
           event.currentTarget.removeAttribute("loop");
@@ -188,7 +208,11 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
       />
 
       {isPaused && !hasEnded ? (
-        <span className="pointer-events-none absolute inset-0 z-[3] flex items-center justify-center">
+        <span
+          className={`pointer-events-none absolute inset-0 z-[3] flex items-center justify-center transition-opacity duration-300 ${
+            controlsVisible ? "opacity-100" : "opacity-0"
+          }`}
+        >
           <span className={`h-14 w-14 ${videoControlButtonClass}`}>
             <Play className="ml-0.5 h-5 w-5 fill-current" strokeWidth={1.25} />
           </span>
@@ -197,11 +221,28 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
 
       <button
         type="button"
+        onClick={goFullscreen}
+        aria-label={t("fullscreen")}
+        style={{ backgroundColor: "transparent", border: "none", boxShadow: "none" }}
+        className={`absolute right-14 bottom-3 z-20 flex h-10 w-10 items-center justify-center rounded-full md:hidden ${aboutGhostControlClass} text-white/85 transition-opacity duration-300 hover:text-white ${
+          controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
+      >
+        <Maximize2
+          className="h-5 w-5 drop-shadow-[0_1px_8px_rgba(0,0,0,0.7)]"
+          strokeWidth={1.5}
+        />
+      </button>
+
+      <button
+        type="button"
         onClick={toggleMute}
         aria-pressed={!isMuted}
         aria-label={isMuted ? t("unmute") : t("mute")}
         style={{ backgroundColor: "transparent", border: "none", boxShadow: "none" }}
-        className={`absolute right-3 bottom-3 z-20 flex h-10 w-10 items-center justify-center rounded-full ${aboutGhostControlClass} text-white/85 transition-colors duration-300 hover:text-white md:right-4 md:bottom-4 md:h-11 md:w-11`}
+        className={`absolute right-3 bottom-3 z-20 flex h-10 w-10 items-center justify-center rounded-full ${aboutGhostControlClass} text-white/85 transition-opacity duration-300 hover:text-white md:right-4 md:bottom-4 md:h-11 md:w-11 ${
+          controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
+        }`}
       >
         {isMuted ? (
           <VolumeX
