@@ -334,12 +334,12 @@ function PortfolioCard({
   };
 
   return (
-    <article className="group mx-auto flex w-full max-w-[20rem] flex-col items-center lg:max-w-[22rem]">
-      <div className="flex w-max max-w-full flex-col items-center">
+    <article className="group mx-auto flex w-[85vw] max-w-[340px] flex-col items-center sm:w-full sm:max-w-[20rem] lg:max-w-[22rem]">
+      <div className="flex w-full flex-col items-center">
       <div
         onMouseEnter={onMouseEnter}
         onMouseLeave={onMouseLeave}
-        className={`relative mx-auto aspect-[9/16] h-[min(70svh,31.25rem)] w-auto max-w-full overflow-hidden rounded-2xl border border-glass-border bg-glass/10 transition-[border-color] duration-500 hover:border-gold/30 sm:h-[500px] lg:h-[550px] ${
+        className={`relative mx-auto aspect-[9/16] w-full overflow-hidden rounded-2xl border border-glass-border bg-glass/10 transition-[border-color] duration-500 hover:border-gold/30 sm:h-[500px] sm:w-auto sm:max-w-full lg:h-[550px] ${
           isPhoto ? "cursor-zoom-in" : "cursor-pointer"
         }`}
       >
