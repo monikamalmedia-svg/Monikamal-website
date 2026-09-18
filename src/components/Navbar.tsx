@@ -212,7 +212,15 @@ export function Navbar() {
           </nav>
 
           <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-2.5 md:gap-3">
-            <LanguageSwitcher />
+            <LanguageSwitcher className="relative z-10 hidden lg:block" />
+
+            <button
+              type="button"
+              onClick={() => goToSection("contact")}
+              className="box-border inline-flex h-8 shrink-0 items-center justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold lg:hidden"
+            >
+              {t("contactCta")}
+            </button>
 
             <button
               type="button"
@@ -227,9 +235,9 @@ export function Navbar() {
               aria-label={t("openMenu")}
               aria-expanded={mobileOpen}
               onClick={() => setMobileOpen(true)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-glass-border bg-graphite/90 text-foreground backdrop-blur-md sm:h-10 sm:w-10 lg:hidden"
+              className="box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold lg:hidden"
             >
-              <Menu className="h-5 w-5" strokeWidth={1.5} />
+              <Menu className="h-4 w-4" strokeWidth={1.5} />
             </button>
           </div>
         </div>
@@ -242,7 +250,7 @@ export function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label={t("navLabel")}
-            className="fixed inset-0 z-[60] flex flex-col bg-graphite/98 backdrop-blur-md md:hidden"
+            className="fixed inset-0 z-[60] flex flex-col bg-graphite/98 backdrop-blur-md lg:hidden"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
@@ -260,18 +268,12 @@ export function Navbar() {
               </button>
             </div>
 
-            <nav className="flex flex-1 flex-col items-center justify-center gap-8 px-6 pb-16">
-              {navItems(true)}
-
-              <div className="mt-6 flex flex-col items-center gap-5">
+            <nav className="flex flex-1 flex-col items-center justify-center px-6 pb-12">
+              <div className="flex flex-col items-center gap-7">
+                {navItems(true)}
+              </div>
+              <div className="mt-10">
                 <LanguageSwitcher />
-                <button
-                  type="button"
-                  onClick={openInquiry}
-                  className="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-xs font-medium tracking-widest text-white uppercase backdrop-blur-md transition-all duration-300 hover:border-amber-400/60 hover:bg-amber-400/10 hover:text-amber-300 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)]"
-                >
-                  {t("cta")}
-                </button>
               </div>
             </nav>
           </motion.div>
