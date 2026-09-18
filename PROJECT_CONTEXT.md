@@ -73,7 +73,7 @@ Former **Custom** pack is **Partnership**.
 
 ## Navbar / CTAs
 
-Hashes: `#portfolio`, `#pipeline`, `#pricing`, `#faq`. About → `/about`. Right (`lg+`): LanguageSwitcher (frosted dropdown) + Get in touch. Mobile (`<lg`): compact **Let’s Talk** / **Aanvraag** (`Navbar.contactCta`, scroll `#contact`) + burger. Overlay: section links + LanguageSwitcher only (no Get in touch). Overlay `lg:hidden`. Hero **Book a project** → `#pricing`; **View work** → `#portfolio`. Nav `z-50`.
+Hashes: `#portfolio`, `#pipeline`, `#pricing`, `#faq`. About → `/about`. Right (`lg+`): LanguageSwitcher (frosted dropdown) + **Let’s Talk** / **Aanvraag** (`Navbar.contactCta`, ghost `border-glass-border` + `bg-black/30`, opens Get in touch modal). Mobile (`<lg`): same CTA (scroll `#contact`) + ghost burger. Overlay: section links + LanguageSwitcher only (no Get in touch). Overlay `lg:hidden`. Hero **Book a project** → `#pricing`; **View work** → `#portfolio`. Nav `z-50`.
 
 ## Components (`src/components/`)
 
@@ -91,7 +91,7 @@ Hashes: `#portfolio`, `#pipeline`, `#pricing`, `#faq`. About → `/about`. Right
 | `GetInTouchModal.tsx` | Nav inquiry. |
 | `AboutMeVideoPlayer.tsx` / `AboutWorkGrid.tsx` | Autoplay muted, no loop, last-frame freeze; Replay + mute; auto-hide chrome; mobile FS. |
 | `Footer.tsx` / `FooterView.tsx` | CMS. WhatsApp in footer. Legal bar **after** full-width border: copyright + Privacy/Cookies, `flex-col items-center text-center`. No Savo credit. |
-| `Navbar.tsx` / `LanguageSwitcher.tsx` | Sticky EN/NL. Desktop: lang + Get in touch. Mobile header: Let’s Talk/Aanvraag + burger; overlay: section links + lang only. Dropdown: glass `bg-white/[0.08]`, blur, staggered motion. |
+| `Navbar.tsx` / `LanguageSwitcher.tsx` | Sticky EN/NL. Desktop: lang + Let’s Talk/Aanvraag (modal). Mobile header: same CTA + burger; overlay: section links + lang only. Dropdown: glass `bg-white/[0.08]`, blur, staggered motion. |
 | `CookieBanner.tsx` + consent | Cookie + localStorage. |
 | `ConsentScripts.tsx` | GA / Meta / TikTok if IDs **and** consent. |
 | `ProtectedVideo` / `ProtectedImage` / `DisableRightClick` | Casual anti-save. `allowFullscreen` toggles `nofullscreen` in `controlsList`. |

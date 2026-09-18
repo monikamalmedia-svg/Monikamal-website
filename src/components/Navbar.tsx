@@ -119,6 +119,9 @@ export function Navbar() {
     [isHome],
   );
 
+  const contactGhostClass =
+    "box-border inline-flex h-8 shrink-0 items-center justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold";
+
   const brandLockup = (
     <Link href="/" onClick={goHome} className="flex min-w-0 items-center gap-2 sm:gap-2.5">
       <Image
@@ -217,7 +220,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => goToSection("contact")}
-              className="box-border inline-flex h-8 shrink-0 items-center justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold lg:hidden"
+              className={`${contactGhostClass} lg:hidden`}
             >
               {t("contactCta")}
             </button>
@@ -225,9 +228,9 @@ export function Navbar() {
             <button
               type="button"
               onClick={openInquiry}
-              className="hidden rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium tracking-widest text-white uppercase backdrop-blur-md transition-all duration-300 hover:border-amber-400/60 hover:bg-amber-400/10 hover:text-amber-300 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] lg:inline-flex"
+              className={`${contactGhostClass} hidden lg:inline-flex`}
             >
-              {t("cta")}
+              {t("contactCta")}
             </button>
 
             <button
