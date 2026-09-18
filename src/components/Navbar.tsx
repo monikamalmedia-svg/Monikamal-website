@@ -75,6 +75,17 @@ export function Navbar() {
   }, [isHome]);
 
   useEffect(() => {
+    const media = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = () => {
+      if (media.matches) setMobileOpen(false);
+    };
+
+    closeOnDesktop();
+    media.addEventListener("change", closeOnDesktop);
+    return () => media.removeEventListener("change", closeOnDesktop);
+  }, []);
+
+  useEffect(() => {
     if (!mobileOpen) return;
 
     const previous = document.body.style.overflow;
@@ -209,39 +220,41 @@ export function Navbar() {
 
           <nav
             aria-label={t("navLabel")}
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 lg:flex lg:gap-8"
+            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 md:flex lg:gap-8"
           >
             {navItems(false)}
           </nav>
 
-          <div className="flex shrink-0 items-center justify-end gap-2 sm:gap-2.5 md:gap-3">
-            <LanguageSwitcher className="relative z-10 hidden lg:block" />
+          <div className="flex shrink-0 items-center justify-end">
+            <div className="hidden items-center justify-end gap-3 md:flex">
+              <LanguageSwitcher className="relative z-10" />
+              <button
+                type="button"
+                onClick={openInquiry}
+                className={contactGhostClass}
+              >
+                {t("contactCta")}
+              </button>
+            </div>
 
-            <button
-              type="button"
-              onClick={() => goToSection("contact")}
-              className={`${contactGhostClass} lg:hidden`}
-            >
-              {t("contactCta")}
-            </button>
-
-            <button
-              type="button"
-              onClick={openInquiry}
-              className={`${contactGhostClass} hidden lg:inline-flex`}
-            >
-              {t("contactCta")}
-            </button>
-
-            <button
-              type="button"
-              aria-label={t("openMenu")}
-              aria-expanded={mobileOpen}
-              onClick={() => setMobileOpen(true)}
-              className="box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold lg:hidden"
-            >
-              <Menu className="h-4 w-4" strokeWidth={1.5} />
-            </button>
+            <div className="flex items-center justify-end gap-2 md:hidden">
+              <button
+                type="button"
+                onClick={() => goToSection("contact")}
+                className={contactGhostClass}
+              >
+                {t("contactCta")}
+              </button>
+              <button
+                type="button"
+                aria-label={t("openMenu")}
+                aria-expanded={mobileOpen}
+                onClick={() => setMobileOpen(true)}
+                className="box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold"
+              >
+                <Menu className="h-4 w-4" strokeWidth={1.5} />
+              </button>
+            </div>
           </div>
         </div>
       </motion.header>
@@ -253,7 +266,7 @@ export function Navbar() {
             role="dialog"
             aria-modal="true"
             aria-label={t("navLabel")}
-            className="fixed inset-0 z-[60] flex flex-col bg-graphite/98 backdrop-blur-md lg:hidden"
+            className="fixed inset-0 z-[60] flex flex-col bg-graphite/98 backdrop-blur-md md:hidden"
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.98 }}
