@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Pause, Play, Maximize2, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
@@ -13,9 +13,11 @@ import {
   enterVideoFullscreen,
   useAutoHideVideoControls,
 } from "@/hooks/useAutoHideVideoControls";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 export type AboutWorkItem = {
   key: string;
+  slug: string;
   title: string;
   videoUrl: string | null;
   imageUrl: string | null;
@@ -180,7 +182,7 @@ function AboutWorkModal({
                 type="button"
                 onClick={goFullscreen}
                 aria-label={t("fullscreen")}
-                className={`absolute right-14 bottom-3 z-20 h-11 w-11 md:hidden transition-opacity duration-300 ${videoControlButtonClass} ${
+                className={`absolute right-14 bottom-3 z-20 h-11 w-11 transition-opacity duration-300 ${videoControlButtonClass} ${
                   controlsVisible ? "opacity-100" : "pointer-events-none opacity-0"
                 }`}
               >
@@ -398,19 +400,87 @@ function AboutWorkCard({
 export function AboutWorkGrid({
   items,
   placeholderLabel,
+  initialWorkSlug,
 }: {
   items: AboutWorkItem[];
   placeholderLabel: string;
+  initialWorkSlug?: string;
 }) {
+  const locale = useLocale();
+  const pathname = usePathname();
+  const router = useRouter();
   const [active, setActive] = useState<AboutWorkItem | null>(null);
 
-  const openItem = useCallback((item: AboutWorkItem) => {
+  const findBySlug = useCallback(
+    (slug: string | undefined | null) => {
+      if (!slug) return null;
+      return items.find((item) => item.slug === slug) ?? null;
+    },
+    [items],
+  );
+
+  useEffect(() => {
+    const fromPath = pathname.match(/^\/projects\/([^/]+)/)?.[1];
+    const slug = fromPath || initialWorkSlug;
+    if (!slug) return;
+    const item = findBySlug(slug);
+    if (!item || !isPlayableVideoUrl(item.videoUrl)) return;
     setActive(item);
-  }, []);
+  }, [pathname, initialWorkSlug, findBySlug]);
+
+  useEffect(() => {
+    const onPopState = () => {
+      const match = window.location.pathname.match(/\/projects\/([^/]+)/);
+      if (match?.[1]) {
+        const item = findBySlug(match[1]);
+        if (item && isPlayableVideoUrl(item.videoUrl)) {
+          setActive(item);
+          return;
+        }
+      }
+      setActive(null);
+    };
+
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [findBySlug]);
+
+  const pushProjectUrl = useCallback(
+    (slug: string) => {
+      const next = `/${locale}/projects/${slug}`;
+      if (pathname.startsWith("/projects/")) {
+        router.replace(`/projects/${slug}`, { scroll: false });
+        return;
+      }
+      window.history.pushState({ aboutWork: slug }, "", next);
+    },
+    [locale, pathname, router],
+  );
+
+  const restoreAboutUrl = useCallback(() => {
+    if (pathname.startsWith("/projects/")) {
+      router.replace("/about", { scroll: false });
+      return;
+    }
+    if (window.history.state?.aboutWork) {
+      window.history.pushState(null, "", `/${locale}/about`);
+    }
+  }, [locale, pathname, router]);
+
+  const openItem = useCallback(
+    (item: AboutWorkItem) => {
+      setActive(item);
+      if (isPlayableVideoUrl(item.videoUrl) && item.slug) {
+        pushProjectUrl(item.slug);
+      }
+    },
+    [pushProjectUrl],
+  );
 
   const closeItem = useCallback(() => {
     setActive(null);
-  }, []);
+    restoreAboutUrl();
+  }, [restoreAboutUrl]);
 
   return (
     <>

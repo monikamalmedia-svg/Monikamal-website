@@ -42,7 +42,7 @@ UI: `useTranslations()` / `getTranslations()`. Namespace **Faq** (not `faq`).
 
 **Home:** GROQ `heroSection` + all `caseStudy` (ordered `displayOrder`) → Hero → TrustBar (`#brands`) → CommercialPortfolio → AIPipeline → Pricing → PhotoPricing → Faq → Contact.
 
-**About** `/about`: GROQ `aboutPage` portrait video. Heading CMS or JSON. **Lead/body are i18n** (`About.lead` — no surname). CMS `bioEn`/`bioNl` unused. **No “Selected work” heading**; work-sample titles on cards removed. Empty samples → placeholders without labels (demo stubs). CTA `/#contact`. About player: auto-hide controls (hover / tap 2.4s); **mobile fullscreen** via `allowFullscreen` + Maximize2 (`About.fullscreen`). Portfolio player stays `nofullscreen`.
+**About** `/about`: GROQ `aboutPage` portrait video. Heading CMS or JSON. **Lead/body are i18n** (`About.lead` — no surname). CMS `bioEn`/`bioNl` unused. **No “Selected work” heading**; work-sample titles on cards removed. Empty samples → placeholders without labels (demo stubs). CTA `/#contact`. About player: auto-hide controls (hover / tap 2.4s); **mobile fullscreen** via `allowFullscreen` + Maximize2 (`About.fullscreen`). **Mijn werken** modal: deep links `/{locale}/projects/[slug]` + fullscreen on desktop & mobile. Portfolio modal: play/mute only (no deep link / no FS).
 
 **Privacy:** `/privacy`, `/privacy-policy`. **404:** root EN + locale `NotFoundView`. **Studio:** `src/app/studio/[[...tool]]/page.tsx` at `/studio` (outside `[locale]`).
 
@@ -82,14 +82,15 @@ Hashes: `#portfolio`, `#pipeline`, `#pricing`, `#faq`. About → `/about`. Right
 | `Hero.tsx` | Full-viewport. CMS showreel or picsum. Copy fades on scroll 0–300px (`copyOpacity` / `copyY`). Watermark `text-white/70 uppercase`: `bottom-14 md:bottom-6 right-0` (mobile near Scroll, desktop unchanged). |
 | `ShowreelPlayer.tsx` | Unused by Hero; kept. |
 | `TrustBar.tsx` | `#brands` marquee. `/logos/celsius.png`, `clearly.svg`, `rituals.png`, `trueseamoss.png`. |
-| `CommercialPortfolio.tsx` | Tabs AI Videos / AI Photos. **Static 3-col grid (no sticky/parallax).** No section h2. Captions: category `text-gray-300`; title `text-white` as `{title} · {year}`; **centered**. Media `w-[85vw] max-w-[340px]` mobile, `sm:h-[500px] lg:h-[550px]`. Hover: muted loop + thumbnail overlay. Click → modal (`z-[60]`) with custom chrome (play/pause/mute/FS). Photos → lightbox. |
+| `CommercialPortfolio.tsx` | Tabs AI Videos / AI Photos. **Static 3-col grid.** Captions centered. Click → modal (`z-[60]`) play/mute; photos → lightbox. No deep links / no fullscreen. |
+| `AboutWorkGrid.tsx` | About **Mijn werken**. Modal deep links `/{locale}/projects/[slug]`; close → `/about`. Fullscreen (desktop + mobile) via `enterVideoFullscreen`. |
 | `AIPipeline.tsx` | Brief → Concept → Production → Delivery. `#pipeline`. Offset `STEP_SCROLL_OFFSET: [string, string] = ["start 48%", "end 28%"]` + `// @ts-ignore` on `useScroll`. |
 | `Pricing.tsx` / `PricingView.tsx` | CMS or JSON. CTA Choose package / Kies pakket. Popular + glow (fallback Growth). |
 | `PhotoPricing.tsx` / `PhotoPricingView.tsx` | CMS or JSON 5/10. Better value + glow (fallback 10). `pt-8 pb-12 md:pb-16` (tight gap to FAQ). |
 | `Faq.tsx` / `FaqView.tsx` | CMS or JSON accordion `#faq`. `py-12 md:py-16`. |
 | `Contact.tsx` / `ContactFormStates.tsx` | Brief + Resend. No email on UI. |
 | `GetInTouchModal.tsx` | Nav inquiry. |
-| `AboutMeVideoPlayer.tsx` / `AboutWorkGrid.tsx` | Autoplay muted, no loop, last-frame freeze; Replay + mute; auto-hide chrome; mobile FS. |
+| `AboutMeVideoPlayer.tsx` | Portrait about video: autoplay muted, no loop, last-frame freeze; Replay + mute; auto-hide chrome; mobile FS. |
 | `Footer.tsx` / `FooterView.tsx` | CMS. WhatsApp in footer. Legal bar **after** full-width border: copyright + Privacy/Cookies, `flex-col items-center text-center`. No Savo credit. |
 | `Navbar.tsx` / `LanguageSwitcher.tsx` | Sticky EN/NL. Split at `md`: desktop `hidden md:flex` (lang + Let’s Talk/Aanvraag modal); mobile `md:hidden` (CTA `#contact` + burger). Overlay: section links + lang only. Dropdown: glass `bg-white/[0.08]`, blur, staggered motion. |
 | `CookieBanner.tsx` + consent | Cookie + localStorage. |

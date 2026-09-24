@@ -33,9 +33,10 @@ export const SITE_SETTINGS_QUERY = `*[_type == "siteSettings"][0]{
 }`;
 
 export const DEFAULT_SOCIALS = {
-  instagramUrl: "https://www.instagram.com/monika.mmedia/",
+  instagramUrl:
+    "https://www.instagram.com/monikaa_mal?stkn=eWQyejkwd2pucGM5&utm_source=qr",
   linkedinUrl:
-    "https://www.linkedin.com/in/monika-malinovskaja-797a472a8?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
+    "https://www.linkedin.com/in/monika-mal-797a472a8?utm_source=share_via&utm_content=profile&utm_medium=member_ios",
   tiktokUrl: "https://www.tiktok.com/@ugcflow.by.monika",
 } as const;
 
@@ -49,9 +50,9 @@ export function resolveSiteSettings(
   return {
     whatsappNumber: digits(doc?.whatsappNumber) || WHATSAPP_NUMBER,
     contactEmail: doc?.contactEmail?.trim() || null,
-    instagramUrl: doc?.instagramUrl?.trim() || DEFAULT_SOCIALS.instagramUrl,
+    instagramUrl: DEFAULT_SOCIALS.instagramUrl,
     tiktokUrl: doc?.tiktokUrl?.trim() || DEFAULT_SOCIALS.tiktokUrl,
-    linkedinUrl: doc?.linkedinUrl?.trim() || DEFAULT_SOCIALS.linkedinUrl,
+    linkedinUrl: DEFAULT_SOCIALS.linkedinUrl,
     footerTaglineEn: doc?.footerTaglineEn?.trim() || null,
     footerTaglineNl: doc?.footerTaglineNl?.trim() || null,
   };

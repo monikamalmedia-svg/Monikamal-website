@@ -2,17 +2,12 @@ import { AboutMain } from "@/components/AboutMain";
 import { loadAboutPageData } from "@/lib/about-page";
 
 type Props = {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ work?: string | string[] }>;
+  params: Promise<{ locale: string; slug: string }>;
 };
 
-export default async function AboutPage({ params, searchParams }: Props) {
-  const { locale } = await params;
-  const query = await searchParams;
+export default async function ProjectPage({ params }: Props) {
+  const { locale, slug } = await params;
   const data = await loadAboutPageData(locale);
-
-  const workParam = query.work;
-  const initialWorkSlug = Array.isArray(workParam) ? workParam[0] : workParam;
 
   return (
     <AboutMain
@@ -23,7 +18,7 @@ export default async function AboutPage({ params, searchParams }: Props) {
       ctaTitle={data.ctaTitle}
       ctaBody={data.ctaBody}
       cta={data.cta}
-      initialWorkSlug={initialWorkSlug}
+      initialWorkSlug={slug}
     />
   );
 }
