@@ -17,6 +17,9 @@ import {
 } from "@/lib/services";
 
 const DEMO_ID = "gratis-demo";
+/** Header height on desktop (md:h-[4.25rem]); the hero counts as passed once its bottom reaches it. */
+const HEADER_HEIGHT = 68;
+const DESKTOP_MQ = "(min-width: 1024px)";
 
 // No outline after a mouse click; a clear gold ring for keyboard focus only.
 const FOCUS_RING =
@@ -36,6 +39,8 @@ export function Navbar() {
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
+  const [overHero, setOverHero] = useState(true);
 
   const isHome = pathname === "/";
   const firstSegment = pathname.split("/")[1] ?? "";
@@ -47,9 +52,35 @@ export function Navbar() {
     about: firstSegment === "about" || firstSegment === "projects",
   };
 
+  // Homepage on desktop: the header lies over the hero (transparent, ivory on hover/focus via
+  // .site-header[data-hero] in globals.css) until the hero has scrolled past.
+  const heroMode = isHome && isDesktop && overHero;
+  const solid = heroMode ? false : scrolled;
+
+  const syncOverHero = useCallback(() => {
+    const hero = document.querySelector("[data-hero-section]");
+    setOverHero(hero ? hero.getBoundingClientRect().bottom > HEADER_HEIGHT : false);
+  }, []);
+
   useMotionValueEvent(scrollY, "change", (value) => {
     setScrolled(value > 50);
+    if (isHome) syncOverHero();
   });
+
+  useEffect(() => {
+    const media = window.matchMedia(DESKTOP_MQ);
+    const sync = () => {
+      setIsDesktop(media.matches);
+      syncOverHero();
+    };
+    sync();
+    media.addEventListener("change", sync);
+    window.addEventListener("resize", syncOverHero);
+    return () => {
+      media.removeEventListener("change", sync);
+      window.removeEventListener("resize", syncOverHero);
+    };
+  }, [pathname, syncOverHero]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -106,15 +137,23 @@ export function Navbar() {
 
   const brandLockup = (
     <Link href="/" onClick={goHome} className={`flex min-w-0 items-center gap-2 rounded-sm sm:gap-2.5 ${FOCUS_RING}`}>
-      <Image
-        src="/logo.png"
-        alt="Monika Mal"
-        width={36}
-        height={36}
-        priority
-        className="h-7 w-auto shrink-0 object-contain opacity-95"
-      />
-      <span className="whitespace-nowrap font-serif text-[0.95rem] tracking-wide text-stone-200 sm:text-lg">
+      <span className="relative inline-flex shrink-0">
+        <Image
+          src="/logo.png"
+          alt="Monika Mal"
+          width={36}
+          height={36}
+          priority
+          data-logo-img
+          className="h-7 w-auto shrink-0 object-contain opacity-95"
+        />
+        <span
+          aria-hidden
+          data-logo-gold
+          className="pointer-events-none absolute inset-0 bg-gold opacity-0 [mask:url(/logo.png)_center/contain_no-repeat]"
+        />
+      </span>
+      <span data-brand-text className="whitespace-nowrap font-serif text-[0.95rem] tracking-wide text-stone-200 sm:text-lg">
         {t("brand")}
       </span>
     </Link>
@@ -141,7 +180,7 @@ export function Navbar() {
 
   const navItems = (large: boolean) => (
     <>
-      <Link href="/portfolio" onClick={close} aria-current={current(active.work)} className={linkClass(active.work, large)}>
+      <Link href="/portfolio" onClick={close} aria-current={current(active.work)} data-nav-link={large ? undefined : ""} className={linkClass(active.work, large)}>
         {t("work")}
       </Link>
       {large ? (
@@ -170,6 +209,7 @@ export function Navbar() {
           <Link
             href={pagePath("hub", locale)}
             aria-current={current(active.services)}
+            data-nav-link
             className={`inline-flex items-center gap-1 ${linkClass(active.services)}`}
           >
             {t("services")}
@@ -182,6 +222,7 @@ export function Navbar() {
           <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
             <ul
               aria-label={t("servicesMenuLabel")}
+              data-nav-dropdown
               className="min-w-52 rounded-xl border border-glass-border bg-graphite/95 p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-md"
             >
               {serviceLinks.map((item) => (
@@ -189,6 +230,7 @@ export function Navbar() {
                   <Link
                     href={item.href}
                     aria-current={current(item.isActive)}
+                    data-nav-dropdown-link
                     className={`block rounded-lg px-3 py-2.5 text-sm whitespace-nowrap transition-colors hover:bg-white/[0.06] focus-visible:bg-white/[0.06] focus-visible:outline-none ${item.isActive ? "text-gold" : "text-foreground/90 hover:text-gold focus-visible:text-gold"}`}
                   >
                     {item.label}
@@ -199,10 +241,10 @@ export function Navbar() {
           </div>
         </div>
       )}
-      <Link href={pagePath("howItWorks", locale)} onClick={close} aria-current={current(active.process)} className={linkClass(active.process, large)}>
+      <Link href={pagePath("howItWorks", locale)} onClick={close} aria-current={current(active.process)} data-nav-link={large ? undefined : ""} className={linkClass(active.process, large)}>
         {t("process")}
       </Link>
-      <Link href="/about" onClick={close} aria-current={current(active.about)} className={linkClass(active.about, large)}>
+      <Link href="/about" onClick={close} aria-current={current(active.about)} data-nav-link={large ? undefined : ""} className={linkClass(active.about, large)}>
         {t("about")}
       </Link>
     </>
@@ -211,14 +253,15 @@ export function Navbar() {
   return (
     <>
       <motion.header
-        className="fixed inset-x-0 top-0 z-50"
+        className="site-header fixed inset-x-0 top-0 z-50"
+        data-hero={heroMode ? "" : undefined}
         initial={false}
         animate={{
-          backgroundColor: scrolled ? "rgba(20, 7, 12, 0.8)" : "rgba(20, 7, 12, 0)",
-          borderBottomColor: scrolled
+          backgroundColor: solid ? "rgba(20, 7, 12, 0.8)" : "rgba(20, 7, 12, 0)",
+          borderBottomColor: solid
             ? "rgba(245, 235, 232, 0.12)"
             : "rgba(245, 235, 232, 0)",
-          backdropFilter: scrolled ? "blur(12px)" : "blur(0px)",
+          backdropFilter: solid ? "blur(12px)" : "blur(0px)",
         }}
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
         style={{ borderBottomWidth: 1 }}
@@ -240,6 +283,7 @@ export function Navbar() {
               <button
                 type="button"
                 onClick={() => goToDemo()}
+                data-header-cta
                 className={contactGhostClass}
               >
                 {t("demoCta")}

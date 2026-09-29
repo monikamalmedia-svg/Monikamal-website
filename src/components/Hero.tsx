@@ -80,7 +80,10 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
   }, [mediaSrc, reduceMotion]);
 
   return (
-    <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
+    <section
+      data-hero-section
+      className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]"
+    >
       <div className="pointer-events-none absolute inset-0 z-[2]">
         {mediaSrc ? (
           <ProtectedVideo

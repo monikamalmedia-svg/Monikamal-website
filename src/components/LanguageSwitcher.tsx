@@ -141,6 +141,7 @@ export function LanguageSwitcher({
         aria-controls={menuId}
         onClick={() => setOpen((current) => !current)}
         onFocus={openMenu}
+        data-lang-trigger
         className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 text-white/80 backdrop-blur-md transition-all duration-300 ease-out hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:border-white/25 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 sm:h-auto sm:gap-2 sm:px-3 sm:py-1.5"
       >
         <FlagIcon locale={locale} className="h-3 w-4" />
@@ -186,6 +187,7 @@ export function LanguageSwitcher({
               },
             }}
             style={{ originX: 1, originY: 0 }}
+            data-lang-menu
             className="absolute top-[calc(100%+0.5rem)] right-0 min-w-[9.75rem] rounded-2xl border border-white/20 bg-white/[0.08] p-1.5 shadow-[0_10px_40px_rgba(14,2,6,0.22)] ring-1 ring-white/10 ring-inset backdrop-blur-2xl"
           >
             {routing.locales.map((code) => {
@@ -208,6 +210,7 @@ export function LanguageSwitcher({
                   <button
                     type="button"
                     onClick={() => selectLocale(code)}
+                    data-lang-option
                     className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-left text-xs font-medium tracking-wider uppercase transition-[background-color,color,box-shadow,transform] duration-300 ease-out hover:translate-x-px hover:bg-white/[0.12] hover:text-white hover:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] focus-visible:bg-white/[0.12] focus-visible:text-white focus-visible:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.1)] focus-visible:outline-none ${
                       isActive ? "bg-white/[0.1] text-white" : "text-white/75"
                     }`}
