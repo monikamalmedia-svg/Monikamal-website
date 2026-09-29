@@ -17,7 +17,7 @@ type AboutMeVideoPlayerProps = {
 };
 
 const aboutGhostControlClass =
-  "appearance-none !border-0 !bg-transparent shadow-none ring-0 outline-none backdrop-blur-none hover:!bg-transparent hover:shadow-none focus-visible:!bg-transparent";
+  "appearance-none !border-0 !bg-transparent shadow-none ring-0 outline-none backdrop-blur-none hover:!bg-transparent hover:shadow-none focus-visible:!bg-transparent focus-visible:rounded-full focus-visible:ring-2 focus-visible:ring-gold/70";
 
 function preventBrowserChrome(event: MouseEvent<HTMLElement>) {
   event.preventDefault();
@@ -176,7 +176,8 @@ export function AboutMeVideoPlayer({ src, label }: AboutMeVideoPlayerProps) {
         allowFullscreen
         controls={false}
         disablePictureInPicture
-        preload="auto"
+        // Autoplay still streams it; "metadata" avoids pulling 25 MB when autoplay is blocked.
+        preload="metadata"
         aria-label={label}
         onContextMenu={preventBrowserChrome}
         onLoadedMetadata={(event) => {

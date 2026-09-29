@@ -9,31 +9,53 @@ import {
 import { client } from "@/lib/sanity";
 
 const FEATURE_KEYS = {
-  starter: ["video", "hook", "asmr", "revisions", "delivery"] as const,
-  growth: ["videos", "asmr", "post", "revisions", "delivery"] as const,
-  partnership: ["videos", "cycle", "priority", "slot", "revisions"] as const,
+  starter: ["video", "mode", "finish", "revisions", "export"] as const,
+  growth: ["videos", "directions", "mode", "finish", "revisions", "export"] as const,
+  partnership: [
+    "videos",
+    "mode",
+    "planning",
+    "priority",
+    "hooks",
+    "delivery",
+    "revisions",
+  ] as const,
 };
 
 const TAGGED_PACKAGES = ["starter", "growth", "partnership"] as const;
 
+type TaggedPackage = (typeof TAGGED_PACKAGES)[number];
+
+type Translator = Awaited<ReturnType<typeof getTranslations>>;
+
+function optional(t: Translator, key: string): string | null {
+  return t.has(key) ? t(key) : null;
+}
+
+/** Copy, intro pricing and CTA for the three known packages come from messages. */
+function localizedCopy(key: TaggedPackage, t: Translator) {
+  const base = `packages.${key}`;
+  return {
+    tagline: t(`${base}.tagline`),
+    features: FEATURE_KEYS[key].map((feature) =>
+      t(`${base}.features.${feature}`),
+    ),
+    oldPrice: optional(t, `${base}.oldPrice`),
+    discount: optional(t, `${base}.discount`),
+    period: optional(t, `${base}.period`),
+    valueNote: optional(t, `${base}.valueNote`),
+    cta: t(`${base}.cta`),
+  };
+}
+
 function withLocalizedPackageCopy(
   packages: DisplayPackage[],
-  t: Awaited<ReturnType<typeof getTranslations>>,
+  t: Translator,
 ): DisplayPackage[] {
   return packages.map((pack) => {
-    const tagged = TAGGED_PACKAGES.includes(
-      pack.key as (typeof TAGGED_PACKAGES)[number],
-    );
+    const tagged = TAGGED_PACKAGES.includes(pack.key as TaggedPackage);
     if (!tagged) return pack;
-
-    const keys = FEATURE_KEYS[pack.key as (typeof TAGGED_PACKAGES)[number]];
-    return {
-      ...pack,
-      tagline: t(`packages.${pack.key}.tagline`),
-      features: keys.map((feature) =>
-        t(`packages.${pack.key}.features.${feature}`),
-      ),
-    };
+    return { ...pack, ...localizedCopy(pack.key as TaggedPackage, t) };
   });
 }
 
@@ -51,44 +73,16 @@ export async function Pricing() {
   const t = await getTranslations("Pricing");
   const doc = await fetchPricingSection();
 
-  const fallbackPackages: DisplayPackage[] = [
-    {
-      key: "starter",
-      name: t("packages.starter.name"),
-      price: t("packages.starter.price"),
-      pricePerUnit: null,
-      tagline: t("packages.starter.tagline"),
-      features: FEATURE_KEYS.starter.map((feature) =>
-        t(`packages.starter.features.${feature}`),
-      ),
-      featured: false,
-    },
-    {
-      key: "growth",
-      name: t("packages.growth.name"),
-      price: t("packages.growth.price"),
-      pricePerUnit: null,
-      tagline: t("packages.growth.tagline"),
-      features: FEATURE_KEYS.growth.map((feature) =>
-        t(`packages.growth.features.${feature}`),
-      ),
-      featured: true,
-    },
-    {
-      key: "partnership",
-      name: t("packages.partnership.name"),
-      price: t("packages.partnership.price"),
-      pricePerUnit: t("packages.partnership.perUnit"),
-      tagline: t("packages.partnership.tagline"),
-      features: FEATURE_KEYS.partnership.map((feature) =>
-        t(`packages.partnership.features.${feature}`),
-      ),
-      featured: false,
-    },
-  ];
+  const fallbackPackages: DisplayPackage[] = TAGGED_PACKAGES.map((key) => ({
+    key,
+    name: t(`packages.${key}.name`),
+    price: t(`packages.${key}.price`),
+    pricePerUnit: optional(t, `packages.${key}.perUnit`),
+    features: [],
+    featured: key === "growth",
+  }));
 
   const cmsPackages = mapVideoPackages(isNl, doc?.videoPackages);
-  const heading = t("title");
   const packages = withLocalizedPackageCopy(
     cmsPackages.length > 0 ? cmsPackages : fallbackPackages,
     t,
@@ -96,10 +90,13 @@ export async function Pricing() {
 
   return (
     <PricingView
-      heading={heading}
+      heading={t("title")}
+      intro={t("intro")}
       kicker={t("kicker")}
       badge={t("badge")}
-      cta={t("packages.starter.cta")}
+      introLabel={t("introLabel")}
+      regularPriceLabel={t("regularPrice")}
+      defaultCta={t("packages.starter.cta")}
       packages={packages}
     />
   );

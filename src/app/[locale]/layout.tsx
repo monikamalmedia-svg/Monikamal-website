@@ -27,16 +27,11 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Metadata" });
-  const englishUrl = new URL("/", SITE_URL).toString();
-  const dutchUrl = new URL("/nl", SITE_URL).toString();
-  const url = locale === "nl" ? dutchUrl : englishUrl;
-  const keywords = t.raw("keywords") as string[];
 
   return {
     metadataBase: new URL(SITE_URL),
     title: t("title"),
     description: t("description"),
-    keywords,
     icons: {
       icon: [
         { url: "/favicon.ico?v=4" },
@@ -52,20 +47,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ],
     },
     manifest: "/site.webmanifest",
-    alternates: {
-      canonical: url,
-      languages: {
-        en: englishUrl,
-        nl: dutchUrl,
-        "x-default": englishUrl,
-      },
-    },
+    // Canonical + hreflang are set per page (see lib/seo.ts); a layout-level canonical
+    // would make every page without its own metadata point at the homepage.
     openGraph: {
       type: "website",
       siteName: SITE_NAME,
       locale: locale === "nl" ? "nl_NL" : "en_US",
       alternateLocale: locale === "nl" ? ["en_US"] : ["nl_NL"],
-      url,
       title: t("ogTitle"),
       description: t("ogDescription"),
       images: [

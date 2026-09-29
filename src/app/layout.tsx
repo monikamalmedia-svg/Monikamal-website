@@ -21,30 +21,18 @@ type Props = {
   children: ReactNode;
 };
 
-const DEFAULT_TITLE = "Custom E-Commerce Commercials | Monika Mal";
+// Fallback for routes outside [locale] (Studio, error pages); locale pages set their own metadata.
+const DEFAULT_TITLE = "UGC, AI Commercials & Product Content | Monika Mal";
 const DEFAULT_DESCRIPTION =
-  "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.";
+  "UGC videos, cinematic AI commercials and product content for e-commerce brands. For Meta Ads, TikTok, Instagram and webshops.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Monika Mal | Global AI Video Production, UGC & Commercials for US & Europe",
-  description:
-    "Cinematic AI video production, high-converting UGC, and product visuals for premium e-commerce brands and agencies across the US, Netherlands, and Europe. Elevate your brand with next-gen AI commercials.",
-  keywords: [
-    "AI video production",
-    "AI commercials",
-    "AI UGC video agency",
-    "Product video production US and Europe",
-    "E-commerce video production",
-    "Cinematic AI assets",
-    "AI video agency US and Europe",
-    "Global AI commercial production",
-    "High-end AI video director",
-    "UGC content for brands"
-  ],
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION,
   openGraph: {
-    title: "Monika Mal | Global AI Video Production, UGC & Commercials for US & Europe",
-    description: "Cinematic AI video production, high-converting UGC & AI-driven commercials for global brands across the US and Europe.",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     url: SITE_URL,
     siteName: "Monika Mal",
     locale: "en_US",

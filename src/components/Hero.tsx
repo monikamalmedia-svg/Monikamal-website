@@ -3,30 +3,15 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { keepEcommerce } from "@/components/KeepEcommerce";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
 
-const heroCopyContainer = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const heroCopyItem = {
-  hidden: { opacity: 0, y: 25 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.7,
-      ease: "easeOut" as const,
-    },
-  },
-};
+/**
+ * Entrance of the hero copy runs in CSS (.hero-reveal in globals.css), so the text shows at first
+ * paint instead of waiting for hydration. Same timing as before: 0.2s start, 0.3s stagger.
+ */
+const revealDelay = (index: number) => ({ animationDelay: `${0.2 + index * 0.3}s` });
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({
@@ -52,6 +37,20 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
   const copyOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   const copyY = useTransform(scrollY, [0, 300], [0, 28]);
   const [copyInteractive, setCopyInteractive] = useState(true);
+  // Attach the video source only after window load, so the large file doesn't compete with JS/fonts.
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!mediaSrc) return;
+    const attach = () => setVideoSrc(mediaSrc);
+    if (document.readyState === "complete") {
+      // Timeout, not rAF: rAF never fires in a background tab, which would leave the hero empty.
+      const timer = window.setTimeout(attach, 0);
+      return () => window.clearTimeout(timer);
+    }
+    window.addEventListener("load", attach, { once: true });
+    return () => window.removeEventListener("load", attach);
+  }, [mediaSrc]);
 
   useMotionValueEvent(copyOpacity, "change", (value) => {
     setCopyInteractive(value > 0.08);
@@ -59,6 +58,11 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
 
   useEffect(() => {
     if (!mediaSrc) return;
+    // Reduced motion: keep the first frame instead of a looping background video.
+    if (reduceMotion) {
+      videoRef.current?.pause();
+      return;
+    }
 
     const unlockAutoplay = () => {
       void videoRef.current?.play()?.catch(() => {});
@@ -73,7 +77,7 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
       window.removeEventListener("touchstart", unlockAutoplay);
       window.removeEventListener("click", unlockAutoplay);
     };
-  }, [mediaSrc]);
+  }, [mediaSrc, reduceMotion]);
 
   return (
     <section className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]">
@@ -82,8 +86,8 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
           <ProtectedVideo
             ref={videoRef}
             className="absolute inset-0 h-full w-full object-cover"
-            src={mediaSrc}
-            autoPlay
+            src={videoSrc ?? undefined}
+            autoPlay={!reduceMotion}
             muted
             loop
             playsInline
@@ -115,47 +119,42 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
         {t("adWatermark")}
       </p>
 
-      <div className="relative z-20 mx-auto flex h-full max-w-5xl flex-col items-center justify-end px-6 pb-24 text-center sm:pb-28 md:pb-32">
+      <div className="relative z-20 mx-auto flex h-full max-w-5xl flex-col items-center justify-end px-6 pb-28 text-center md:pb-32">
         <motion.div
           style={reduceMotion ? undefined : { opacity: copyOpacity, y: copyY }}
           className={`flex w-full flex-col items-center ${
             reduceMotion || copyInteractive ? "" : "pointer-events-none"
           }`}
         >
-          <motion.div
-            variants={heroCopyContainer}
-            initial="hidden"
-            animate="visible"
-            className="flex w-full flex-col items-center"
-          >
-          <motion.p
-            variants={heroCopyItem}
-            className="mb-4 w-full max-w-[22rem] px-2 text-center font-mono text-base leading-snug tracking-[0.22em] text-gold uppercase drop-shadow-[0_0_16px_rgba(212,175,55,0.35)] sm:max-w-none sm:text-lg sm:tracking-[0.26em] md:text-xl md:tracking-[0.28em]"
+          <div className="flex w-full flex-col items-center">
+          <p
+            style={revealDelay(0)}
+            className="hero-reveal mb-4 w-full max-w-[22rem] px-2 text-center font-mono text-[11px] leading-snug tracking-[0.1em] text-gold uppercase drop-shadow-[0_0_16px_rgba(212,175,55,0.35)] sm:max-w-none sm:text-lg sm:tracking-[0.26em] md:text-xl md:tracking-[0.28em]"
           >
             {kicker}
-          </motion.p>
+          </p>
 
-          <motion.h1
-            variants={heroCopyItem}
-            className="font-display mb-4 max-w-[11.5ch] px-2 text-center text-[clamp(2.4rem,7.2vw,5.75rem)] leading-[0.95] font-medium tracking-tight text-balance text-white drop-shadow-lg md:max-w-none"
+          <h1
+            style={revealDelay(1)}
+            className="hero-reveal font-display mb-4 max-w-[11.5ch] px-2 text-center text-[clamp(2.4rem,7.2vw,5.75rem)] leading-[0.95] font-medium tracking-tight text-balance text-white drop-shadow-lg md:max-w-none"
           >
             {headline}
-          </motion.h1>
+          </h1>
 
-          <motion.p
-            variants={heroCopyItem}
-            className="mb-8 max-w-2xl text-base font-light text-neutral-300 drop-shadow sm:text-lg md:text-2xl"
+          <p
+            style={revealDelay(2)}
+            className="hero-reveal mb-8 max-w-2xl text-base font-light text-neutral-300 drop-shadow sm:text-lg md:text-2xl"
           >
-            {subheadline}
-          </motion.p>
+            {keepEcommerce(subheadline)}
+          </p>
 
-          <motion.div
-            variants={heroCopyItem}
-            className="flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4"
+          <div
+            style={revealDelay(3)}
+            className="hero-reveal flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4"
           >
             <button
               type="button"
-              onClick={() => scrollToId("pricing")}
+              onClick={() => scrollToId("gratis-demo")}
               className="cursor-pointer rounded-full border border-gold/40 bg-[#1a0f16]/40 px-8 py-3.5 text-center text-sm font-medium tracking-wide text-gold uppercase backdrop-blur-sm transition-[border-color,box-shadow,background-color,transform] duration-300 ease-out hover:scale-[1.02] hover:border-gold hover:bg-gold/10 hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] active:scale-[0.99] sm:px-9"
             >
               {t("cta")}
@@ -167,8 +166,15 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
             >
               {t("ctaSecondary")}
             </button>
-          </motion.div>
-          </motion.div>
+          </div>
+
+          <p
+            style={revealDelay(4)}
+            className="hero-reveal mt-4 text-[11px] tracking-[0.18em] text-stone-300/80 uppercase drop-shadow sm:text-xs"
+          >
+            {t("ctaNote")}
+          </p>
+          </div>
         </motion.div>
       </div>
 
@@ -186,7 +192,7 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
             ? undefined
             : { duration: 2, repeat: Infinity, ease: "easeInOut" }
         }
-        className="absolute bottom-6 left-1/2 z-30 -translate-x-1/2 cursor-pointer text-center"
+        className="absolute bottom-3 left-1/2 z-30 -translate-x-1/2 cursor-pointer px-4 py-3 text-center"
       >
         <span className="block text-xs tracking-[0.4em] text-foreground-muted uppercase">
           {t("scrollHint")}

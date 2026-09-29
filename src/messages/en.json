@@ -1,27 +1,21 @@
 {
   "Metadata": {
-    "title": "Custom E-Commerce Commercials | Monika Mal",
-    "description": "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.",
-    "ogTitle": "Custom E-Commerce Commercials | Monika Mal",
-    "ogDescription": "Professional custom e-commerce commercials for brands. High-converting cinematic videos for Meta, TikTok, and product pages without an expensive crew.",
-    "keywords": [
-      "AI-driven video production",
-      "e-commerce commercials",
-      "AI commercials",
-      "product video ads",
-      "sales growth video",
-      "Meta ads video",
-      "TikTok ads video",
-      "custom AI avatar",
-      "AI photography"
-    ]
+    "title": "UGC, AI Commercials & Product Content | Monika Mal",
+    "description": "UGC videos, cinematic AI commercials and product content for e-commerce brands. For Meta Ads, TikTok, Instagram and webshops. Request a free demo.",
+    "ogTitle": "UGC, AI Commercials & Product Content | Monika Mal",
+    "ogDescription": "UGC videos, cinematic AI commercials and product content for e-commerce brands. For Meta Ads, TikTok, Instagram and webshops. Request a free demo.",
+    "about": {
+      "title": "About me | Monika Mal",
+      "description": "I’m Monika Mal, a UGC creator and AI visual creator. I make UGC, AI commercials and product content for e-commerce brands."
+    }
   },
   "Hero": {
-    "kicker": "Custom E-Commerce Commercials",
-    "title": "Cinematic Commercials",
-    "subtitle": "High-converting AI commercials for e-commerce brands.",
-    "cta": "Book a project",
-    "ctaSecondary": "View work",
+    "kicker": "UGC · AI Commercials · Product Content",
+    "title": "Content that makes your product stand out.",
+    "subtitle": "From authentic UGC to cinematic AI commercials — content for e-commerce brands, social ads and webshops.",
+    "cta": "Request a free demo",
+    "ctaSecondary": "View my work",
+    "ctaNote": "Free · up to 10 sec · no obligation",
     "scrollHint": "Scroll down",
     "adWatermark": "AI Advertisement Example"
   },
@@ -41,8 +35,17 @@
     "fullscreen": "Enter fullscreen",
     "exitFullscreen": "Exit fullscreen",
     "filterLabel": "Filter work",
-    "filterVideos": "AI Videos",
-    "filterPhotos": "AI Photos",
+    "filterAll": "All",
+    "filterUgc": "UGC",
+    "filterAi": "AI Commercials",
+    "filterProduct": "Product Content",
+    "typeUgc": "UGC",
+    "typeAiCommercial": "AI Commercial",
+    "typeProductContent": "Product Content",
+    "concept": "Independent AI concept",
+    "conceptUgc": "Independent UGC concept",
+    "empty": "No projects in this category in the portfolio yet.",
+    "emptyCta": "Request a free demo",
     "items": {
       "1": {
         "title": "Lumina Skin",
@@ -92,7 +95,10 @@
         "title": "Citrus Grove",
         "category": "AI Photography / Food"
       }
-    }
+    },
+    "viewCase": "View case",
+    "selectedWork": "Selected work",
+    "viewAllWork": "View all work"
   },
   "LanguageSwitcher": {
     "label": "Language",
@@ -102,15 +108,17 @@
   "Navbar": {
     "brand": "Monika Mal",
     "navLabel": "Primary",
-    "portfolio": "Portfolio",
-    "about": "About me",
-    "pipeline": "How I work",
-    "pricing": "Pricing",
-    "faq": "FAQ",
-    "cta": "Get in touch",
-    "contactCta": "Let’s Talk",
+    "work": "Portfolio",
+    "services": "Services",
+    "process": "How I work",
+    "about": "About",
+    "demoCta": "Free demo",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "serviceUgc": "UGC Content",
+    "serviceAi": "AI Commercials",
+    "serviceProduct": "Product Content",
+    "servicesMenuLabel": "Services"
   },
   "GetInTouch": {
     "title": "Have a custom request or project?",
@@ -128,51 +136,140 @@
     "packageLabel": "Custom request"
   },
   "TrustBar": {
-    "title": "Trusted by brands"
+    "title": "Selected brands featured in my work"
+  },
+  "Positioning": {
+    "kicker": "For modern brands",
+    "title": "More content. Less production hassle.",
+    "body1": "Brands constantly need new visuals, hooks and formats for social media, ads and their webshop. But not every idea calls for a full traditional shoot.",
+    "body2": "With UGC, AI and hybrid production, I choose what works best for your product — concept by concept.",
+    "points": {
+      "human": {
+        "title": "Human when it matters",
+        "body": "Authentic UGC for trust, product experience and social content."
+      },
+      "ai": {
+        "title": "AI when the idea can go bigger",
+        "body": "Cinematic visuals and concepts without a full traditional production."
+      },
+      "platform": {
+        "title": "Made for the platform",
+        "body": "Content developed for Reels, TikTok, Meta Ads and webshops."
+      }
+    }
+  },
+  "Services": {
+    "kicker": "Services",
+    "title": "Content for every moment of your brand.",
+    "intro": "From human UGC to fully generated campaigns — I choose the approach that fits your product, audience and platform.",
+    "items": {
+      "ugc": {
+        "title": "UGC Content",
+        "body": "Authentic product videos with a human feel. For organic content, Meta Ads, TikTok and product pages.",
+        "tags": {
+          "one": "Authentic",
+          "two": "Social-first",
+          "three": "Paid social"
+        },
+        "cta": "View UGC"
+      },
+      "ai": {
+        "title": "AI Commercials",
+        "body": "Cinematic product videos and visual concepts without a traditional shoot — from creative direction to final edit.",
+        "tags": {
+          "one": "Cinematic",
+          "two": "Concept-to-final",
+          "three": "Platform-ready"
+        },
+        "cta": "View AI work"
+      },
+      "product": {
+        "title": "Product Content",
+        "body": "Product videos, visuals and social content created with UGC, AI or a tailored mix of both.",
+        "tags": {
+          "one": "UGC",
+          "two": "AI",
+          "three": "Hybrid"
+        },
+        "cta": "View Product Content"
+      }
+    },
+    "allServices": "View all services"
+  },
+  "MeetMonika": {
+    "kicker": "About me",
+    "title": "Hi, I’m Monika.",
+    "body1": "I started as a UGC creator and learned how much authenticity, storytelling and timing matter for content people actually want to watch.",
+    "body2": "Today I combine that experience with AI production and professional post-production. That way I can create both natural UGC and cinematic product content — depending on what fits your brand best.",
+    "cta": "More about me",
+    "portraitAlt": "Monika Mal",
+    "expectTitle": "What you can expect",
+    "expect": {
+      "contact": "Direct contact with me",
+      "price": "Clear price upfront",
+      "concept": "Concept before production",
+      "personal": "Personal approach",
+      "delivery": "Platform-ready delivery",
+      "revisions": "Revision rounds per package"
+    }
   },
   "Pricing": {
     "kicker": "Pricing",
-    "title": "Prices & Packages",
-    "badge": "Popular",
+    "title": "Content packages",
+    "intro": "Choose what fits your brand, campaign and content rhythm.",
+    "badge": "Most chosen",
+    "introLabel": "Introductory price",
+    "regularPrice": "Regular price:",
     "packages": {
       "starter": {
-        "name": "Starter",
-        "tagline": "Ideal for testing products on Meta and TikTok. Full cycle: from concept to final export-ready commercial.",
-        "price": "€400",
-        "cta": "Choose package",
+        "name": "One video",
+        "tagline": "For one product, campaign or a first collaboration.",
+        "oldPrice": "€400",
+        "price": "€300",
+        "discount": "-25%",
+        "cta": "Request a free demo",
         "features": {
-          "video": "1 AI commercial (up to 30 seconds)",
-          "hook": "High-converting hook & retention strategy",
-          "asmr": "ASMR sound design & cinematic color grading",
-          "revisions": "2 rounds of revisions",
-          "delivery": "Delivery in 3–5 business days"
+          "video": "1 complete content video",
+          "mode": "UGC or AI, depending on the concept",
+          "finish": "Sound design & colour finishing",
+          "revisions": "2 revision rounds",
+          "export": "Platform-ready export"
         }
       },
       "growth": {
-        "name": "Growth",
-        "tagline": "Scale winning creatives. Multiple hooks, advanced post-production, and direct creative oversight.",
-        "price": "€700",
-        "cta": "Choose package",
+        "name": "Content Duo",
+        "tagline": "Two videos to test multiple hooks, formats or creative directions.",
+        "oldPrice": "€700",
+        "price": "€500",
+        "discount": "-29%",
+        "cta": "Request a free demo",
         "features": {
-          "videos": "2 videos with high-converting hooks",
-          "asmr": "ASMR sound design & custom audio texture",
-          "post": "Advanced post-production & cinematic color grading",
-          "revisions": "2 rounds of revisions",
-          "delivery": "Delivery in 6–10 business days"
+          "videos": "2 complete videos",
+          "directions": "Multiple creative directions possible",
+          "mode": "UGC, AI or a mix",
+          "finish": "Sound design & finishing",
+          "revisions": "2 revision rounds per video",
+          "export": "Platform-ready exports"
         }
       },
       "partnership": {
-        "name": "Partnership",
-        "tagline": "A dedicated monthly production slot with priority execution and full-cycle management for consistent scaling.",
-        "price": "€1,200/month",
-        "perUnit": "€300 / video",
-        "cta": "Choose package",
+        "name": "Brand Partner",
+        "tagline": "Ongoing content for brands that want to stay visible.",
+        "oldPrice": "€1,200",
+        "price": "€850",
+        "period": "/ month",
+        "discount": "-29%",
+        "perUnit": "€212.50 per video",
+        "valueNote": "Save €150 per month compared to 2× Content Duo",
+        "cta": "Discuss a partnership",
         "features": {
-          "videos": "4 AI videos per month (€300 / video)",
-          "cycle": "Full-cycle production: hooks, editing, ASMR & color grading",
-          "priority": "Priority timing – produced ahead of the queue",
-          "slot": "Dedicated monthly production slot & creative oversight",
-          "revisions": "2 rounds of revisions on each video"
+          "videos": "4 content videos per month",
+          "mode": "UGC, AI or a fitting mix",
+          "planning": "Monthly creative planning",
+          "priority": "Priority in production",
+          "hooks": "Extra hook variations where agreed",
+          "delivery": "Platform-ready delivery",
+          "revisions": "2 revision rounds per video"
         }
       }
     }
@@ -181,7 +278,7 @@
     "kicker": "AI Photography",
     "title": "Professional photos for product pages and social",
     "intro": "AI photo generation for brands — a fast alternative to classic product shoots, with the same cinematic look as my video work.",
-    "badge": "Better value",
+    "badge": "Most chosen",
     "cta": "Choose package",
     "packages": {
       "five": {
@@ -210,55 +307,107 @@
   },
   "Pipeline": {
     "kicker": "How I work",
-    "title": "From concept to commercial",
-    "intro": "A focused four-step process — cinematic quality without a traditional production crew.",
+    "title": "From first idea to delivery",
+    "intro": "A clear four-step process, tailored to your product and content needs.",
     "steps": {
       "brief": {
-        "title": "Brief",
-        "body": "I map your brand, audience, and offer — locking the exact creative direction before a single frame is generated."
+        "title": "Product & brief",
+        "body": "You tell me about your product, brand, audience and platform. A product name, link or short explanation is enough to get started."
       },
       "concept": {
-        "title": "Concept",
-        "body": "Strategic hooks, storyboards, and mood boards built for e-commerce performance. You approve the exact visual tone before production begins."
+        "title": "Concept & approval",
+        "body": "Hooks, storytelling and visual style — with a storyboard or moodboard where useful. You approve the direction before production begins."
       },
       "production": {
         "title": "Production",
-        "body": "Advanced AI generation combined with professional post-production: precise color grading, custom sound design, rhythm editing, and polish to match high-end cinematic standards without a traditional crew."
+        "body": "I create the agreed content — UGC, AI or product-focused — followed by editing and professional finishing."
       },
       "delivery": {
         "title": "Delivery",
-        "body": "Thorough revisions per your package, followed by export-ready assets optimized for high-converting Meta, TikTok, and web product pages."
+        "body": "Platform-ready files in the agreed formats, with revision rounds as included in your package."
       }
-    }
+    },
+    "moreLink": "More about how I work"
   },
   "Contact": {
-    "kicker": "Contact",
-    "title": "Tell me about the brand",
-    "intro": "Share the product, the deadline, and the format. I reply with a clear next step and the right package.",
+    "kicker": "Free demo",
+    "title": "See your product in action first.",
+    "intro": "Tell me what your product is or send me a link. I’ll create a short creative demo of up to 10 seconds, so you can see which direction could fit your brand before you decide.",
+    "trustLine": "Free · max. 10 sec · no obligation",
+    "stepOf": "Step {step} of {total}",
+    "step1": {
+      "title": "What are you looking for?"
+    },
+    "contentTypes": {
+      "ugc": "UGC Video",
+      "ai": "AI Commercial",
+      "product": "Product Content",
+      "hybrid": "UGC + AI",
+      "unsure": "Not sure yet"
+    },
+    "step2": {
+      "title": "Where do you want to use the content?",
+      "hint": "Choose all that apply.",
+      "productLabel": "What is your product?",
+      "productHint": "Enter the product name or paste a link.",
+      "placeholder": "e.g. Glow Serum or https://yourbrand.com/product"
+    },
+    "platforms": {
+      "instagram": "Instagram / Reels",
+      "metaAds": "Meta Ads",
+      "tiktok": "TikTok",
+      "webshop": "Webshop",
+      "organic": "Organic social",
+      "other": "Other"
+    },
+    "step3": {
+      "title": "Where can I send the demo?"
+    },
     "name": "Name",
     "email": "Email",
     "brand": "Brand",
-    "package": "Package of interest",
-    "packageNone": "Not selected — to discuss on a call",
+    "social": "Instagram / website",
+    "note": "Anything else I should know?",
+    "optional": "(optional)",
+    "next": "Next",
+    "back": "Back",
+    "cta": "Request my free demo",
+    "sending": "Sending...",
+    "conditions": {
+      "one": "Free demo of up to 10 sec.",
+      "two": "One concept, without revision rounds.",
+      "three": "The demo is a preview and not intended for commercial use."
+    },
+    "success": {
+      "title": "Thank you — I’ll look at your brand personally.",
+      "body": "Your request has been received. I’ll get in touch via the email address you provided.",
+      "portfolio": "View portfolio",
+      "instagram": "Instagram",
+      "again": "Start another request",
+      "tiktok": "TikTok",
+      "socialLabel": "Follow my work"
+    },
+    "errors": {
+      "contentType": "Choose what you are looking for.",
+      "product": "Enter a product name or link.",
+      "name": "Enter your name.",
+      "email": "Enter your email address."
+    },
+    "error": "Something went wrong. Please try again or email me directly.",
+    "invalidEmail": "Enter a valid email address.",
+    "packageChosen": "Selected package:",
+    "packageRemove": "Remove selected package",
     "packageOptions": {
-      "none": "Not selected — to discuss on a call",
-      "starter": "Starter — €400",
-      "growth": "Growth — €700",
-      "partnership": "Partnership — €1,200/month",
+      "starter": "One video — €300",
+      "growth": "Content Duo — €500",
+      "partnership": "Brand Partner — €850/month",
       "photographyFive": "Photography — 5 photos (€100)",
       "photographyTen": "Photography — 10 photos (€150)"
-    },
-    "message": "Project",
-    "cta": "Send brief",
-    "sending": "Sending...",
-    "success": "Thank you. I’ll review your brief and get back to you within 24 hours.",
-    "error": "Something went wrong. Please try again or email me directly.",
-    "invalidEmail": "Please enter a valid email address.",
-    "required": "Please fill in all required fields."
+    }
   },
   "About": {
     "kicker": "About me",
-    "title": "About me",
+    "title": "Hi, I’m Monika.",
     "photoPlaceholder": "Photo coming soon",
     "videoPlaceholder": "Video coming soon",
     "mute": "Mute video",
@@ -267,10 +416,9 @@
     "pause": "Pause video",
     "replay": "Replay",
     "fullscreen": "Enter fullscreen",
-    "lead": "I'm Monika, an <specialist>AI Visual Director</specialist> creating high-end commercials for e-commerce brands.",
-    "body1": "I create compelling videos that <customers>turn viewers into customers</customers>.",
-    "body2": "<fiveYears>Five years ago</fiveYears>, I picked up a camera and started creating <ugc>UGC content</ugc>, filming myself, people, and the beauty around me — capturing emotions, stories, and fleeting moments through my lens. Over the years, I’ve mastered visual storytelling, playing with light, movement, and narrative to make every video feel alive and engaging.",
-    "body3": "For the <twoYears>past two years</twoYears>, I’ve been fully dedicated to <aiCreation>AI video creation</aiCreation>, merging my deep background in production with cutting-edge artificial intelligence. This unique combination allows me to find fresh angles, build high-converting visuals, and convey atmosphere at a whole new level. As a video creator, I help brands create engaging, social-first content that genuinely connects with their audience. From AI commercials and product videos to UGC and lifestyle campaigns, I manage the entire creative process — from concept development and storyboarding to filming, AI generation, editing, and final delivery.",
+    "lead": "I started as a <hl>UGC creator</hl> and discovered how much <hl>authenticity, storytelling and timing</hl> matter for content people actually want to watch.",
+    "body1": "Today I combine that experience with <hl>AI production</hl> and professional post-production. That lets me help brands with natural UGC content, cinematic <hl>AI commercials</hl> and strong product content for social media, ads and <nw>e-commerce</nw>.",
+    "body2": "For each project I choose what works best: UGC for trust and connection, AI when an idea can be bigger, faster or more visual, or a <hl>combination of both</hl> when that gives the strongest result. I guide the whole process — from concept and visual direction to production, editing and delivery.",
     "worksTitle": "Selected work",
     "close": "Close",
     "works": {
@@ -278,17 +426,35 @@
       "two": "Work placeholder 02",
       "three": "Work placeholder 03"
     },
-    "ctaTitle": "Let’s make the next AI commercial",
-    "ctaBody": "Share the product and the deadline — I start from a clear brief.",
-    "cta": "Get in touch"
+    "ctaTitle": "Let’s create your next content",
+    "ctaBody": "Send me your product or webshop — I’ll make a free demo of up to 10 seconds.",
+    "cta": "Request a free demo",
+    "allWork": "View all work",
+    "closing": "My approach is personal, clear and focused on content that doesn’t just look good, but is genuinely useful for your brand.",
+    "cards": {
+      "ugc": {
+        "title": "UGC",
+        "body": "Authentic content that builds trust and feels natural."
+      },
+      "ai": {
+        "title": "AI commercials",
+        "body": "Strong visual concepts for brands that want to make a statement."
+      },
+      "product": {
+        "title": "Product content",
+        "body": "Content for webshops, socials and ads, ready to use straight away."
+      }
+    },
+    "ctaQuestion": "Curious which style suits your brand best?",
+    "ctaButton": "Request a free demo"
   },
   "Footer": {
     "brand": "Monika Mal",
-    "tagline": "Cinematic AI commercials for e-commerce brands",
+    "tagline": "UGC, AI commercials & product content for e-commerce brands.",
     "location": "Based in the Netherlands • Working globally",
     "navLabel": "Footer",
     "portfolio": "Portfolio",
-    "about": "About me",
+    "about": "About",
     "pipeline": "How I work",
     "pricing": "Pricing",
     "instagram": "Instagram",
@@ -296,32 +462,34 @@
     "tiktok": "TikTok",
     "whatsapp": "WhatsApp",
     "privacy": "Privacy Policy",
-    "copyright": "© {year} Monika Mal. All rights reserved."
+    "copyright": "© {year} Monika Mal. All rights reserved.",
+    "services": "Services",
+    "process": "How I work"
   },
   "Faq": {
     "kicker": "FAQ",
     "title": "Questions before we start",
-    "intro": "Clear answers for e-commerce teams planning AI commercials and ads.",
+    "intro": "Clear answers for e-commerce brands planning UGC, AI commercials or product content.",
     "items": {
       "turnaround": {
         "question": "What is the typical turnaround time?",
-        "answer": "Starter projects deliver in <hl>3–5 business days</hl>. Growth & Commercial packages take <hl>6–10 business days</hl>. Retainer partners receive priority scheduling slots in my calendar."
+        "answer": "<hl>One video</hl>: usually 3–5 business days after the creative direction and required input have been approved. <hl>Content Duo</hl>: usually 5–8 business days, depending on complexity and feedback. <hl>Brand Partner</hl>: planning is agreed per month. At the start, we agree together on a fixed content schedule and delivery moments. Turnaround times are indicative and can vary depending on feedback, complexity and available assets."
       },
       "product": {
-        "question": "Will the AI video accurately reflect my physical product?",
-        "answer": "Yes. I manage the entire creative direction, brand alignment, and color grading so the product matches your exact standards before final polish."
+        "question": "Will the AI video match my physical product?",
+        "answer": "I work from your real product images and oversee brand alignment and colour grading, so the final result matches the creative direction agreed upfront."
       },
       "ads": {
-        "question": "Can I run these videos as Meta, TikTok, and TV Ads?",
-        "answer": "Yes. You receive <hl>full commercial rights</hl> for all generated video & photo assets across all global digital advertising and broadcast channels."
+        "question": "Can I use the content in ads?",
+        "answer": "Usage rights are agreed clearly per project. Use on your own channels can be part of the package. Paid advertising, whitelisting or broader commercial use may require additional agreements."
       },
       "revisions": {
-        "question": "How do revisions work?",
-        "answer": "Every package includes structured revision rounds. I guide the project from the initial brief through custom sound design and final export, ensuring you get a polished commercial ready to run."
+        "question": "How do revisions and delivery work?",
+        "answer": "Every package includes two revision rounds per video. I guide the project from the first brief through sound design and final export. I deliver content in the format and resolution that suit the platform and project. 4K can be agreed when the source material and production allow it."
       },
       "payment": {
-        "question": "How does payment and onboarding work?",
-        "answer": "I operate on a <hl>50% deposit</hl> to initiate production, with the remaining 50% due upon final approval and 4K asset delivery."
+        "question": "How do payment and onboarding work?",
+        "answer": "A <hl>50% deposit</hl> is paid at the start. The remaining amount is paid before or at final delivery, according to the agreed project terms."
       }
     }
   },
@@ -369,7 +537,7 @@
     "sections": {
       "data": {
         "title": "What I collect",
-        "body": "Name, email, brand details, project briefs, and any media assets (images, logos, reference files) you share with me. This information is used solely to evaluate enquiries, process payments, and generate custom AI video/photo content for your project. I do not sell, rent, or publicly display your private project assets."
+        "body": "Name, email, brand details, project briefs, and any media assets (images, logos, reference files) you share with me. This information is used solely to evaluate enquiries, process payments, and create custom video and photo content for your project. I do not sell, rent, or publicly display your private project assets."
       },
       "intellectual": {
         "title": "Intellectual Property & Video Content",
@@ -381,7 +549,7 @@
       },
       "analytics": {
         "title": "Analytics & Data Collection",
-        "body": "We use privacy-friendly analytics tools (Vercel Analytics and PostHog) to understand visitor interactions and improve user experience. All session replays and inputs are automatically masked to protect your personal data. No personal data is sold or shared with third parties."
+        "body": "I use privacy-friendly analytics tools (Vercel Analytics and PostHog) to understand visitor interactions and improve user experience. All session replays and inputs are automatically masked to protect your personal data. No personal data is sold or shared with third parties."
       },
       "contact": {
         "title": "Contact",
@@ -427,6 +595,464 @@
   },
   "WhatsApp": {
     "label": "Chat on WhatsApp",
-    "greeting": "Hi Monika, I'm interested in AI video production for my brand"
+    "greeting": "Hi Monika, I’m interested in content for my brand"
+  },
+  "ServicePages": {
+    "common": {
+      "home": "Home",
+      "breadcrumbLabel": "Breadcrumb",
+      "demoCta": "Request a free demo",
+      "examplesCta": "See examples",
+      "fullPortfolio": "View the full portfolio",
+      "allPackages": "View all packages",
+      "introPrice": "introductory price",
+      "regularPrice": "regularly",
+      "faqTitle": "Frequently asked questions",
+      "relatedTitle": "Other services",
+      "aboutLink": "Who makes your content? Read more about me",
+      "more": "Read more",
+      "casesTitle": "Case studies"
+    },
+    "ugc": {
+      "meta": {
+        "title": "UGC Content for E-commerce Brands | Monika Mal",
+        "description": "Authentic UGC videos for e-commerce brands, social media and paid ads. From concept to platform-ready content for Instagram, TikTok and Meta."
+      },
+      "breadcrumb": "UGC content",
+      "serviceType": "UGC content creation",
+      "hero": {
+        "kicker": "UGC content",
+        "title": "UGC content for e-commerce brands",
+        "intro": "Authentic videos that show your product being used the way a real customer would. Made for Instagram, TikTok, Meta Ads and your product pages — from concept to a platform-ready file."
+      },
+      "context": {
+        "title": "What is UGC?",
+        "body1": "UGC stands for user-generated content: videos that look and sound as if a customer made them. Not a polished ad, but someone unboxing your product, using it and explaining why they like it.",
+        "body2": "For brands, good UGC is no longer left to chance. I create it as a commissioned creator, with a clear concept, a strong first second and a structure that suits the platform the video will run on."
+      },
+      "audience": {
+        "title": "Who is UGC for?",
+        "items": {
+          "one": "Webshops that want livelier product pages with relatable, real-use footage",
+          "two": "Brands advertising on Meta and TikTok that regularly need fresh creatives",
+          "three": "New products that need to build trust with an audience that doesn’t know the brand yet",
+          "four": "Teams without the time or budget for a full video shoot"
+        }
+      },
+      "benefits": {
+        "title": "Why brands use UGC",
+        "items": {
+          "one": {
+            "title": "Trust",
+            "body": "People see your product in a familiar situation, which feels closer than a traditional ad."
+          },
+          "two": {
+            "title": "Organic social",
+            "body": "UGC sits naturally in Instagram and TikTok feeds, so it feels less like advertising."
+          },
+          "three": {
+            "title": "Meta Ads & TikTok",
+            "body": "For paid social I build videos around a clear hook, so you can compare different angles side by side."
+          },
+          "four": {
+            "title": "Product storytelling",
+            "body": "A good UGC video tells a small story: the problem, the moment of use and what the product solves."
+          }
+        }
+      },
+      "examples": {
+        "title": "Examples",
+        "intro": "A selection of my UGC work: product videos I filmed myself. Independent concepts are labelled as such.",
+        "social": "See earlier UGC content on TikTok"
+      },
+      "process": {
+        "title": "How I work",
+        "steps": {
+          "one": {
+            "title": "Product & brief",
+            "body": "You tell me about your product, your audience and where the video will be used."
+          },
+          "two": {
+            "title": "Concept & approval",
+            "body": "I write opening lines and a structure. You approve the direction before production begins."
+          },
+          "three": {
+            "title": "Production",
+            "body": "I film the video with your product and edit it, including sound and colour."
+          },
+          "four": {
+            "title": "Delivery",
+            "body": "You receive platform-ready files, with revision rounds as included in your package."
+          }
+        }
+      },
+      "pricing": {
+        "title": "What does UGC cost?",
+        "body": "UGC is part of my content packages. For each video we decide together whether UGC, AI or a mix works best."
+      },
+      "faq": {
+        "one": {
+          "q": "What’s the difference between UGC and an AI commercial?",
+          "a": "UGC is built around a real person and a relatable moment of use. An AI commercial is a cinematic product video made without a traditional shoot. I look at what suits each concept — sometimes a combination works best."
+        },
+        "two": {
+          "q": "Which platforms do you create UGC for?",
+          "a": "Instagram and Reels, TikTok, Meta Ads, organic social and your webshop. You receive each video in the format of the platform it will run on."
+        },
+        "three": {
+          "q": "How many revision rounds are included?",
+          "a": "Every content package includes two revision rounds per video."
+        }
+      }
+    },
+    "ai": {
+      "meta": {
+        "title": "AI Commercials for E-commerce Brands | Monika Mal",
+        "description": "Cinematic AI commercials and product videos for e-commerce brands. From concept and storyboard to editing, sound design and final delivery."
+      },
+      "breadcrumb": "AI commercials",
+      "serviceType": "AI commercial production",
+      "hero": {
+        "kicker": "AI commercials",
+        "title": "AI commercials for e-commerce brands",
+        "intro": "Cinematic product videos without a film set, crew or location. I develop the concept, protect the look of your product and deliver a finished commercial for Meta, TikTok, Reels and your webshop."
+      },
+      "context": {
+        "title": "What is an AI commercial?",
+        "body1": "An AI commercial is a product video whose shots are generated and directed with AI, then edited professionally. It lets you show sets, moods and camera moves that would be expensive or impossible on a traditional shoot.",
+        "body2": "AI is a tool here, not a replacement for creative decisions. The difference is in the direction: a clear concept, a consistent look and a finish with sound design and colour grading."
+      },
+      "audience": {
+        "title": "Who is it for?",
+        "items": {
+          "one": "E-commerce brands that want a premium look without an agency-sized production budget",
+          "two": "Brands with a launch or campaign that need visuals quickly",
+          "three": "Advertisers who want to try several visual directions on Meta and TikTok",
+          "four": "Webshops that want to add motion to their product pages"
+        }
+      },
+      "benefits": {
+        "title": "What an AI commercial gives you",
+        "items": {
+          "one": {
+            "title": "Creative direction",
+            "body": "Every video starts with a concept and a visual direction that fits your brand — not a random prompt."
+          },
+          "two": {
+            "title": "Product consistency",
+            "body": "Your product has to stay recognisable. I work from your own product images and check shape, colour and detail at every stage."
+          },
+          "three": {
+            "title": "Storyboard first",
+            "body": "Before production starts you see how the video is built, so there are no surprises afterwards."
+          },
+          "four": {
+            "title": "Formats per platform",
+            "body": "Vertical for Reels and TikTok, other ratios for feed or webshop — matched to where the video runs."
+          }
+        }
+      },
+      "examples": {
+        "title": "Recent AI work",
+        "intro": "A selection from the portfolio. Independent concepts are labelled as such."
+      },
+      "process": {
+        "title": "From concept to final delivery",
+        "steps": {
+          "one": {
+            "title": "Product & brief",
+            "body": "Product, audience, platform and the look you have in mind."
+          },
+          "two": {
+            "title": "Concept & approval",
+            "body": "Hooks, scenes and visual style in a storyboard, approved before production begins."
+          },
+          "three": {
+            "title": "Production",
+            "body": "AI production of the shots with checks on product details, followed by editing, sound design and colour grading."
+          },
+          "four": {
+            "title": "Delivery",
+            "body": "Delivered in the formats you need, with revision rounds as included in your package."
+          }
+        }
+      },
+      "pricing": {
+        "title": "What does an AI commercial cost?",
+        "body": "AI commercials use the same content packages as UGC. The price depends on the number of videos, not on the technique."
+      },
+      "faq": {
+        "one": {
+          "q": "Will my product stay recognisable?",
+          "a": "That’s the starting point. I work from your real product images and check during production that shape, colour and details are right. If AI can’t render a detail well enough, I adapt the concept around it."
+        },
+        "two": {
+          "q": "What do you need from me to get started?",
+          "a": "A link to your product or webshop is enough for a first conversation or demo. Good product photos and any brand guidelines help make the result more accurate."
+        },
+        "three": {
+          "q": "Can I see what it looks like first?",
+          "a": "Yes. You can request a free demo of up to 10 seconds: one concept, without revision rounds, meant as a preview and not for commercial use."
+        }
+      }
+    },
+    "product": {
+      "meta": {
+        "title": "Product Content for Webshops & Social Media | Monika Mal",
+        "description": "Product videos, UGC and AI visuals for webshops, social media and ads. Content tailored to your product, platform and campaign."
+      },
+      "breadcrumb": "Product content",
+      "serviceType": "Product content creation",
+      "hero": {
+        "kicker": "Product content",
+        "title": "Product content for webshops and social media",
+        "intro": "Product videos, UGC and AI visuals that show what your product is and does. For your webshop, your socials and your ads — tailored to every channel."
+      },
+      "context": {
+        "title": "What counts as product content?",
+        "body1": "Product content is every visual you use to sell a product: short product videos, lifestyle shots, detail shots and visuals for product pages, carousels and ads.",
+        "body2": "Depending on the product, I choose UGC, AI or a hybrid approach. A skincare product calls for something different than shoes or a home accessory."
+      },
+      "audience": {
+        "title": "Who is it for?",
+        "items": {
+          "one": "Webshops that want more and better visuals per product",
+          "two": "Brands that want to support one launch across webshop, social and ads",
+          "three": "Brands that want their organic content and ads to look like they belong together",
+          "four": "Small teams that can’t hire a photographer and videographer for every campaign"
+        }
+      },
+      "benefits": {
+        "title": "What you get",
+        "items": {
+          "one": {
+            "title": "Product video",
+            "body": "Short videos that show the product in use or in a fitting setting."
+          },
+          "two": {
+            "title": "Product visuals",
+            "body": "AI images for product pages, banners and carousels, in the look of your brand."
+          },
+          "three": {
+            "title": "UGC, AI or hybrid",
+            "body": "Human content, combined with AI visuals, product shots and motion where that adds more."
+          },
+          "four": {
+            "title": "Organic and paid",
+            "body": "One set of content that works in your feed and as an ad, with formats per channel."
+          }
+        }
+      },
+      "examples": {
+        "title": "Product visuals from the portfolio",
+        "intro": "AI product visuals from my own independent concepts — not client commissions."
+      },
+      "process": {
+        "title": "How I work",
+        "steps": {
+          "one": {
+            "title": "Product & brief",
+            "body": "Which products, which channels and which formats do you need?"
+          },
+          "two": {
+            "title": "Concept & approval",
+            "body": "UGC, AI or a mix — based on a moodboard or concept that you approve upfront."
+          },
+          "three": {
+            "title": "Production",
+            "body": "Creating the videos and visuals, with attention to the details of your product."
+          },
+          "four": {
+            "title": "Delivery",
+            "body": "Files per channel: webshop, social and ads."
+          }
+        }
+      },
+      "pricing": {
+        "title": "Pricing for product content",
+        "body": "For video you work with the content packages. For standalone AI product images there are photo packages.",
+        "photoTitle": "AI product photos"
+      },
+      "faq": {
+        "one": {
+          "q": "Product video or product photos — what do I need?",
+          "a": "Video shows how a product works and feels; images are quicker to scan on a product page or in a carousel. Many brands use both: photos for the webshop, short videos for social and ads."
+        },
+        "two": {
+          "q": "Can I combine UGC and AI?",
+          "a": "Yes. A hybrid approach combines human content with AI visuals, product shots and motion. Together, we decide on the right mix based on your product and platform."
+        },
+        "three": {
+          "q": "Which package suits me?",
+          "a": "For one product or a first collaboration, the One video package is a logical start. If you want to test several hooks or directions, Content Duo fits. For ongoing content there’s Brand Partner, and for standalone product images there are photo packages."
+        }
+      }
+    }
+  },
+  "CasePage": {
+    "breadcrumbPortfolio": "Portfolio",
+    "conceptNote": "Not commissioned by the featured brand.",
+    "clientWork": "Client work",
+    "facts": {
+      "contentType": "Content type",
+      "industry": "Industry",
+      "format": "Format",
+      "platform": "Designed for",
+      "year": "Year",
+      "project": "Project"
+    },
+    "sections": {
+      "concept": "Creative concept",
+      "visual": "Visual approach",
+      "objective": "Creative objective",
+      "approach": "Production approach",
+      "deliverables": "Deliverables",
+      "finalWork": "Final work"
+    },
+    "service": {
+      "title": "Related service",
+      "cta": "View the service"
+    },
+    "more": {
+      "title": "More cases",
+      "portfolio": "View the full portfolio"
+    },
+    "platforms": {
+      "instagram": "Instagram / Reels",
+      "tiktok": "TikTok",
+      "metaAds": "Meta Ads",
+      "youtube": "YouTube / Shorts",
+      "webshop": "Webshop",
+      "organic": "Organic social"
+    },
+    "independentProject": "Independent creative concept",
+    "closing": {
+      "title": "Want to see what I could create for your product?",
+      "cta": "Request a free demo"
+    }
+  },
+  "Hub": {
+    "meta": {
+      "title": "Services: UGC, AI Commercials & Product Content | Monika Mal",
+      "description": "UGC videos, cinematic AI commercials and product content for e-commerce brands. See which approach fits your product, audience and platform."
+    },
+    "breadcrumb": "Services",
+    "kicker": "Services",
+    "title": "Content for e-commerce brands",
+    "intro": "From authentic UGC to cinematic AI commercials and product content — I choose the approach that fits your product, audience and platform.",
+    "bestFor": "Best for",
+    "allWork": "View all work",
+    "sections": {
+      "ugc": {
+        "kicker": "UGC Content",
+        "title": "Authentic videos with a human feel",
+        "body": "Product videos I film myself, with a real person and a relatable moment of use. For trust, organic social and paid ads.",
+        "bestFor": {
+          "one": "Product pages that need to build trust",
+          "two": "Organic content for Instagram and TikTok",
+          "three": "Meta and TikTok ads built around a clear hook"
+        },
+        "link": "More about UGC content"
+      },
+      "ai": {
+        "kicker": "AI Commercials",
+        "title": "Cinematic product videos without a film set",
+        "body": "From concept and storyboard to AI production, editing and sound design — for visuals that would be expensive or impossible on a traditional shoot.",
+        "bestFor": {
+          "one": "Launches and campaigns with a premium look",
+          "two": "Trying several visual directions",
+          "three": "Brands without the budget for a full production"
+        },
+        "link": "More about AI commercials"
+      },
+      "product": {
+        "kicker": "Product Content / Hybrid",
+        "title": "Product videos and visuals for every channel",
+        "body": "Product videos, UGC and AI visuals for your webshop, socials and ads — and, where it adds more, a mix of human content and AI.",
+        "bestFor": {
+          "one": "Webshops that need more visuals per product",
+          "two": "One launch across webshop, social and ads",
+          "three": "Product visuals in your brand’s look"
+        },
+        "link": "More about product content"
+      }
+    },
+    "links": {
+      "process": "How I work"
+    }
+  },
+  "HowItWorks": {
+    "meta": {
+      "title": "How I Work: From Idea to Delivery | Monika Mal",
+      "description": "How I work in four steps: product & brief, concept & approval, production and delivery. With indicative timelines, revisions and formats."
+    },
+    "breadcrumb": "How I work",
+    "kicker": "How I work",
+    "title": "From first idea to platform-ready content",
+    "intro": "A clear four-step process. You know upfront what you’ll get, when you give feedback and what I need from you.",
+    "process": {
+      "title": "The process",
+      "steps": {
+        "intro": {
+          "title": "Product & brief",
+          "body": "You tell me about your product, brand, audience and where the content will be used. A product name, link or short explanation is enough to get started."
+        },
+        "concept": {
+          "title": "Concept & approval",
+          "body": "I develop the creative direction: hooks, storytelling, visual style and, where useful, a storyboard or moodboard. You approve the direction before production begins."
+        },
+        "production": {
+          "title": "Production",
+          "body": "Depending on the concept, I create UGC, AI content or a combination of both, followed by editing, sound design, colour finishing and final production."
+        },
+        "delivery": {
+          "title": "Delivery",
+          "body": "You receive platform-ready files in the agreed formats. Any revision rounds are completed according to the selected package."
+        }
+      }
+    },
+    "timeline": {
+      "title": "Indicative timelines",
+      "items": {
+        "starter": "Usually 3–5 business days after the creative direction and required input have been approved.",
+        "growth": "Usually 5–8 business days, depending on complexity and feedback.",
+        "partnership": "Planned per month, with a fixed content schedule and delivery moments agreed at the start."
+      },
+      "note": "Timelines are indicative and can vary depending on feedback, complexity and available assets."
+    },
+    "revisions": {
+      "title": "Revisions",
+      "body": "Every content package includes two revision rounds per video. The free demo is one concept without revision rounds, meant as a preview and not for commercial use."
+    },
+    "needs": {
+      "title": "What I need from you",
+      "items": {
+        "product": "Your product name or a link to your product or webshop",
+        "audience": "Who the product is for",
+        "platform": "Where the content will run: Reels, TikTok, Meta Ads or your webshop",
+        "brand": "Any brand guidelines, logos or product photos",
+        "deadline": "A preferred deadline or launch date"
+      }
+    },
+    "formats": {
+      "title": "Formats",
+      "body1": "I deliver content in the format and resolution that suit the platform and project — usually vertical 9:16 for Reels and TikTok, and other ratios for feed or webshop where needed.",
+      "body2": "4K can be agreed when the source material and production allow it."
+    },
+    "links": {
+      "services": "View all services",
+      "work": "View all work"
+    }
+  },
+  "PortfolioPage": {
+    "meta": {
+      "title": "Portfolio: UGC, AI Commercials & Product Content | Monika Mal",
+      "description": "Browse UGC videos, AI commercials and product content for e-commerce brands. Client work and independent concepts, clearly labelled."
+    },
+    "breadcrumb": "Portfolio",
+    "title": "Work for e-commerce brands",
+    "intro": "UGC, AI commercials and product content — client work and independent concepts, always clearly labelled.",
+    "servicesLink": "View all services",
+    "processLink": "How I work"
   }
 }

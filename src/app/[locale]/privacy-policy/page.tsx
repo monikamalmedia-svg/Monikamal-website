@@ -1,5 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { PrivacyContent } from "@/components/PrivacyContent";
+import { pageMetadata } from "@/lib/seo";
+import type { Locale } from "@/lib/services";
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -8,10 +10,12 @@ type Props = {
 export async function generateMetadata({ params }: Props) {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "Privacy" });
-  return {
-    title: t("title"),
+  return pageMetadata({
+    locale: locale as Locale,
+    paths: { en: "/privacy-policy", nl: "/privacy-policy" },
+    title: `${t("title")} | Monika Mal`,
     description: t("intro"),
-  };
+  });
 }
 
 export default async function PrivacyPolicyPage({ params }: Props) {

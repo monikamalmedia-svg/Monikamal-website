@@ -2,15 +2,19 @@
 
 import { useTranslations } from "next-intl";
 
+// Real client brands only. Brands used in independent concepts (e.g. Rituals)
+// are labelled as concepts in the portfolio and do not belong in this bar.
 const LOGOS = [
   { src: "/logos/celsius.png", alt: "Celsius", height: 24 },
   { src: "/logos/clearly.svg", alt: "Clearly", height: 22 },
-  { src: "/logos/rituals.png", alt: "Rituals", height: 16 },
   { src: "/logos/trueseamoss.png", alt: "True Sea Moss", height: 26 },
 ] as const;
 
+// Repeat the set so one marquee group is wider than the container.
+const REPEAT = 3;
+
 function LogoSet({ hidden = false }: { hidden?: boolean }) {
-  const items = [...LOGOS, ...LOGOS];
+  const items = Array.from({ length: REPEAT }, () => LOGOS).flat();
 
   return (
     <div className="trust-marquee-group" aria-hidden={hidden || undefined}>
@@ -50,6 +54,9 @@ export function TrustBar() {
       className="relative z-20 scroll-mt-16 bg-transparent px-6 pt-20 pb-6 md:px-10 md:pt-28 lg:px-12"
     >
       <div className="mx-auto max-w-6xl">
+        <p className="mb-6 text-center text-[10px] tracking-[0.28em] text-foreground-muted uppercase md:mb-8 md:text-xs">
+          {t("title")}
+        </p>
         <div className="trust-marquee">
           <div className="trust-marquee-track">
             <LogoSet />

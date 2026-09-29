@@ -315,7 +315,7 @@ function AboutWorkCard({
           <button
             type="button"
             onClick={onClick}
-            className="absolute inset-0 z-[1] cursor-pointer text-left focus-visible:outline-none"
+            className="absolute inset-0 z-[1] cursor-pointer rounded-xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-inset"
             aria-label={item.title}
           >
             {videoUrl ? (
@@ -328,7 +328,8 @@ function AboutWorkCard({
                   loop
                   playsInline
                   allowFullscreen
-                  preload="auto"
+                  // Poster first; the file loads when the visitor opens or plays it.
+                  preload="none"
                   controls={false}
                   className="pointer-events-none h-full w-full rounded-xl object-cover"
                   onPlay={() => setIsPaused(false)}

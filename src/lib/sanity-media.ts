@@ -57,6 +57,24 @@ export function resolveSanityFileUrl(value: unknown): string | null {
   return null;
 }
 
+/**
+ * Sanity image CDN URL at display size: `auto=format` serves WebP/AVIF, `fit=max` never upscales.
+ * Other URLs are returned unchanged.
+ */
+export function sizedImageUrl(url: string | null | undefined, width: number): string {
+  if (!url) return "";
+  if (!url.includes("cdn.sanity.io/images/")) return url;
+  try {
+    const sized = new URL(url);
+    sized.searchParams.set("w", String(width));
+    sized.searchParams.set("auto", "format");
+    sized.searchParams.set("fit", "max");
+    return sized.toString();
+  } catch {
+    return url;
+  }
+}
+
 export function resolveSanityImageUrl(value: unknown): string | null {
   const fromFile = resolveSanityFileUrl(value);
   if (fromFile) return fromFile;

@@ -1,18 +1,32 @@
+import { useTranslations } from "next-intl";
 import { AIPipeline } from "@/components/AIPipeline";
 import { CommercialPortfolio } from "@/components/CommercialPortfolio";
-import { Contact } from "@/components/Contact";
+import { ContactSection } from "@/components/ContactSection";
 import { Hero } from "@/components/Hero";
 import { HomeHashScroll } from "@/components/HomeHashScroll";
 import { Faq } from "@/components/Faq";
+import { MeetMonika } from "@/components/MeetMonika";
 import { TrustBar } from "@/components/TrustBar";
 import { PhotoPricing } from "@/components/PhotoPricing";
+import { Positioning } from "@/components/Positioning";
 import { Pricing } from "@/components/Pricing";
-import { type PortfolioType } from "@/lib/portfolio";
+import { Services } from "@/components/Services";
+import {
+  type ContentType,
+  type PortfolioType,
+  type ProjectType,
+} from "@/lib/portfolio";
 
 export type HomePortfolioItem = {
   id: string;
   title: string;
-  category: string;
+  contentType: ContentType;
+  projectType: ProjectType | null;
+  format: string;
+  /** Set only when a published case page exists. */
+  caseSlug: string | null;
+  /** Position in the mixed "Alles" view; null = after the numbered items. */
+  featuredOrder: number | null;
   year: string;
   mediaType: PortfolioType;
   imageUrl: string | null;
@@ -25,15 +39,15 @@ export function HomeMain({
   subheadline,
   videoUrl,
   portfolioItems,
-  sanityDocs,
 }: {
   kicker: string;
   headline: string;
   subheadline: string;
   videoUrl: string | null;
   portfolioItems: HomePortfolioItem[];
-  sanityDocs?: unknown;
 }) {
+  const t = useTranslations("Portfolio");
+
   return (
     <main className="relative z-20 flex-1">
       <HomeHashScroll />
@@ -44,12 +58,22 @@ export function HomeMain({
         videoUrl={videoUrl}
       />
       <TrustBar />
-      <CommercialPortfolio items={portfolioItems} sanityDocs={sanityDocs} />
+      <Positioning />
+      <Services />
+      <CommercialPortfolio
+        items={portfolioItems}
+        // Homepage shows a selection; the full archive lives on /portfolio.
+        preview={{ limit: 6, label: t("selectedWork"), ctaLabel: t("viewAllWork") }}
+      />
       <AIPipeline />
+      <MeetMonika />
       <Pricing />
       <PhotoPricing />
       <Faq />
-      <Contact />
+      {/* Demo CTA anchor; wraps the existing #contact section. */}
+      <div id="gratis-demo" className="scroll-mt-24">
+        <ContactSection />
+      </div>
     </main>
   );
 }

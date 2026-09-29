@@ -1,5 +1,6 @@
 "use client";
 
+import { PackageBadge } from "@/components/PackageBadge";
 import { Check } from "lucide-react";
 import { useSelectedPackage } from "@/context/SelectedPackageContext";
 import type { DisplayPackage } from "@/lib/cms-pricing";
@@ -43,28 +44,11 @@ export function PhotoPricingView({
 
         <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6">
           {packages.map((pack) => (
-            <div
-              key={`${pack.key}-${pack.name}`}
-              className={
-                pack.featured
-                  ? "glow-border-card relative z-20 h-full"
-                  : "relative z-20 h-full"
-              }
-            >
-              <article
-                className={
-                  pack.featured
-                    ? "relative flex h-full flex-col rounded-2xl bg-graphite p-6 backdrop-blur-sm md:p-8"
-                    : "relative flex h-full flex-col rounded-2xl border border-glass-border bg-graphite p-6 backdrop-blur-sm md:p-8"
-                }
-              >
-                {pack.featured ? (
-                  <span className="absolute top-5 right-5 rounded-full border border-gold px-2.5 py-1 text-[10px] tracking-[0.16em] text-gold uppercase">
-                    {badge}
-                  </span>
-                ) : null}
+            <div key={`${pack.key}-${pack.name}`} className="relative z-20 h-full">
+              <article className="relative flex h-full flex-col rounded-2xl border border-glass-border bg-graphite p-6 backdrop-blur-sm md:p-8">
+                {pack.featured ? <PackageBadge>{badge}</PackageBadge> : null}
 
-                <h3 className="font-display pr-20 text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
+                <h3 className="font-display pr-28 text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
                   {pack.name}
                 </h3>
 

@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import type { DisplayFaqItem } from "@/lib/cms-faq";
+import { keepEcommerce } from "@/components/KeepEcommerce";
 
 const highlight = (chunks: ReactNode) => (
   <span className="font-medium text-amber-300">{chunks}</span>
@@ -48,7 +49,7 @@ export function FaqView({ kicker, heading, subheading, items }: Props) {
             {heading}
           </h2>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground-muted md:text-lg">
-            {subheading}
+            {keepEcommerce(subheading)}
           </p>
         </header>
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { type ReactNode, useEffect, useState } from "react";
-import posthog from "posthog-js";
-import { PostHogProvider } from "posthog-js/react";
+import type { PostHog } from "posthog-js";
 import {
   CONSENT_EVENT,
   allowsAnalytics,
@@ -12,6 +11,14 @@ import {
 type Props = {
   children: ReactNode;
 };
+
+// Loaded on first analytics consent only, so visitors without consent never download PostHog.
+let posthogPromise: Promise<PostHog> | null = null;
+
+function loadPosthog(): Promise<PostHog> {
+  posthogPromise ??= import("posthog-js").then((module) => module.default);
+  return posthogPromise;
+}
 
 export function CSPostHogProvider({ children }: Props) {
   const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
@@ -31,22 +38,26 @@ export function CSPostHogProvider({ children }: Props) {
     if (!key || !host) return;
 
     if (!analyticsAllowed) {
-      if (posthog.__loaded) {
-        posthog.opt_out_capturing();
+      // Only opt out if PostHog was already loaded earlier in this visit.
+      if (posthogPromise) {
+        void posthogPromise.then((posthog) => {
+          if (posthog.__loaded) posthog.opt_out_capturing();
+        });
       }
       return;
     }
 
-    if (!posthog.__loaded) {
-      posthog.init(key, {
-        api_host: host,
-        person_profiles: "identified_only",
-      });
-      return;
-    }
-
-    posthog.opt_in_capturing();
+    void loadPosthog().then((posthog) => {
+      if (!posthog.__loaded) {
+        posthog.init(key, {
+          api_host: host,
+          person_profiles: "identified_only",
+        });
+        return;
+      }
+      posthog.opt_in_capturing();
+    });
   }, [analyticsAllowed]);
 
-  return <PostHogProvider client={posthog}>{children}</PostHogProvider>;
+  return <>{children}</>;
 }

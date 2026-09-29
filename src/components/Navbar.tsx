@@ -3,76 +3,53 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
-import { useTranslations } from "next-intl";
-import { Menu, X } from "lucide-react";
-import { GetInTouchModal } from "@/components/GetInTouchModal";
+import { useLocale, useTranslations } from "next-intl";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import {
+  SERVICE_KEYS,
+  pagePath,
+  routeFromSlug,
+  servicePath,
+  type Locale,
+  type ServiceKey,
+} from "@/lib/services";
 
-const HASH_LINKS = [
-  { id: "portfolio", key: "portfolio" },
-  { id: "pipeline", key: "pipeline" },
-  { id: "pricing", key: "pricing" },
-  { id: "faq", key: "faq" },
-] as const;
+const DEMO_ID = "gratis-demo";
 
-type HashId = (typeof HASH_LINKS)[number]["id"] | "contact";
+// No outline after a mouse click; a clear gold ring for keyboard focus only.
+const FOCUS_RING =
+  "outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F0206]";
 
-function scrollToSection(id: string) {
-  const target = document.getElementById(id);
-  if (!target) return;
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
-}
+const SERVICE_LABEL_KEYS: Record<ServiceKey, "serviceUgc" | "serviceAi" | "serviceProduct"> = {
+  ugc: "serviceUgc",
+  ai: "serviceAi",
+  product: "serviceProduct",
+};
 
 export function Navbar() {
   const t = useTranslations("Navbar");
+  const locale = useLocale() as Locale;
   const pathname = usePathname();
   const router = useRouter();
   const { scrollY } = useScroll();
   const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState<HashId | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [inquiryOpen, setInquiryOpen] = useState(false);
 
   const isHome = pathname === "/";
-  const isAbout = pathname === "/about";
+  const firstSegment = pathname.split("/")[1] ?? "";
+  const route = routeFromSlug(firstSegment);
+  const active = {
+    work: firstSegment === "portfolio",
+    services: route?.kind === "service" || (route?.kind === "page" && route.key === "hub"),
+    process: route?.kind === "page" && route.key === "howItWorks",
+    about: firstSegment === "about" || firstSegment === "projects",
+  };
 
   useMotionValueEvent(scrollY, "change", (value) => {
     setScrolled(value > 50);
   });
-
-  useEffect(() => {
-    if (!isHome) {
-      setActiveId(null);
-      return;
-    }
-
-    const ids = [...HASH_LINKS.map(({ id }) => id), "contact"] as const;
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
-
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-
-        if (visible[0]?.target.id) {
-          setActiveId(visible[0].target.id as HashId);
-        }
-      },
-      {
-        rootMargin: "-30% 0px -45% 0px",
-        threshold: [0.15, 0.35, 0.55],
-      },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, [isHome]);
 
   useEffect(() => {
     const media = window.matchMedia("(min-width: 768px)");
@@ -102,22 +79,16 @@ export function Navbar() {
     };
   }, [mobileOpen]);
 
-  const goToSection = useCallback(
-    (id: string) => {
-      setMobileOpen(false);
-      if (isHome) {
-        scrollToSection(id);
-        return;
-      }
-      router.push(`/#${id}`);
-    },
-    [isHome, router],
-  );
-
-  const openInquiry = useCallback(() => {
+  // Service, case and other pages have their own demo form; otherwise go to the homepage form.
+  const goToDemo = useCallback(() => {
     setMobileOpen(false);
-    setInquiryOpen(true);
-  }, []);
+    const target = document.getElementById(DEMO_ID);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
+    router.push(`/#${DEMO_ID}`);
+  }, [router]);
 
   const goHome = useCallback(
     (event?: { preventDefault: () => void }) => {
@@ -131,10 +102,10 @@ export function Navbar() {
   );
 
   const contactGhostClass =
-    "box-border inline-flex h-8 shrink-0 items-center justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold";
+    `box-border inline-flex h-8 shrink-0 items-center whitespace-nowrap justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold ${FOCUS_RING}`;
 
   const brandLockup = (
-    <Link href="/" onClick={goHome} className="flex min-w-0 items-center gap-2 sm:gap-2.5">
+    <Link href="/" onClick={goHome} className={`flex min-w-0 items-center gap-2 rounded-sm sm:gap-2.5 ${FOCUS_RING}`}>
       <Image
         src="/logo.png"
         alt="Monika Mal"
@@ -149,54 +120,91 @@ export function Navbar() {
     </Link>
   );
 
-  const linkClass = (active: boolean, large = false) =>
+  const linkClass = (isActive: boolean, large = false) =>
     large
-      ? `font-display text-3xl tracking-tight transition-colors ${
-          active ? "text-gold" : "text-foreground"
+      ? `font-display rounded-sm text-3xl tracking-tight transition-colors ${FOCUS_RING} ${
+          isActive ? "text-gold" : "text-foreground"
         }`
-      : `text-sm tracking-[0.04em] transition-colors ${
-          active ? "text-gold" : "text-foreground/90 hover:text-gold"
+      : `rounded-sm text-sm tracking-[0.04em] transition-colors ${FOCUS_RING} ${
+          isActive ? "text-gold" : "text-foreground/90 hover:text-gold"
         }`;
 
-  const navItems = (
-    large: boolean,
-  ) => (
+  const close = () => setMobileOpen(false);
+  const current = (isActive: boolean) => (isActive ? ("page" as const) : undefined);
+
+  const serviceLinks = SERVICE_KEYS.map((key) => ({
+    key,
+    href: servicePath(key, locale),
+    label: t(SERVICE_LABEL_KEYS[key]),
+    isActive: route?.kind === "service" && route.key === key,
+  }));
+
+  const navItems = (large: boolean) => (
     <>
-      <button
-        type="button"
-        onClick={() => goToSection("portfolio")}
-        className={linkClass(isHome && activeId === "portfolio", large)}
-      >
-        {t("portfolio")}
-      </button>
-      <Link
-        href="/about"
-        onClick={() => setMobileOpen(false)}
-        className={linkClass(isAbout, large)}
-      >
+      <Link href="/portfolio" onClick={close} aria-current={current(active.work)} className={linkClass(active.work, large)}>
+        {t("work")}
+      </Link>
+      {large ? (
+        <div className="flex flex-col items-center gap-3">
+          <Link href={pagePath("hub", locale)} onClick={close} aria-current={current(active.services)} className={linkClass(active.services, true)}>
+            {t("services")}
+          </Link>
+          <ul className="flex flex-col items-center gap-2">
+            {serviceLinks.map((item) => (
+              <li key={item.key}>
+                <Link
+                  href={item.href}
+                  onClick={close}
+                  aria-current={current(item.isActive)}
+                  className={`text-base transition-colors ${item.isActive ? "text-gold" : "text-foreground-muted hover:text-foreground"}`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        // Understated dropdown on hover/focus; clicking the label itself opens the hub page.
+        <div className="group relative">
+          <Link
+            href={pagePath("hub", locale)}
+            aria-current={current(active.services)}
+            className={`inline-flex items-center gap-1 ${linkClass(active.services)}`}
+          >
+            {t("services")}
+            <ChevronDown
+              className="h-3.5 w-3.5 opacity-60 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180"
+              strokeWidth={1.5}
+              aria-hidden
+            />
+          </Link>
+          <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
+            <ul
+              aria-label={t("servicesMenuLabel")}
+              className="min-w-52 rounded-xl border border-glass-border bg-graphite/95 p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-md"
+            >
+              {serviceLinks.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    aria-current={current(item.isActive)}
+                    className={`block rounded-lg px-3 py-2.5 text-sm whitespace-nowrap transition-colors hover:bg-white/[0.06] focus-visible:bg-white/[0.06] focus-visible:outline-none ${item.isActive ? "text-gold" : "text-foreground/90 hover:text-gold focus-visible:text-gold"}`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+      <Link href={pagePath("howItWorks", locale)} onClick={close} aria-current={current(active.process)} className={linkClass(active.process, large)}>
+        {t("process")}
+      </Link>
+      <Link href="/about" onClick={close} aria-current={current(active.about)} className={linkClass(active.about, large)}>
         {t("about")}
       </Link>
-      <button
-        type="button"
-        onClick={() => goToSection("pipeline")}
-        className={linkClass(isHome && activeId === "pipeline", large)}
-      >
-        {t("pipeline")}
-      </button>
-      <button
-        type="button"
-        onClick={() => goToSection("pricing")}
-        className={linkClass(isHome && activeId === "pricing", large)}
-      >
-        {t("pricing")}
-      </button>
-      <button
-        type="button"
-        onClick={() => goToSection("faq")}
-        className={linkClass(isHome && activeId === "faq", large)}
-      >
-        {t("faq")}
-      </button>
     </>
   );
 
@@ -215,12 +223,13 @@ export function Navbar() {
         transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
         style={{ borderBottomWidth: 1 }}
       >
-        <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 md:h-[4.25rem] md:px-10 lg:px-12">
+        <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 md:h-[4.25rem] md:grid-cols-[auto_minmax(0,1fr)_auto] md:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:px-12">
           {brandLockup}
 
+          {/* Tablet: sits in the middle grid column; desktop: centered in the bar. */}
           <nav
             aria-label={t("navLabel")}
-            className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-6 md:flex lg:gap-8"
+            className="hidden items-center justify-center gap-5 md:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:gap-8"
           >
             {navItems(false)}
           </nav>
@@ -230,27 +239,27 @@ export function Navbar() {
               <LanguageSwitcher className="relative z-10" />
               <button
                 type="button"
-                onClick={openInquiry}
+                onClick={() => goToDemo()}
                 className={contactGhostClass}
               >
-                {t("contactCta")}
+                {t("demoCta")}
               </button>
             </div>
 
             <div className="flex items-center justify-end gap-2 md:hidden">
               <button
                 type="button"
-                onClick={() => goToSection("contact")}
+                onClick={() => goToDemo()}
                 className={contactGhostClass}
               >
-                {t("contactCta")}
+                {t("demoCta")}
               </button>
               <button
                 type="button"
                 aria-label={t("openMenu")}
                 aria-expanded={mobileOpen}
                 onClick={() => setMobileOpen(true)}
-                className="box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold"
+                className={`box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold ${FOCUS_RING}`}
               >
                 <Menu className="h-4 w-4" strokeWidth={1.5} />
               </button>
@@ -278,7 +287,7 @@ export function Navbar() {
                 type="button"
                 aria-label={t("closeMenu")}
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-graphite text-foreground"
+                className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-graphite text-foreground ${FOCUS_RING}`}
               >
                 <X className="h-5 w-5" strokeWidth={1.5} />
               </button>
@@ -288,15 +297,20 @@ export function Navbar() {
               <div className="flex flex-col items-center gap-7">
                 {navItems(true)}
               </div>
-              <div className="mt-10">
+              <button
+                type="button"
+                onClick={() => goToDemo()}
+                className={`mt-10 inline-flex items-center justify-center rounded-full border border-gold/60 ${FOCUS_RING} bg-gold/10 px-9 py-3.5 text-sm font-medium tracking-[0.12em] text-gold uppercase transition-[border-color,background-color,box-shadow] duration-300 hover:border-gold hover:bg-gold/15 hover:shadow-[0_0_22px_rgba(212,175,55,0.28)]`}
+              >
+                {t("demoCta")}
+              </button>
+              <div className="mt-8">
                 <LanguageSwitcher />
               </div>
             </nav>
           </motion.div>
         ) : null}
       </AnimatePresence>
-
-      <GetInTouchModal open={inquiryOpen} onClose={() => setInquiryOpen(false)} />
     </>
   );
 }

@@ -1,6 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { type HomePortfolioItem } from "@/components/HomeMain";
-import { toMediaType } from "@/lib/portfolio";
+import { CASE_READY } from "@/lib/cases";
+import { toContentType, toMediaType, toProjectType } from "@/lib/portfolio";
 import {
   isPlayableVideoUrl,
   resolveSanityFileUrl,
@@ -22,6 +23,11 @@ type CaseStudyDoc = {
   _id: string;
   title: string | null;
   category: string | null;
+  contentType: string | null;
+  projectType: string | null;
+  format: string | null;
+  caseSlug: string | null;
+  featuredOrder: number | null;
   year: number | string | null;
   featured: boolean | null;
   mediaType: string | null;
@@ -40,6 +46,11 @@ const CASE_STUDIES_QUERY = `*[_type == "caseStudy"] | order(displayOrder asc) {
   _id,
   title,
   category,
+  contentType,
+  projectType,
+  format,
+  featuredOrder,
+  "caseSlug": select(${CASE_READY} => slug.current, null),
   year,
   featured,
   mediaType,
@@ -68,6 +79,39 @@ async function fetchCaseStudies(): Promise<CaseStudyDoc[]> {
   }
 }
 
+function toPortfolioItem(caseItem: CaseStudyDoc): HomePortfolioItem {
+  const videoUrl =
+    resolveSanityFileUrl(caseItem.videoUrl) ??
+    resolveSanityFileUrl(caseItem.videoFileUrl) ??
+    resolveSanityFileUrl(caseItem.caseVideo) ??
+    resolveSanityFileUrl(caseItem.videoFile) ??
+    resolveSanityFileUrl(caseItem.videoAssetRef);
+  const imageUrl =
+    resolveSanityImageUrl(caseItem.imageUrl) ??
+    resolveSanityImageUrl(caseItem.thumbnail);
+
+  const mediaType = toMediaType(caseItem.mediaType);
+
+  return {
+    id: caseItem._id,
+    title: caseItem.title?.trim() || "Untitled",
+    contentType: toContentType(caseItem.contentType, mediaType),
+    projectType: toProjectType(caseItem.projectType, caseItem.category),
+    format: caseItem.format?.trim() || "",
+    caseSlug: caseItem.caseSlug ?? null,
+    featuredOrder: typeof caseItem.featuredOrder === "number" ? caseItem.featuredOrder : null,
+    year: caseItem.year != null ? String(caseItem.year) : "",
+    mediaType,
+    imageUrl,
+    videoUrl: isPlayableVideoUrl(videoUrl) ? videoUrl : null,
+  };
+}
+
+/** Portfolio items for service pages (same mapping as the homepage grid). */
+export async function loadPortfolioItems(): Promise<HomePortfolioItem[]> {
+  return (await fetchCaseStudies()).map(toPortfolioItem);
+}
+
 export async function loadHomePageData(locale: string): Promise<{
   kicker: string;
   headline: string;
@@ -83,27 +127,7 @@ export async function loadHomePageData(locale: string): Promise<{
     fetchCaseStudies(),
   ]);
 
-  const portfolioItems = caseStudies.map((caseItem) => {
-    const videoUrl =
-      resolveSanityFileUrl(caseItem.videoUrl) ??
-      resolveSanityFileUrl(caseItem.videoFileUrl) ??
-      resolveSanityFileUrl(caseItem.caseVideo) ??
-      resolveSanityFileUrl(caseItem.videoFile) ??
-      resolveSanityFileUrl(caseItem.videoAssetRef);
-    const imageUrl =
-      resolveSanityImageUrl(caseItem.imageUrl) ??
-      resolveSanityImageUrl(caseItem.thumbnail);
-
-    return {
-      id: caseItem._id,
-      title: caseItem.title?.trim() || "Untitled",
-      category: caseItem.category?.trim() || "",
-      year: caseItem.year != null ? String(caseItem.year) : "",
-      mediaType: toMediaType(caseItem.mediaType),
-      imageUrl,
-      videoUrl: isPlayableVideoUrl(videoUrl) ? videoUrl : null,
-    };
-  });
+  const portfolioItems = caseStudies.map(toPortfolioItem);
 
   return {
     kicker: t("kicker"),

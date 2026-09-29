@@ -1,7 +1,42 @@
 export type PortfolioType = "video" | "photo";
 
+export type ContentType = "ugc" | "aiCommercial" | "productContent";
+
+export type ProjectType = "client" | "concept";
+
+/**
+ * Message key (Portfolio namespace) for the independent-concept label. The content type says
+ * how it was made (filmed UGC vs AI), the concept label says it wasn't commissioned.
+ */
+export function conceptLabelKey(contentType: ContentType): "conceptUgc" | "concept" {
+  return contentType === "ugc" ? "conceptUgc" : "concept";
+}
+
 export function toMediaType(value: string | null | undefined): PortfolioType {
   return value === "photo" ? "photo" : "video";
+}
+
+/**
+ * The Studio "Content category" field (required). The media-type fallback is only a safety net so an
+ * incomplete document never disappears from the portfolio; every published case has a category.
+ */
+export function toContentType(
+  value: string | null | undefined,
+  mediaType: PortfolioType,
+): ContentType {
+  if (value === "ugc" || value === "aiCommercial" || value === "productContent") {
+    return value;
+  }
+  return mediaType === "photo" ? "productContent" : "aiCommercial";
+}
+
+/** CMS value first; older entries only count as concepts when their category says so. Unknown stays unlabelled. */
+export function toProjectType(
+  value: string | null | undefined,
+  category: string | null | undefined,
+): ProjectType | null {
+  if (value === "client" || value === "concept") return value;
+  return category && /concept/i.test(category) ? "concept" : null;
 }
 
 /** URL-safe slug for portfolio deep links (`/projects/[slug]`). */

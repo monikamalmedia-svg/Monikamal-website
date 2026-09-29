@@ -15,6 +15,14 @@ export const aboutPage = defineType({
       },
     }),
     defineField({
+      name: "portrait",
+      title: "Portrait photo",
+      type: "image",
+      description:
+        'Photo of Monika for the homepage "Over mij" block (portrait, roughly 4:5). The block shows text only until this is set.',
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "headingEn",
       title: "Heading (English)",
       type: "string",

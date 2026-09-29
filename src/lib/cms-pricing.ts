@@ -40,6 +40,13 @@ export type DisplayPackage = {
   tagline?: string | null;
   features: string[];
   featured: boolean;
+  /** Regular price shown struck through next to the introductory price. */
+  oldPrice?: string | null;
+  discount?: string | null;
+  /** Billing period after the price, e.g. "/ maand". */
+  period?: string | null;
+  valueNote?: string | null;
+  cta?: string | null;
 };
 
 export const PRICING_SECTION_QUERY = `*[_type == "pricingSection"][0]{

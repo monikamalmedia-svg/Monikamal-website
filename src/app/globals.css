@@ -43,6 +43,9 @@ body {
 
 @utility font-display {
   font-family: var(--font-cormorant), ui-serif, serif;
+  /* Cormorant defaults to oldstyle figures, where "1" reads like "I" (e.g. "10" → "Io").
+     Lining figures keep prices, package names and step numbers unambiguous. */
+  font-variant-numeric: lining-nums;
 }
 
 .shadow-burgundy-glow {
@@ -57,50 +60,25 @@ body {
     0 0 48px rgba(212, 175, 55, 0.22);
 }
 
-@keyframes glow-border-spin {
+/* Hero copy entrance: CSS instead of JS, so the text paints before hydration.
+   Matches the former Framer Motion values: 25px rise, 0.7s ease-out (delay set inline per item). */
+@keyframes hero-reveal {
   from {
-    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 0;
+    transform: translateY(25px);
   }
   to {
-    transform: translate(-50%, -50%) rotate(360deg);
+    opacity: 1;
+    transform: none;
   }
 }
 
-.glow-border-card {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  border-radius: 1rem;
-  padding: 2px;
-}
-
-.glow-border-card::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 0;
-  width: 220%;
-  height: 220%;
-  background: conic-gradient(
-    from 0deg,
-    #d4af37,
-    transparent 22%,
-    #e8a5b8 50%,
-    transparent 72%,
-    #d4af37
-  );
-  will-change: transform;
-  animation: glow-border-spin 5s linear infinite;
-}
-
-.glow-border-card > * {
-  position: relative;
-  z-index: 1;
+.hero-reveal {
+  animation: hero-reveal 0.7s ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .glow-border-card::before {
+  .hero-reveal {
     animation: none;
   }
 }

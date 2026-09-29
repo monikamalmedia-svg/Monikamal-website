@@ -14,6 +14,7 @@ import { GB, NL } from "country-flag-icons/react/3x2";
 import { usePathname, useRouter } from "@/i18n/navigation";
 import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from "@/i18n/locale";
 import { routing } from "@/i18n/routing";
+import { translatePath } from "@/lib/services";
 
 type LocaleCode = (typeof routing.locales)[number];
 
@@ -91,7 +92,8 @@ export function LanguageSwitcher({
       closeMenu();
       persistLocaleCookie(code);
       if (code === locale) return;
-      router.replace(pathname, { locale: code });
+      // Some pages use a different slug per language (e.g. /diensten ↔ /services).
+      router.replace(translatePath(pathname, code), { locale: code });
     },
     [closeMenu, locale, pathname, persistLocaleCookie, router],
   );
@@ -139,7 +141,7 @@ export function LanguageSwitcher({
         aria-controls={menuId}
         onClick={() => setOpen((current) => !current)}
         onFocus={openMenu}
-        className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 text-white/80 backdrop-blur-md transition-all duration-300 ease-out hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:border-white/25 focus-visible:bg-white/10 focus-visible:outline-none sm:h-auto sm:gap-2 sm:px-3 sm:py-1.5"
+        className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 text-white/80 backdrop-blur-md transition-all duration-300 ease-out hover:border-white/25 hover:bg-white/10 hover:text-white focus-visible:border-white/25 focus-visible:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 sm:h-auto sm:gap-2 sm:px-3 sm:py-1.5"
       >
         <FlagIcon locale={locale} className="h-3 w-4" />
         <span className="text-[11px] font-medium tracking-wider uppercase sm:text-xs">

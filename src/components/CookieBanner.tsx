@@ -9,7 +9,7 @@ import { useCookieConsent } from "@/context/CookieConsentContext";
 const COPY = {
   nl: {
     barBody:
-      "Strikt noodzakelijke cookies houden de site werkend. Analyse (Vercel Analytics / PostHog) en marketing plaatsen we alleen met jouw toestemming. Geen impliciete toestemming: kies zelf.",
+      "Strikt noodzakelijke cookies houden de site werkend. Analyse (Vercel Analytics / PostHog) en marketing plaats ik alleen met jouw toestemming. Geen impliciete toestemming: kies zelf.",
     accept: "Akkoord",
     reject: "Alles afwijzen",
     manage: "Voorkeuren beheren",

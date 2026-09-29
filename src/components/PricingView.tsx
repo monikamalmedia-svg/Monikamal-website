@@ -1,18 +1,31 @@
 "use client";
 
 import { Check } from "lucide-react";
+import { PackageBadge } from "@/components/PackageBadge";
 import { useSelectedPackage } from "@/context/SelectedPackageContext";
 import type { DisplayPackage } from "@/lib/cms-pricing";
 
 type Props = {
   heading: string;
+  intro: string;
   kicker: string;
   badge: string;
-  cta: string;
+  introLabel: string;
+  regularPriceLabel: string;
+  defaultCta: string;
   packages: DisplayPackage[];
 };
 
-export function PricingView({ heading, kicker, badge, cta, packages }: Props) {
+export function PricingView({
+  heading,
+  intro,
+  kicker,
+  badge,
+  introLabel,
+  regularPriceLabel,
+  defaultCta,
+  packages,
+}: Props) {
   const { selectPackage } = useSelectedPackage();
 
   return (
@@ -28,76 +41,98 @@ export function PricingView({ heading, kicker, badge, cta, packages }: Props) {
           <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-medium tracking-tight text-foreground">
             {heading}
           </h2>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground-muted md:text-lg">
+            {intro}
+          </p>
         </header>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:gap-6">
+        {/* Desktop: each card spans 4 subgrid rows (intro, price, features, CTA) so rows line up across cards. */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-0">
           {packages.map((pack) => (
-            <div
+            <article
               key={`${pack.key}-${pack.name}`}
-              className={
-                pack.featured
-                  ? "glow-border-card relative z-20 h-full"
-                  : "relative z-20 h-full"
-              }
+              className="relative z-20 flex flex-col rounded-2xl border border-glass-border bg-graphite p-6 backdrop-blur-sm md:p-8 lg:row-span-4 lg:grid lg:grid-rows-subgrid lg:gap-0"
             >
-              <article
-                className={
-                  pack.featured
-                    ? "relative flex h-full flex-col rounded-2xl bg-graphite p-6 backdrop-blur-sm md:p-8"
-                    : "relative flex h-full flex-col rounded-2xl border border-glass-border bg-graphite p-6 backdrop-blur-sm md:p-8"
-                }
-              >
-                {pack.featured ? (
-                  <span className="absolute top-5 right-5 rounded-full border border-gold px-2.5 py-1 text-[10px] tracking-[0.16em] text-gold uppercase">
-                    {badge}
-                  </span>
-                ) : null}
+              <div>
+                {pack.featured ? <PackageBadge>{badge}</PackageBadge> : null}
 
-                <h3 className="font-display pr-20 text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
+                <h3 className="font-display pr-28 text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
                   {pack.name}
                 </h3>
                 {pack.tagline ? (
-                  <p className="mt-2 max-w-[18rem] text-sm leading-relaxed text-foreground-muted">
+                  <p className="mt-2 text-sm leading-relaxed text-foreground-muted">
                     {pack.tagline}
                   </p>
                 ) : null}
+              </div>
 
-                <div className="mt-4">
-                  <p className="font-display text-4xl font-medium tracking-tight text-foreground md:text-5xl">
-                    {pack.price}
+              <div className="mt-6">
+                {pack.oldPrice ? (
+                  <p className="flex items-center gap-2 text-[10px] tracking-[0.2em] text-gold/80 uppercase">
+                    {introLabel}
+                    {pack.discount ? (
+                      <span className="rounded-full bg-gold/10 px-2 py-0.5 font-medium tracking-[0.08em] text-gold">
+                        {pack.discount}
+                      </span>
+                    ) : null}
                   </p>
-                  {pack.pricePerUnit ? (
-                    <p className="mt-1 text-sm text-foreground-muted">
-                      {pack.pricePerUnit}
-                    </p>
+                ) : null}
+
+                <p className="mt-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <span className="font-display text-4xl font-medium tracking-tight text-foreground md:text-5xl">
+                    {pack.price}
+                  </span>
+                  {pack.period ? (
+                    <span className="text-sm text-foreground-muted">{pack.period}</span>
                   ) : null}
-                </div>
+                  {pack.oldPrice ? (
+                    <span className="text-base text-foreground-muted/80">
+                      <span className="sr-only">{regularPriceLabel} </span>
+                      <s className="decoration-foreground-muted/60 decoration-1">
+                        {pack.oldPrice}
+                      </s>
+                    </span>
+                  ) : null}
+                </p>
 
-                <ul className="mt-8 flex flex-1 flex-col gap-3">
-                  {pack.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="flex items-start gap-3 text-sm leading-relaxed text-foreground-muted"
-                    >
-                      <Check
-                        className="mt-[3px] h-4 w-4 shrink-0 text-gold"
-                        strokeWidth={1.75}
-                        aria-hidden
-                      />
-                      <span className="min-w-0">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+                {pack.pricePerUnit ? (
+                  <p className="mt-1 text-sm text-foreground-muted">
+                    {pack.pricePerUnit}
+                  </p>
+                ) : null}
+              </div>
 
+              <ul className="mt-8 flex flex-1 flex-col gap-3">
+                {pack.features.map((feature) => (
+                  <li
+                    key={feature}
+                    className="flex items-start gap-3 text-sm leading-relaxed text-foreground-muted"
+                  >
+                    <Check
+                      className="mt-[3px] h-4 w-4 shrink-0 text-gold"
+                      strokeWidth={1.75}
+                      aria-hidden
+                    />
+                    <span className="min-w-0">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-8 flex flex-col justify-end">
+                {pack.valueNote ? (
+                  <p className="mb-4 border-t border-glass-border pt-4 text-xs leading-relaxed text-foreground-muted">
+                    {pack.valueNote}
+                  </p>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => selectPackage(pack.key)}
-                  className="mt-8 w-full rounded-full border border-gold/50 bg-transparent px-5 py-3 text-xs font-medium tracking-wide text-gold uppercase [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-gold hover:bg-gold/8 hover:shadow-[0_0_15px_rgba(212,175,55,0.2)]"
+                  className="w-full rounded-full border border-gold/50 bg-transparent px-5 py-3 text-xs font-medium tracking-wide text-gold uppercase [text-shadow:0_1px_10px_rgba(0,0,0,0.55)] transition-all duration-300 hover:border-gold hover:bg-gold/8 hover:shadow-[0_0_15px_rgba(212,175,55,0.2)]"
                 >
-                  {cta}
+                  {pack.cta ?? defaultCta}
                 </button>
-              </article>
-            </div>
+              </div>
+            </article>
           ))}
         </div>
       </div>

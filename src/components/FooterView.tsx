@@ -2,9 +2,17 @@
 
 import { useCallback, type SVGProps } from "react";
 import Image from "next/image";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { CookieSettingsButton } from "@/components/CookieBanner";
+import { keepEcommerce } from "@/components/KeepEcommerce";
+import { SERVICE_KEYS, pagePath, servicePath, type Locale, type ServiceKey } from "@/lib/services";
+
+const SERVICE_NAV_KEYS: Record<ServiceKey, "serviceUgc" | "serviceAi" | "serviceProduct"> = {
+  ugc: "serviceUgc",
+  ai: "serviceAi",
+  product: "serviceProduct",
+};
 
 function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
@@ -58,6 +66,8 @@ export function FooterView({
   whatsappUrl,
 }: Props) {
   const t = useTranslations("Footer");
+  const nav = useTranslations("Navbar");
+  const locale = useLocale() as Locale;
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
@@ -78,7 +88,7 @@ export function FooterView({
   }, [isHome, router]);
 
   const legalLinkClass =
-    "text-foreground-muted transition-colors hover:text-gold";
+    "inline-block py-1.5 text-foreground-muted transition-colors hover:text-gold";
 
   return (
     <footer className="relative z-20 mt-auto border-t border-glass-border bg-graphite">
@@ -102,9 +112,9 @@ export function FooterView({
               </span>
             </button>
             <p className="mt-3 max-w-xs text-sm text-foreground-muted">
-              {tagline}
+              {keepEcommerce(tagline)}
             </p>
-            <p className="mt-2 max-w-xs text-xs text-white/40">
+            <p className="mt-2 max-w-xs text-xs text-white/60">
               {t("location")}
             </p>
             {contactEmail ? (
@@ -138,13 +148,35 @@ export function FooterView({
 
       <div className="border-t border-glass-border">
         <div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-2 px-6 py-4 text-center text-xs md:px-10 lg:px-12">
+          <nav
+            aria-label={t("navLabel")}
+            className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1"
+          >
+            <Link href={pagePath("hub", locale)} className={legalLinkClass}>
+              {t("services")}
+            </Link>
+            {SERVICE_KEYS.map((key) => (
+              <Link key={key} href={servicePath(key, locale)} className={legalLinkClass}>
+                {nav(SERVICE_NAV_KEYS[key])}
+              </Link>
+            ))}
+            <Link href="/portfolio" className={legalLinkClass}>
+              {t("portfolio")}
+            </Link>
+            <Link href={pagePath("howItWorks", locale)} className={legalLinkClass}>
+              {t("process")}
+            </Link>
+            <Link href="/about" className={legalLinkClass}>
+              {t("about")}
+            </Link>
+          </nav>
           <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
             <Link href="/privacy-policy" className={legalLinkClass}>
               {t("privacy")}
             </Link>
             <CookieSettingsButton className={legalLinkClass} />
           </nav>
-          <p className="mx-auto leading-relaxed text-neutral-500">
+          <p className="mx-auto leading-relaxed text-neutral-400">
             {t("copyright", { year: new Date().getFullYear() })}
           </p>
         </div>

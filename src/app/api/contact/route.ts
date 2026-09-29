@@ -2,6 +2,11 @@ import { Resend } from "resend";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Caps keep oversized/bot payloads out of the inbox.
+const MAX_SHORT = 300;
+const MAX_LONG = 5000;
+const MAX_PLATFORMS = 10;
+
 type ContactPayload = {
   name?: unknown;
   email?: unknown;
@@ -10,10 +15,24 @@ type ContactPayload = {
   budget?: unknown;
   message?: unknown;
   website_url?: unknown;
+  social?: unknown;
+  contentType?: unknown;
+  platforms?: unknown;
+  product?: unknown;
+  /** Legacy name (before product names were allowed); still accepted. */
+  productUrl?: unknown;
 };
 
-function asTrimmedString(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
+function asTrimmedString(value: unknown, max = MAX_SHORT) {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function asStringList(value: unknown) {
+  if (!Array.isArray(value)) return [];
+  return value
+    .slice(0, MAX_PLATFORMS)
+    .map((item) => asTrimmedString(item))
+    .filter(Boolean);
 }
 
 function escapeHtml(value: string) {
@@ -46,14 +65,22 @@ export async function POST(request: Request) {
   const email = asTrimmedString(payload.email);
   const brand = asTrimmedString(payload.brand);
   const selectedPackage = asTrimmedString(payload.package) || asTrimmedString(payload.budget);
-  const message = asTrimmedString(payload.message);
+  const message = asTrimmedString(payload.message, MAX_LONG);
   const websiteUrl = asTrimmedString(payload.website_url);
+  const social = asTrimmedString(payload.social);
+  const contentType = asTrimmedString(payload.contentType);
+  const platforms = asStringList(payload.platforms);
+  // Product name or link, free text.
+  const product =
+    asTrimmedString(payload.product, 1000) || asTrimmedString(payload.productUrl, 1000);
+  // Demo requests come from the multi-step form, where the note is optional.
+  const isDemoRequest = Boolean(contentType || product);
 
   if (websiteUrl) {
     return Response.json({ ok: true });
   }
 
-  if (!name || !email || !message) {
+  if (!name || !email || (!isDemoRequest && !message)) {
     return Response.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -75,17 +102,21 @@ export async function POST(request: Request) {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const subject = `[Inquiry] ${name || "Client"} — ${brand || "New Project"} (${sentAt})`;
+  const subject = `${isDemoRequest ? "[Gratis demo]" : "[Inquiry]"} ${name || "Client"} — ${brand || "New Project"} (${sentAt})`;
 
   const html = `
     <div style="background:#1E040C;color:#EDE6E8;font-family:Georgia,serif;padding:32px;">
       <p style="margin:0 0 8px;color:#D4AF37;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;">Monika Mal</p>
-      <h1 style="margin:0 0 24px;font-size:28px;font-weight:500;">Новая заявка с сайта</h1>
+      <h1 style="margin:0 0 24px;font-size:28px;font-weight:500;">${isDemoRequest ? "Заявка на бесплатное демо" : "Новая заявка с сайта"}</h1>
       <table style="width:100%;border-collapse:collapse;">
+        ${row("Тип контента", contentType)}
+        ${row("Платформы", platforms.join(", "))}
+        ${row("Product / link", product)}
         ${row("Имя", name)}
-        ${row("Email", email)}
         ${row("Бренд", brand)}
-        ${row("Интересующий пакет", selectedPackage || "Custom request")}
+        ${row("Email", email)}
+        ${row("Instagram / сайт", social)}
+        ${row("Интересующий пакет", selectedPackage || (isDemoRequest ? "" : "Custom request"))}
         ${row("Сообщение", message)}
       </table>
     </div>

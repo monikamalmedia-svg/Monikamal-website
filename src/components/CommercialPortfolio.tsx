@@ -6,59 +6,45 @@ import { useTranslations } from "next-intl";
 import { Play, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
-import { isPlayableVideoUrl } from "@/lib/sanity-media";
-import { type PortfolioType } from "@/lib/portfolio";
+import { isPlayableVideoUrl, sizedImageUrl } from "@/lib/sanity-media";
+import {
+  conceptLabelKey,
+  type ContentType,
+  type PortfolioType,
+  type ProjectType,
+} from "@/lib/portfolio";
 import { videoControlButtonClass } from "@/components/videoControlStyles";
+import { Link } from "@/i18n/navigation";
 
 type PortfolioItem = {
   id: string;
   title: string;
-  category: string;
+  contentType: ContentType;
+  projectType: ProjectType | null;
+  format: string;
+  caseSlug?: string | null;
+  featuredOrder?: number | null;
   year: string;
   mediaType: PortfolioType;
   imageUrl: string | null;
   videoUrl?: string | null;
-  isPlaceholder?: boolean;
 };
 
-const PHOTO_PLACEHOLDERS: PortfolioItem[] = [
-  {
-    id: "photo-placeholder-1",
-    title: "Cybernetic Luxury I",
-    category: "Cyber-Luxury",
-    year: "2026",
-    mediaType: "photo",
-    imageUrl:
-      "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop",
-    isPlaceholder: true,
-  },
-  {
-    id: "photo-placeholder-2",
-    title: "Neon Elegance II",
-    category: "Cyber-Luxury",
-    year: "2026",
-    mediaType: "photo",
-    imageUrl:
-      "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?q=80&w=1000&auto=format&fit=crop",
-    isPlaceholder: true,
-  },
-  {
-    id: "photo-placeholder-3",
-    title: "Gold & Dark Abstract",
-    category: "Cyber-Luxury",
-    year: "2026",
-    mediaType: "photo",
-    imageUrl:
-      "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?q=80&w=1000&auto=format&fit=crop",
-    isPlaceholder: true,
-  },
-];
+type FilterId = "all" | ContentType;
 
-const FILTERS: { id: PortfolioType; labelKey: "filterVideos" | "filterPhotos" }[] =
+const FILTERS: { id: FilterId; labelKey: "filterAll" | "filterUgc" | "filterAi" | "filterProduct" }[] =
   [
-    { id: "video", labelKey: "filterVideos" },
-    { id: "photo", labelKey: "filterPhotos" },
+    { id: "all", labelKey: "filterAll" },
+    { id: "ugc", labelKey: "filterUgc" },
+    { id: "aiCommercial", labelKey: "filterAi" },
+    { id: "productContent", labelKey: "filterProduct" },
   ];
+
+const TYPE_LABEL_KEYS: Record<ContentType, "typeUgc" | "typeAiCommercial" | "typeProductContent"> = {
+  ugc: "typeUgc",
+  aiCommercial: "typeAiCommercial",
+  productContent: "typeProductContent",
+};
 
 const videoHiddenNativeControls =
   "[&::-webkit-media-controls]:hidden [&::-webkit-media-controls-enclosure]:hidden [&::-webkit-media-controls-panel]:hidden [&::-webkit-media-controls-timeline]:hidden [&::-webkit-media-controls-current-time-display]:hidden [&::-webkit-media-controls-time-remaining-display]:hidden";
@@ -71,6 +57,7 @@ function PortfolioMedia({
   isHovering = false,
   onPlay,
   onPause,
+  imageWidth = 720,
 }: {
   item: PortfolioItem;
   alt: string;
@@ -79,9 +66,11 @@ function PortfolioMedia({
   isHovering?: boolean;
   onPlay?: () => void;
   onPause?: () => void;
+  /** Requested image width: ~2× the card width; the lightbox asks for more. */
+  imageWidth?: number;
 }) {
   const [videoFailed, setVideoFailed] = useState(false);
-  const imageUrl = item.imageUrl?.trim() || "";
+  const imageUrl = sizedImageUrl(item.imageUrl?.trim(), imageWidth);
   const videoUrl = isPlayableVideoUrl(item.videoUrl) ? item.videoUrl : null;
   const showVideo =
     item.mediaType === "video" && Boolean(videoUrl) && !videoFailed;
@@ -96,10 +85,11 @@ function PortfolioMedia({
           muted
           loop
           playsInline
-          preload="auto"
+          // Cards show the poster until hover/tap; loading 20+ MB per card upfront stalls the page.
+          preload="none"
           controls={false}
           className={`pointer-events-none ${className} ${videoHiddenNativeControls}`}
-          onPlay={onPlay}
+          onPlaying={onPlay}
           onPause={onPause}
           onError={(event) => {
             console.error("Video load error:", event);
@@ -110,6 +100,8 @@ function PortfolioMedia({
           <ProtectedImage
             src={imageUrl}
             alt={alt}
+            loading="lazy"
+            decoding="async"
             className={`pointer-events-none absolute inset-0 z-[1] h-full w-full rounded-2xl object-cover transition-opacity duration-300 ${
               isHovering ? "opacity-0" : "opacity-100"
             }`}
@@ -121,7 +113,13 @@ function PortfolioMedia({
 
   if (imageUrl) {
     return (
-      <ProtectedImage src={imageUrl} alt={alt} className={className} />
+      <ProtectedImage
+        src={imageUrl}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        className={className}
+      />
     );
   }
 
@@ -244,7 +242,7 @@ function PortfolioModal({
             <ProtectedVideo
               ref={videoRef}
               src={videoUrl}
-              poster={imageUrl || undefined}
+              poster={sizedImageUrl(imageUrl, 900) || undefined}
               autoPlay
               muted
               loop
@@ -283,6 +281,7 @@ function PortfolioModal({
             item={item}
             alt={title}
             className="max-h-[90vh] w-auto max-w-full object-contain"
+            imageWidth={1600}
           />
         )}
       </motion.div>
@@ -297,15 +296,20 @@ function PortfolioCard({
   item: PortfolioItem;
   onOpen: (item: PortfolioItem) => void;
 }) {
+  const t = useTranslations("Portfolio");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [canHover, setCanHover] = useState(true);
-  const [hovered, setHovered] = useState(false);
   const [isPaused, setIsPaused] = useState(true);
   const isVideo = item.mediaType === "video" && isPlayableVideoUrl(item.videoUrl);
   const isPhoto = item.mediaType === "photo";
-  const category = item.category.trim();
   const year = item.year.trim();
   const meta = [item.title, year].filter(Boolean).join(" · ");
+  const details = [
+    item.format,
+    item.projectType === "concept" ? t(conceptLabelKey(item.contentType)) : "",
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   useEffect(() => {
     const media = window.matchMedia("(hover: hover)");
@@ -317,7 +321,6 @@ function PortfolioCard({
 
   const onMouseEnter = () => {
     if (!canHover || !isVideo) return;
-    setHovered(true);
     const video = videoRef.current;
     if (!video) return;
     video.loop = true;
@@ -326,7 +329,6 @@ function PortfolioCard({
   };
 
   const onMouseLeave = () => {
-    setHovered(false);
     const video = videoRef.current;
     if (!video) return;
     video.pause();
@@ -351,18 +353,18 @@ function PortfolioCard({
               video.pause();
               video.currentTime = 0;
             }
-            setHovered(false);
             onOpen(item);
           }}
           onDragStart={(event) => event.preventDefault()}
-          className="absolute inset-0 z-[1] text-left focus-visible:outline-none"
+          className="absolute inset-0 z-[1] rounded-2xl text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-inset"
           aria-label={item.title}
         >
           <PortfolioMedia
             item={item}
             alt={item.title}
             videoRef={videoRef}
-            isHovering={hovered || !isPaused}
+            // Keep the poster until frames play, so a buffering video never flashes black.
+            isHovering={!isPaused}
             onPlay={() => setIsPaused(false)}
             onPause={() => setIsPaused(true)}
             className="h-full w-full rounded-2xl object-cover"
@@ -379,15 +381,27 @@ function PortfolioCard({
       </div>
 
       <div className="mt-3 w-full shrink-0 text-center">
-        {category ? (
-          <p className="text-[10px] font-medium tracking-[0.18em] text-gray-300 uppercase">
-            {category}
-          </p>
-        ) : null}
+        <p className="text-[10px] font-medium tracking-[0.18em] text-gray-300 uppercase">
+          {t(TYPE_LABEL_KEYS[item.contentType])}
+        </p>
         {meta ? (
-          <p className={`text-sm font-medium tracking-wide text-white ${category ? "mt-1" : ""}`}>
+          <p className="mt-1 text-sm font-medium tracking-wide text-white">
             {meta}
           </p>
+        ) : null}
+        {details ? (
+          <p className="mt-1 text-xs tracking-wide text-foreground-muted">
+            {details}
+          </p>
+        ) : null}
+        {item.caseSlug ? (
+          <Link
+            href={`/portfolio/${item.caseSlug}`}
+            // 44px touch target; the negative margins keep the text where the 17px-high link sat before.
+            className="-mt-1.5 -mb-3 inline-flex min-h-11 items-center gap-1.5 px-3 text-[11px] font-medium tracking-[0.16em] text-gold uppercase underline-offset-[5px] hover:underline"
+          >
+            {t("viewCase")} <span aria-hidden>→</span>
+          </Link>
         ) : null}
       </div>
       </div>
@@ -397,26 +411,33 @@ function PortfolioCard({
 
 export function CommercialPortfolio({
   items,
-  sanityDocs,
+  preview,
 }: {
   items: PortfolioItem[];
-  sanityDocs?: unknown;
+  /** Homepage "selected work": first N of the curated order, no filters, link to the full portfolio page. */
+  preview?: { limit: number; label: string; ctaLabel: string };
 }) {
   const t = useTranslations("Portfolio");
-  const [filter, setFilter] = useState<PortfolioType>("video");
+  const [filter, setFilter] = useState<FilterId>("all");
   const [active, setActive] = useState<PortfolioItem | null>(null);
 
-  useEffect(() => {
-    console.log("[Portfolio GROQ] caseStudy", sanityDocs);
-  }, [sanityDocs]);
+  // Hide filters without projects (e.g. UGC until real UGC work is added) instead of showing an empty state.
+  const visibleFilters = FILTERS.filter(
+    (tab) => tab.id === "all" || (items ?? []).some((item) => item.contentType === tab.id),
+  );
 
-  const visibleItems = (() => {
-    const matched = (items ?? []).filter((item) => item.mediaType === filter);
-    if (filter === "photo" && matched.length === 0) {
-      return PHOTO_PLACEHOLDERS;
-    }
-    return matched;
-  })();
+  // "Alles" uses the curated featuredOrder (deterministic, set in Studio); category filters keep
+  // the CMS display order. Unnumbered items follow in display order (stable sort).
+  const curated = [...(items ?? [])].sort(
+    (a, b) => (a.featuredOrder ?? Infinity) - (b.featuredOrder ?? Infinity),
+  );
+  const visibleItems = preview
+    ? curated.slice(0, preview.limit)
+    : filter === "all"
+      ? [...(items ?? [])].sort(
+          (a, b) => (a.featuredOrder ?? Infinity) - (b.featuredOrder ?? Infinity),
+        )
+      : (items ?? []).filter((item) => item.contentType === filter);
 
   const openItem = useCallback((item: PortfolioItem) => {
     setActive(item);
@@ -426,7 +447,7 @@ export function CommercialPortfolio({
     setActive(null);
   }, []);
 
-  const selectFilter = useCallback((next: PortfolioType) => {
+  const selectFilter = useCallback((next: FilterId) => {
     setFilter(next);
     setActive(null);
   }, []);
@@ -440,15 +461,16 @@ export function CommercialPortfolio({
         <div className="mx-auto max-w-7xl">
           <header className="relative z-20 mb-8 flex flex-col items-center gap-6 rounded-xl text-center backdrop-blur-sm md:mb-10 md:flex-row md:items-center md:justify-between md:text-left">
             <p className="text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
-              {t("label")}
+              {preview?.label ?? t("label")}
             </p>
 
+            {preview ? null : (
             <div
               role="tablist"
               aria-label={t("filterLabel")}
-              className="grid w-full max-w-[19.5rem] shrink-0 grid-cols-2 rounded-full border border-glass-border bg-graphite p-1 sm:max-w-none sm:inline-flex sm:w-auto"
+              className="grid w-full max-w-[20rem] shrink-0 grid-cols-2 gap-1 rounded-2xl border border-glass-border bg-graphite p-1 sm:inline-flex sm:w-auto sm:max-w-none sm:gap-0 sm:rounded-full"
             >
-              {FILTERS.map((tab) => {
+              {visibleFilters.map((tab) => {
                 const selected = filter === tab.id;
                 return (
                   <button
@@ -459,7 +481,7 @@ export function CommercialPortfolio({
                     aria-controls="portfolio-grid"
                     id={`portfolio-tab-${tab.id}`}
                     onClick={() => selectFilter(tab.id)}
-                    className={`relative cursor-pointer rounded-full px-3 py-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors duration-300 sm:px-4 sm:text-xs md:px-5 ${
+                    className={`relative cursor-pointer whitespace-nowrap rounded-full px-3 py-2 odd:last:col-span-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors duration-300 sm:px-4 sm:text-xs md:px-5 ${
                       selected
                         ? "text-gold"
                         : "text-foreground-muted hover:text-foreground"
@@ -477,18 +499,79 @@ export function CommercialPortfolio({
                 );
               })}
             </div>
+            )}
           </header>
 
-          <div id="portfolio-grid" role="tabpanel" aria-labelledby={`portfolio-tab-${filter}`}>
+          <div
+            id="portfolio-grid"
+            role={preview ? undefined : "tabpanel"}
+            aria-labelledby={preview ? undefined : `portfolio-tab-${filter}`}
+          >
             <div className="grid grid-cols-1 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-6">
               {visibleItems.map((item) => (
                 <PortfolioCard key={item.id} item={item} onOpen={openItem} />
               ))}
             </div>
+            {preview ? (
+              <div className="mt-10 flex justify-center">
+                <Link
+                  href="/portfolio"
+                  className="inline-flex items-center gap-2 rounded-full border border-gold/50 px-7 py-3 text-xs font-medium tracking-widest text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10 focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
+                >
+                  {preview.ctaLabel} <span aria-hidden>→</span>
+                </Link>
+              </div>
+            ) : null}
+            {visibleItems.length === 0 ? (
+              <div className="mx-auto flex max-w-md flex-col items-center py-16 text-center">
+                <p className="text-base leading-relaxed text-foreground-muted">
+                  {t("empty")}
+                </p>
+                <a
+                  href="#gratis-demo"
+                  onClick={(event) => {
+                    const target = document.getElementById("gratis-demo");
+                    if (!target) return;
+                    event.preventDefault();
+                    target.scrollIntoView({ behavior: "smooth", block: "start" });
+                  }}
+                  className="mt-5 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline"
+                >
+                  {t("emptyCta")} <span aria-hidden>→</span>
+                </a>
+              </div>
+            ) : null}
           </div>
         </div>
       </section>
 
+      <AnimatePresence>
+        {active ? (
+          <PortfolioModal
+            item={active}
+            title={active.title}
+            closeLabel={t("close")}
+            onClose={closeItem}
+          />
+        ) : null}
+      </AnimatePresence>
+    </>
+  );
+}
+
+/** Cards + lightbox without the section chrome or filters (used on service pages). */
+export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
+  const t = useTranslations("Portfolio");
+  const [active, setActive] = useState<PortfolioItem | null>(null);
+  const closeItem = useCallback(() => setActive(null), []);
+
+  return (
+    <>
+      <div className="grid grid-cols-1 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-6">
+        {items.map((item) => (
+          <PortfolioCard key={item.id} item={item} onOpen={setActive} />
+        ))}
+      </div>
       <AnimatePresence>
         {active ? (
           <PortfolioModal
