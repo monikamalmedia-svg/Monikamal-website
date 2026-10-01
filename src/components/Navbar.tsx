@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
@@ -20,6 +20,10 @@ const DEMO_ID = "gratis-demo";
 /** Header height on desktop (md:h-[4.25rem]); the hero counts as passed once its bottom reaches it. */
 const HEADER_HEIGHT = 68;
 const DESKTOP_MQ = "(min-width: 1024px)";
+
+// /projects/[slug] serves About works and portfolio videos; the page content says which one.
+const subscribeToNothing = () => () => {};
+const isPortfolioPage = () => Boolean(document.querySelector('main[data-page="portfolio"]'));
 
 // No outline after a mouse click; a clear gold ring for keyboard focus only.
 const FOCUS_RING =
@@ -45,11 +49,13 @@ export function Navbar() {
   const isHome = pathname === "/";
   const firstSegment = pathname.split("/")[1] ?? "";
   const route = routeFromSlug(firstSegment);
+  const portfolioContent = useSyncExternalStore(subscribeToNothing, isPortfolioPage, () => false);
+  const portfolioProject = firstSegment === "projects" && portfolioContent;
   const active = {
-    work: firstSegment === "portfolio",
+    work: firstSegment === "portfolio" || portfolioProject,
     services: route?.kind === "service" || (route?.kind === "page" && route.key === "hub"),
     process: route?.kind === "page" && route.key === "howItWorks",
-    about: firstSegment === "about" || firstSegment === "projects",
+    about: firstSegment === "about" || (firstSegment === "projects" && !portfolioProject),
   };
 
   // Homepage on desktop: the header lies over the hero (transparent, ivory on hover/focus via

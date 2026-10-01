@@ -25,6 +25,8 @@ export type HomePortfolioItem = {
   format: string;
   /** Set only when a published case page exists. */
   caseSlug: string | null;
+  /** Deep-link slug (/projects/[slug]): the Sanity slug, or a unique slug from the title. */
+  projectSlug: string;
   /** Position in the mixed "Alles" view; null = after the numbered items. */
   featuredOrder: number | null;
   year: string;

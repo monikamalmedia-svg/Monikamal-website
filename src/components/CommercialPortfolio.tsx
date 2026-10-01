@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type MouseEvent, type Ref } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Play, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
@@ -23,6 +23,7 @@ type PortfolioItem = {
   projectType: ProjectType | null;
   format: string;
   caseSlug?: string | null;
+  projectSlug?: string;
   featuredOrder?: number | null;
   year: string;
   mediaType: PortfolioType;
@@ -31,6 +32,21 @@ type PortfolioItem = {
 };
 
 type FilterId = "all" | ContentType;
+
+/** UGC and AI videos get their own URL (/projects/[slug]) while open, like the About works. */
+function hasDeepLink(item: PortfolioItem): item is PortfolioItem & { projectSlug: string } {
+  return (
+    item.mediaType === "video" &&
+    isPlayableVideoUrl(item.videoUrl) &&
+    (item.contentType === "ugc" || item.contentType === "aiCommercial") &&
+    Boolean(item.projectSlug)
+  );
+}
+
+const projectSlugFromPath = (path: string) => {
+  const slug = path.match(/\/projects\/([^/?#]+)/)?.[1];
+  return slug ? decodeURIComponent(slug) : null;
+};
 
 const FILTERS: { id: FilterId; labelKey: "filterAll" | "filterUgc" | "filterAi" | "filterProduct" }[] =
   [
@@ -412,14 +428,37 @@ function PortfolioCard({
 export function CommercialPortfolio({
   items,
   preview,
+  initialProjectSlug,
 }: {
   items: PortfolioItem[];
   /** Homepage "selected work": first N of the curated order, no filters, link to the full portfolio page. */
   preview?: { limit: number; label: string; ctaLabel: string };
+  /** /projects/[slug] deep link: open this video on load. */
+  initialProjectSlug?: string;
 }) {
   const t = useTranslations("Portfolio");
+  const locale = useLocale();
   const [filter, setFilter] = useState<FilterId>("all");
-  const [active, setActive] = useState<PortfolioItem | null>(null);
+  const deepLinks = !preview;
+  const findBySlug = useCallback(
+    (slug: string | null | undefined) =>
+      (slug && items.find((item) => item.projectSlug === slug && hasDeepLink(item))) || null,
+    [items],
+  );
+  const [active, setActive] = useState<PortfolioItem | null>(() => findBySlug(initialProjectSlug));
+  // One close can fire twice (button + backdrop); only step back in history once.
+  const steppingBack = useRef(false);
+
+  // Back / Forward between /portfolio and /projects/[slug] closes or reopens the video.
+  useEffect(() => {
+    if (!deepLinks) return;
+    const onPopState = () => {
+      steppingBack.current = false;
+      setActive(findBySlug(projectSlugFromPath(window.location.pathname)));
+    };
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, [deepLinks, findBySlug]);
 
   // Hide filters without projects (e.g. UGC until real UGC work is added) instead of showing an empty state.
   const visibleFilters = FILTERS.filter(
@@ -439,13 +478,29 @@ export function CommercialPortfolio({
         )
       : (items ?? []).filter((item) => item.contentType === filter);
 
-  const openItem = useCallback((item: PortfolioItem) => {
-    setActive(item);
-  }, []);
+  const openItem = useCallback(
+    (item: PortfolioItem) => {
+      setActive(item);
+      if (deepLinks && hasDeepLink(item)) {
+        window.history.pushState({ portfolioWork: item.projectSlug }, "", `/${locale}/projects/${item.projectSlug}`);
+      }
+    },
+    [deepLinks, locale],
+  );
 
   const closeItem = useCallback(() => {
     setActive(null);
-  }, []);
+    if (!deepLinks || !projectSlugFromPath(window.location.pathname)) return;
+    // Opened from this page: step back to /portfolio, so Forward reopens the video.
+    if (window.history.state?.portfolioWork) {
+      if (steppingBack.current) return;
+      steppingBack.current = true;
+      window.history.back();
+      return;
+    }
+    // Arrived directly on /projects/[slug]: show the portfolio URL in place of the deep link.
+    window.history.replaceState(null, "", `/${locale}/portfolio`);
+  }, [deepLinks, locale]);
 
   const selectFilter = useCallback((next: FilterId) => {
     setFilter(next);

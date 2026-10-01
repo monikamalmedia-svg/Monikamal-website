@@ -1,7 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { type HomePortfolioItem } from "@/components/HomeMain";
 import { CASE_READY } from "@/lib/cases";
-import { toContentType, toMediaType, toProjectType } from "@/lib/portfolio";
+import { toContentType, toMediaType, toProjectType, uniqueProjectSlugs } from "@/lib/portfolio";
 import {
   isPlayableVideoUrl,
   resolveSanityFileUrl,
@@ -27,6 +27,7 @@ type CaseStudyDoc = {
   projectType: string | null;
   format: string | null;
   caseSlug: string | null;
+  slug: string | null;
   featuredOrder: number | null;
   year: number | string | null;
   featured: boolean | null;
@@ -51,6 +52,7 @@ const CASE_STUDIES_QUERY = `*[_type == "caseStudy"] | order(displayOrder asc) {
   format,
   featuredOrder,
   "caseSlug": select(${CASE_READY} => slug.current, null),
+  "slug": slug.current,
   year,
   featured,
   mediaType,
@@ -79,7 +81,7 @@ async function fetchCaseStudies(): Promise<CaseStudyDoc[]> {
   }
 }
 
-function toPortfolioItem(caseItem: CaseStudyDoc): HomePortfolioItem {
+function toPortfolioItem(caseItem: CaseStudyDoc, projectSlug: string): HomePortfolioItem {
   const videoUrl =
     resolveSanityFileUrl(caseItem.videoUrl) ??
     resolveSanityFileUrl(caseItem.videoFileUrl) ??
@@ -99,6 +101,7 @@ function toPortfolioItem(caseItem: CaseStudyDoc): HomePortfolioItem {
     projectType: toProjectType(caseItem.projectType, caseItem.category),
     format: caseItem.format?.trim() || "",
     caseSlug: caseItem.caseSlug ?? null,
+    projectSlug,
     featuredOrder: typeof caseItem.featuredOrder === "number" ? caseItem.featuredOrder : null,
     year: caseItem.year != null ? String(caseItem.year) : "",
     mediaType,
@@ -107,9 +110,14 @@ function toPortfolioItem(caseItem: CaseStudyDoc): HomePortfolioItem {
   };
 }
 
+function toPortfolioItems(docs: CaseStudyDoc[]): HomePortfolioItem[] {
+  const fallbackSlugs = uniqueProjectSlugs(docs.map((doc) => doc.title?.trim() || "project"));
+  return docs.map((doc, index) => toPortfolioItem(doc, doc.slug?.trim() || fallbackSlugs[index]));
+}
+
 /** Portfolio items for service pages (same mapping as the homepage grid). */
 export async function loadPortfolioItems(): Promise<HomePortfolioItem[]> {
-  return (await fetchCaseStudies()).map(toPortfolioItem);
+  return toPortfolioItems(await fetchCaseStudies());
 }
 
 export async function loadHomePageData(locale: string): Promise<{
@@ -127,7 +135,7 @@ export async function loadHomePageData(locale: string): Promise<{
     fetchCaseStudies(),
   ]);
 
-  const portfolioItems = caseStudies.map(toPortfolioItem);
+  const portfolioItems = toPortfolioItems(caseStudies);
 
   return {
     kicker: t("kicker"),
