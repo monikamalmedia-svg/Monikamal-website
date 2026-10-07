@@ -11,25 +11,25 @@ type ServiceConfig = {
   slugs: Record<Locale, string>;
   /** Portfolio items shown as examples on the page. */
   contentType: ContentType;
-  /** Pre-selected answer in the demo form (Contact step 1). */
-  demoContentType: "ugc" | "ai" | "product";
+  /** Pre-selected answer in the intro-call form (Contact step 1). */
+  formContentType: "ugc" | "ai" | "product";
 };
 
 export const SERVICES: Record<ServiceKey, ServiceConfig> = {
   ugc: {
     slugs: { nl: "ugc-content", en: "ugc-content" },
     contentType: "ugc",
-    demoContentType: "ugc",
+    formContentType: "ugc",
   },
   ai: {
     slugs: { nl: "ai-commercial-laten-maken", en: "ai-commercials" },
     contentType: "aiCommercial",
-    demoContentType: "ai",
+    formContentType: "ai",
   },
   product: {
     slugs: { nl: "product-content", en: "product-content" },
     contentType: "productContent",
-    demoContentType: "product",
+    formContentType: "product",
   },
 };
 
@@ -59,7 +59,7 @@ export type PageKey = (typeof PAGE_KEYS)[number];
 
 export const PAGES: Record<PageKey, { slugs: Record<Locale, string> }> = {
   hub: { slugs: { nl: "diensten", en: "services" } },
-  howItWorks: { slugs: { nl: "werkwijze", en: "how-it-works" } },
+  howItWorks: { slugs: { nl: "werkwijze", en: "how-i-work" } },
 };
 
 export function pagePath(key: PageKey, locale: Locale): string {

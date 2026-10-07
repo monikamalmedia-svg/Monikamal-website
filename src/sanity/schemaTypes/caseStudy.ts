@@ -6,8 +6,6 @@ const REQUIRED_FOR_CASE_PAGE = [
   "summaryEn",
   "conceptNl",
   "conceptEn",
-  "approachNl",
-  "approachEn",
 ] as const;
 
 const PLATFORM_OPTIONS = [
@@ -41,6 +39,9 @@ const optionTitle = (options: { title: string; value: string }[], value?: string
 
 const caseText =(name: string, title: string, description?: string) =>
   defineField({ name, title, type: "text", rows: 4, group: "case", description });
+
+const caseHeadingField = (name: string, title: string, description?: string) =>
+  defineField({ name, title, type: "string", group: "case", description });
 
 export const caseStudy = defineType({
   name: "caseStudy",
@@ -141,23 +142,20 @@ export const caseStudy = defineType({
       name: "featured",
       title: "Featured on homepage",
       type: "boolean",
-      description: "Show this case in the homepage Portfolio grid.",
+      description: "Show this work on the moving portfolio wall on the homepage. Off = still on /portfolio, its case page and deep link.",
       initialValue: true,
     }),
     defineField({
-      name: "featuredOrder",
-      title: "Order in “Alles”",
-      type: "number",
+      name: "publishedAt",
+      title: "Publication date",
+      type: "datetime",
       description:
-        "Position in the mixed “Alles / All” portfolio view (1 = first). Mix content types so no single type dominates the first row. Empty = after the numbered items. Category filters keep “Display order”.",
+        "The portfolio shows the newest work first (All, every category and the homepage). Set automatically when the work is created; change it only to correct the order. Empty = the date the document was created.",
+      initialValue: () => new Date().toISOString(),
     }),
-    defineField({
-      name: "displayOrder",
-      title: "Display order",
-      type: "number",
-      description: "Lower numbers appear first on the site.",
-      initialValue: 0,
-    }),
+    // Former manual ordering; no longer used by the site. Hidden so old values don't confuse editors.
+    defineField({ name: "featuredOrder", title: "Order in “Alles” (no longer used)", type: "number", hidden: true }),
+    defineField({ name: "displayOrder", title: "Display order (no longer used)", type: "number", hidden: true }),
     defineField({
       name: "publishCasePage",
       title: "Publish case page",
@@ -214,8 +212,62 @@ export const caseStudy = defineType({
     caseText("objectiveEn", "Objective (English)"),
     caseText("visualNl", "Visual approach (Dutch)", "Optional. Light, camera, colour, composition, movement — only what is visible in the work."),
     caseText("visualEn", "Visual approach (English)"),
-    caseText("approachNl", "Production approach (Dutch)", "How it was made: UGC, AI, hybrid, editing, sound."),
+    caseText("approachNl", "Production approach (Dutch)", "Optional. How it was made: UGC, AI, hybrid, editing, sound — only what really happened."),
     caseText("approachEn", "Production approach (English)"),
+    caseText("resultNl", "Result / closing (Dutch)", "Optional. How the concept comes together. No performance numbers unless they are real client data. Concepts also show the 'not commissioned' line here."),
+    caseText("resultEn", "Result / closing (English)"),
+    caseHeadingField("conceptHeadingNl", "Heading for “Creative concept” (Dutch)", 'Optional, e.g. "Het idee". Empty = the standard heading.'),
+    caseHeadingField("conceptHeadingEn", "Heading for “Creative concept” (English)"),
+    caseHeadingField("visualHeadingNl", "Heading for “Visual approach” (Dutch)", "Optional."),
+    caseHeadingField("visualHeadingEn", "Heading for “Visual approach” (English)"),
+    caseHeadingField("resultHeadingNl", "Heading for “Result” (Dutch)", 'Optional, e.g. "Wat dit concept laat zien".'),
+    caseHeadingField("resultHeadingEn", "Heading for “Result” (English)"),
+    caseHeadingField("pullQuoteNl", "Accent sentence (Dutch)", "Optional. One short sentence shown large after the stills."),
+    caseHeadingField("pullQuoteEn", "Accent sentence (English)"),
+    defineField({
+      name: "projectDetailsNl",
+      title: "Project details (Dutch)",
+      type: "array",
+      group: "case",
+      of: [defineArrayMember({ type: "string" })],
+      description: 'Optional facts as "Label: value", e.g. "Formaat: 9:16". Shown as a compact grid. Only what is true for this work.',
+    }),
+    defineField({
+      name: "projectDetailsEn",
+      title: "Project details (English)",
+      type: "array",
+      group: "case",
+      of: [defineArrayMember({ type: "string" })],
+    }),
+    caseHeadingField("applicationsNl", "Possible uses (Dutch)", 'Optional one line under the details, e.g. "Mogelijke toepassingen: Reels en TikTok." Suggested uses only.'),
+    caseHeadingField("applicationsEn", "Possible uses (English)"),
+    defineField({
+      name: "disclaimerNl",
+      title: "Disclaimer (Dutch)",
+      type: "text",
+      rows: 2,
+      group: "case",
+      description: "Optional. Replaces the standard “Not commissioned by the featured brand” note in the concept label at the top.",
+    }),
+    defineField({ name: "disclaimerEn", title: "Disclaimer (English)", type: "text", rows: 2, group: "case" }),
+    defineField({
+      name: "stills",
+      title: "Stills from the work",
+      type: "array",
+      group: "case",
+      description: "Optional, 3–4 frames taken from the real video (no new or generated scenes).",
+      validation: (rule) => rule.max(4),
+      of: [
+        defineArrayMember({
+          type: "image",
+          options: { hotspot: true },
+          fields: [
+            defineField({ name: "altNl", title: "Alt text (Dutch)", type: "string" }),
+            defineField({ name: "altEn", title: "Alt text (English)", type: "string" }),
+          ],
+        }),
+      ],
+    }),
     defineField({
       name: "deliverablesNl",
       title: "Deliverables (Dutch)",
@@ -238,14 +290,12 @@ export const caseStudy = defineType({
   ],
   orderings: [
     {
-      title: "Order in “Alles”",
-      name: "featuredOrderAsc",
-      by: [{ field: "featuredOrder", direction: "asc" }],
-    },
-    {
-      title: "Display order",
-      name: "orderAsc",
-      by: [{ field: "displayOrder", direction: "asc" }],
+      title: "Newest first (site order)",
+      name: "publishedDesc",
+      by: [
+        { field: "publishedAt", direction: "desc" },
+        { field: "_createdAt", direction: "desc" },
+      ],
     },
   ],
   preview: {

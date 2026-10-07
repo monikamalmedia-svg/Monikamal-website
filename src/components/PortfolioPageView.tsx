@@ -1,16 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import { CommercialPortfolio } from "@/components/CommercialPortfolio";
 import { ContactSection } from "@/components/ContactSection";
+import { PageLinks } from "@/components/PageLinks";
 import type { HomePortfolioItem } from "@/components/HomeMain";
 import { JsonLd } from "@/components/JsonLd";
 import { keepEcommerce } from "@/components/KeepEcommerce";
 import { Link } from "@/i18n/navigation";
 import { absoluteUrl } from "@/lib/seo";
-import { pagePath, type Locale } from "@/lib/services";
+import type { Locale } from "@/lib/services";
 import { breadcrumbJsonLd } from "@/lib/structured-data";
 
-const textLinkClass =
-  "inline-flex items-center gap-2 py-3 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline";
 
 /**
  * Full portfolio archive with filters (/portfolio). Also rendered by /projects/[slug] for a
@@ -38,8 +37,8 @@ export async function PortfolioPageView({
           { name: t("breadcrumb"), url: absoluteUrl(locale, "/portfolio") },
         ])}
       />
-      <main data-page="portfolio" className="relative z-20 flex-1">
-        <section className="relative z-20 px-6 pt-28 md:px-10 md:pt-36 lg:px-12">
+      <main data-page="portfolio" data-nav-caption="work" className="relative z-20 flex-1">
+        <section className="portfolio-intro relative z-20 px-6 pt-28 md:px-10 md:pt-36 lg:px-12">
           <div className="mx-auto max-w-7xl">
             <nav aria-label={common("breadcrumbLabel")} className="mb-10 text-xs text-foreground-muted">
               <ol className="flex flex-wrap items-center gap-2">
@@ -54,7 +53,7 @@ export async function PortfolioPageView({
                 </li>
               </ol>
             </nav>
-            <h1 className="font-display max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] leading-[1] font-medium tracking-tight text-balance text-foreground">
+            <h1 className="font-display max-w-4xl text-[clamp(2.5rem,6.5vw,5rem)] leading-[1] font-light tracking-tight text-balance text-foreground">
               {keepEcommerce(t("title"))}
             </h1>
             <p className="mt-6 max-w-2xl text-base leading-relaxed text-foreground-muted md:text-xl">
@@ -65,18 +64,9 @@ export async function PortfolioPageView({
 
         <CommercialPortfolio items={items} initialProjectSlug={initialProjectSlug} />
 
-        <section className="relative z-20 px-6 md:px-10 lg:px-12">
-          <div className="mx-auto flex max-w-7xl flex-col gap-1 border-t border-glass-border pt-8 sm:flex-row sm:flex-wrap sm:gap-8">
-            <Link href={pagePath("hub", locale)} className={textLinkClass}>
-              {t("servicesLink")} <span aria-hidden>→</span>
-            </Link>
-            <Link href={pagePath("howItWorks", locale)} className={textLinkClass}>
-              {t("processLink")} <span aria-hidden>→</span>
-            </Link>
-          </div>
-        </section>
+        <PageLinks items={["services", "process", "about"]} />
 
-        <div id="gratis-demo" className="scroll-mt-24">
+        <div id="kennismaking" className="scroll-mt-24">
           <ContactSection />
         </div>
       </main>

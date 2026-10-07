@@ -1,15 +1,9 @@
-import { useTranslations } from "next-intl";
-import { AIPipeline } from "@/components/AIPipeline";
-import { CommercialPortfolio } from "@/components/CommercialPortfolio";
 import { ContactSection } from "@/components/ContactSection";
 import { Hero } from "@/components/Hero";
 import { HomeHashScroll } from "@/components/HomeHashScroll";
-import { Faq } from "@/components/Faq";
 import { MeetMonika } from "@/components/MeetMonika";
-import { TrustBar } from "@/components/TrustBar";
-import { PhotoPricing } from "@/components/PhotoPricing";
-import { Positioning } from "@/components/Positioning";
-import { Pricing } from "@/components/Pricing";
+import { PortfolioWall } from "@/components/PortfolioWall";
+import { ProcessSteps } from "@/components/ProcessSteps";
 import { Services } from "@/components/Services";
 import {
   type ContentType,
@@ -27,8 +21,8 @@ export type HomePortfolioItem = {
   caseSlug: string | null;
   /** Deep-link slug (/projects/[slug]): the Sanity slug, or a unique slug from the title. */
   projectSlug: string;
-  /** Position in the mixed "Alles" view; null = after the numbered items. */
-  featuredOrder: number | null;
+  /** "Featured on homepage" in Studio; false keeps a work off the homepage wall only. */
+  featured: boolean;
   year: string;
   mediaType: PortfolioType;
   imageUrl: string | null;
@@ -48,10 +42,8 @@ export function HomeMain({
   videoUrl: string | null;
   portfolioItems: HomePortfolioItem[];
 }) {
-  const t = useTranslations("Portfolio");
-
   return (
-    <main className="relative z-20 flex-1">
+    <main data-page="home" className="relative z-20 flex-1">
       <HomeHashScroll />
       <Hero
         kicker={kicker}
@@ -59,22 +51,14 @@ export function HomeMain({
         subheadline={subheadline}
         videoUrl={videoUrl}
       />
-      <TrustBar />
-      <Positioning />
+      {/* Hero → phrase + living portfolio wall → compact services → process → about → contact. */}
+      <PortfolioWall items={portfolioItems.filter((item) => item.featured)} />
       <Services />
-      <CommercialPortfolio
-        items={portfolioItems}
-        // Homepage shows a selection; the full archive lives on /portfolio.
-        preview={{ limit: 6, label: t("selectedWork"), ctaLabel: t("viewAllWork") }}
-      />
-      <AIPipeline />
+      <ProcessSteps variant="home" />
       <MeetMonika />
-      <Pricing />
-      <PhotoPricing />
-      <Faq />
-      {/* Demo CTA anchor; wraps the existing #contact section. */}
-      <div id="gratis-demo" className="scroll-mt-24">
-        <ContactSection />
+      {/* Intro-call anchor; wraps the #contact section. */}
+      <div id="kennismaking" className="scroll-mt-24">
+        <ContactSection toneFrom="#1a1117" />
       </div>
     </main>
   );

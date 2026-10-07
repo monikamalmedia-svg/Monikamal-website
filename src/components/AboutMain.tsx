@@ -34,7 +34,7 @@ export async function AboutMain({
   const t = await getTranslations("About");
 
   return (
-    <main className="relative z-20 flex-1 pt-20 md:pt-24">
+    <main data-page="about" data-nav-caption="aboutPage" className="relative z-20 flex-1 pt-20 md:pt-24">
       <section className="relative z-20 px-6 pt-8 pb-16 md:px-10 md:pt-10 md:pb-24 lg:px-12">
         <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[minmax(0,0.9fr)_1.1fr] lg:items-start lg:gap-16">
           <div className="relative aspect-[3/4] select-none">
@@ -46,7 +46,7 @@ export async function AboutMain({
                   aria-hidden
                   className="pointer-events-none absolute inset-x-8 bottom-10 h-40 rounded-full bg-amber-500/15 blur-[80px]"
                 />
-                <p className="relative z-10 font-mono text-xs tracking-[0.22em] text-white/50 uppercase">
+                <p className="relative z-10 text-xs tracking-[0.22em] text-white/50 uppercase">
                   {placeholderLabel}
                 </p>
               </div>
@@ -54,10 +54,10 @@ export async function AboutMain({
           </div>
 
           <div className="relative z-20 rounded-xl backdrop-blur-sm">
-            <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
+            <p className="mb-3 text-sm tracking-[0.04em] text-gold">
               {t("kicker")}
             </p>
-            <h1 className="font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] font-medium tracking-tight text-foreground">
+            <h1 className="font-display text-[clamp(2.5rem,5vw,4rem)] leading-[1.05] font-light tracking-tight text-foreground">
               {heading}
             </h1>
             <div className="mt-7 max-w-xl">
@@ -80,7 +80,7 @@ export async function AboutMain({
                   key={card}
                   className="rounded-xl border border-glass-border bg-graphite/60 p-4 backdrop-blur-sm md:p-5"
                 >
-                  <p className="text-[11px] tracking-[0.2em] text-gold uppercase">
+                  <p className="text-sm tracking-[0.04em] text-gold">
                     {t(`cards.${card}.title`)}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-foreground-muted">
@@ -93,8 +93,8 @@ export async function AboutMain({
             <div className="mt-8 flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
               <p className="text-sm text-foreground-muted md:text-base">{t("ctaQuestion")}</p>
               <Link
-                href="/#gratis-demo"
-                className="inline-flex shrink-0 items-center justify-center rounded-full border border-gold/50 px-6 py-3 text-xs font-medium tracking-widest text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10 focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
+                href="/#kennismaking"
+                className="inline-flex shrink-0 items-center justify-center rounded-full border border-gold/50 px-6 py-3 text-base text-gold transition-colors hover:border-gold hover:bg-gold/10 focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
               >
                 {t("ctaButton")}
               </Link>
@@ -109,7 +109,7 @@ export async function AboutMain({
       >
         <div className="mx-auto max-w-6xl">
           <header className="relative z-20 mb-10 md:mb-12">
-            <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-medium tracking-tight text-foreground">
+            <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-light tracking-tight text-foreground">
               {t("worksTitle")}
             </h2>
           </header>
@@ -122,9 +122,9 @@ export async function AboutMain({
       </section>
 
       <section className="relative z-20 px-6 pb-28 md:px-10 lg:px-12">
-        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 rounded-2xl border border-glass-border bg-glass/10 p-8 md:flex-row md:items-center md:justify-between md:p-10">
+        <div className="mx-auto flex max-w-6xl flex-col items-start gap-6 rounded-2xl border border-white/12 bg-white/[0.03] p-8 md:flex-row md:items-center md:justify-between md:p-10">
           <div>
-            <h2 className="font-display text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+            <h2 className="font-display text-3xl font-light tracking-tight text-foreground md:text-4xl">
               {ctaTitle}
             </h2>
             <p className="mt-3 max-w-md text-foreground-muted">{ctaBody}</p>
@@ -132,13 +132,13 @@ export async function AboutMain({
           <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-6">
             <Link
               href="/portfolio"
-              className="inline-flex items-center gap-2 py-3 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline"
+              className="inline-flex items-center gap-2 py-2 text-base text-gold underline-offset-[6px] transition-colors duration-300 hover:text-ivory-strong hover:underline"
             >
               {t("allWork")} <span aria-hidden>→</span>
             </Link>
             <Link
-              href="/#gratis-demo"
-              className="rounded-full border-[1.5px] border-gold bg-glass px-6 py-3 text-xs font-medium tracking-wide text-gold uppercase transition-all duration-300 hover:bg-gold/10 hover:shadow-gold-glow"
+              href="/#kennismaking"
+              className="rounded-full border-[1.5px] border-gold bg-glass px-6 py-3 text-base text-gold transition-all duration-300 hover:bg-gold/10 hover:shadow-gold-glow"
             >
               {cta}
             </Link>

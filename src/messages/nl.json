@@ -1,23 +1,22 @@
 {
   "Metadata": {
-    "title": "UGC, AI-commercials & Productcontent | Monika Mal",
-    "description": "UGC-video’s, cinematische AI-commercials en productcontent voor e-commerce merken. Voor Meta Ads, TikTok, Instagram en webshops. Vraag een gratis demo aan.",
-    "ogTitle": "UGC, AI-commercials & Productcontent | Monika Mal",
-    "ogDescription": "UGC-video’s, cinematische AI-commercials en productcontent voor e-commerce merken. Voor Meta Ads, TikTok, Instagram en webshops. Vraag een gratis demo aan.",
+    "title": "UGC, AI-commercials & Productfotografie | Monika Mal",
+    "description": "UGC-video’s, cinematische AI-commercials en productfoto’s voor merken. Voor advertenties, social media en webshops. Plan een gratis kennismaking.",
+    "ogTitle": "UGC, AI-commercials & Productfotografie | Monika Mal",
+    "ogDescription": "UGC-video’s, cinematische AI-commercials en productfoto’s voor merken. Voor advertenties, social media en webshops. Plan een gratis kennismaking.",
     "about": {
       "title": "Over mij | Monika Mal",
-      "description": "Ik ben Monika Mal, UGC creator en AI visual creator. Ik maak UGC, AI-commercials en productcontent voor e-commerce merken."
+      "description": "Ik ben Monika Mal, UGC creator en AI visual creator. Ik maak UGC, AI-commercials en productfoto’s voor merken."
     }
   },
   "Hero": {
-    "kicker": "UGC · AI Commercials · Product Content",
+    "kicker": "UGC · AI commercials · Productfotografie",
     "title": "Content die jouw product laat opvallen.",
-    "subtitle": "Van authentieke UGC tot cinematische AI-commercials — content voor e-commerce merken, social ads en webshops.",
-    "cta": "Vraag gratis demo aan",
+    "subtitle": "Ik maak UGC-video’s, AI-commercials en productfoto’s voor advertenties, social media en webshops.",
+    "cta": "Bespreek jouw project",
     "ctaSecondary": "Bekijk mijn werk",
-    "ctaNote": "Gratis · tot 10 sec · vrijblijvend",
-    "scrollHint": "Scroll naar beneden",
-    "adWatermark": "AI reclamevoorbeeld"
+    "ctaNote": "Een eerste gesprek is gratis en vrijblijvend.",
+    "adWatermark": "Deze video is een reclamevoorbeeld."
   },
   "Showreel": {
     "ariaLabel": "Monika Mal showreel",
@@ -38,14 +37,14 @@
     "filterAll": "Alles",
     "filterUgc": "UGC",
     "filterAi": "AI Commercials",
-    "filterProduct": "Product Content",
+    "filterProduct": "Productfotografie",
     "typeUgc": "UGC",
     "typeAiCommercial": "AI Commercial",
-    "typeProductContent": "Product Content",
+    "typeProductContent": "Productfotografie",
     "concept": "Onafhankelijk AI-concept",
     "conceptUgc": "Onafhankelijk UGC-concept",
     "empty": "Nog geen projecten in deze categorie in het portfolio.",
-    "emptyCta": "Vraag gratis demo aan",
+    "emptyCta": "Bespreek jouw project",
     "items": {
       "1": {
         "title": "Lumina Skin",
@@ -97,8 +96,17 @@
       }
     },
     "viewCase": "Bekijk case",
-    "selectedWork": "Geselecteerd werk",
-    "viewAllWork": "Bekijk al het werk"
+    "viewAllWork": "Bekijk al het werk",
+    "wall": {
+      "title": "Laat je merk niet alleen zien. Laat het voelen.",
+      "body": "Video en fotografie die jouw product centraal zetten.",
+      "stripLabel": "Portfolio — swipe voor meer werk",
+      "pause": "Beweging pauzeren",
+      "resume": "Beweging hervatten"
+    },
+    "conceptShort": "Concept",
+    "watchVideo": "Bekijk video",
+    "videoError": "Deze video kan nu niet worden geladen. Probeer het later opnieuw."
   },
   "LanguageSwitcher": {
     "label": "Taal",
@@ -112,50 +120,38 @@
     "services": "Diensten",
     "process": "Werkwijze",
     "about": "Over mij",
-    "demoCta": "Gratis demo",
     "openMenu": "Menu openen",
     "closeMenu": "Menu sluiten",
     "serviceUgc": "UGC Content",
     "serviceAi": "AI Commercials",
-    "serviceProduct": "Product Content",
-    "servicesMenuLabel": "Diensten"
-  },
-  "GetInTouch": {
-    "title": "Een custom verzoek of project?",
-    "subtitle": "Stuur me een bericht — ik reageer zo snel mogelijk.",
-    "name": "Naam",
-    "email": "E-mail",
-    "message": "Projectdetails",
-    "cta": "Bericht versturen",
-    "sending": "Versturen...",
-    "success": "Dank je. Ik bekijk je briefing en reageer binnen 24 uur.",
-    "error": "Er ging iets mis. Probeer het over een moment opnieuw.",
-    "invalidEmail": "Vul een geldig e-mailadres in.",
-    "required": "Vul alle verplichte velden in.",
-    "close": "Sluiten",
-    "packageLabel": "Custom verzoek"
-  },
-  "TrustBar": {
-    "title": "Selectie van merken in mijn werk"
-  },
-  "Positioning": {
-    "kicker": "Voor moderne merken",
-    "title": "Meer content. Minder productiegedoe.",
-    "body1": "Merken hebben continu nieuwe beelden, hooks en formats nodig voor social media, advertenties en hun webshop. Maar niet ieder idee vraagt om een volledige traditionele shoot.",
-    "body2": "Met UGC, AI en hybride productie kies ik per concept wat het beste werkt voor jouw product.",
-    "points": {
-      "human": {
-        "title": "Menselijk wanneer het telt",
-        "body": "Authentieke UGC voor vertrouwen, productervaring en social content."
-      },
-      "ai": {
-        "title": "AI wanneer het idee groter mag",
-        "body": "Cinematische beelden en concepten zonder volledige traditionele productie."
-      },
-      "platform": {
-        "title": "Gemaakt voor het platform",
-        "body": "Content ontwikkeld voor Reels, TikTok, Meta Ads en webshops."
-      }
+    "serviceProduct": "Productfotografie",
+    "servicesMenuLabel": "Diensten",
+    "phone": "Bel Monika",
+    "tagline": "UGC · AI-video · Productfotografie",
+    "menu": "Menu",
+    "contact": "Contact",
+    "phrase": "Video en fotografie die jouw product laten opvallen.",
+    "discuss": "Bespreek jouw project",
+    "call": "Bel mij",
+    "language": "Taal",
+    "follow": "Volg mij",
+    "instagram": "Instagram",
+    "linkedin": "LinkedIn",
+    "tiktok": "TikTok",
+    "languageSwitch": "Taal: Nederlands. Wissel naar Engels (English)",
+    "captions": {
+      "hero": "UGC · AI-video · Productfotografie",
+      "work": "Mijn werk",
+      "services": "Wat ik voor je maak",
+      "process": "Van idee naar content",
+      "about": "Het gezicht achter de content",
+      "contact": "Bespreek jouw project",
+      "hub": "Diensten",
+      "ugc": "UGC Content",
+      "ai": "AI Commercials",
+      "product": "Productfotografie",
+      "howItWorks": "Mijn werkwijze",
+      "aboutPage": "Over Monika"
     }
   },
   "Services": {
@@ -165,33 +161,21 @@
     "items": {
       "ugc": {
         "title": "UGC Content",
-        "body": "Authentieke productvideo’s met een menselijke uitstraling. Voor organische content, Meta Ads, TikTok en productpagina’s.",
-        "tags": {
-          "one": "Authentiek",
-          "two": "Social-first",
-          "three": "Paid social"
-        },
-        "cta": "Bekijk UGC"
+        "body": "Natuurlijke productvideo’s voor social media en advertenties.",
+        "cta": "Meer over UGC",
+        "imageAlt": "Tube Aēsop-handbalsem op lichte zandsteenblokken met een klodder crème"
       },
       "ai": {
         "title": "AI Commercials",
-        "body": "Cinematische productvideo’s en visuele concepten zonder traditionele shoot — van creative direction tot final edit.",
-        "tags": {
-          "one": "Cinematic",
-          "two": "Concept-to-final",
-          "three": "Platform-ready"
-        },
-        "cta": "Bekijk AI-werk"
+        "body": "Opvallende reclamevideo’s met AI, van concept tot montage.",
+        "cta": "Meer over AI-commercials",
+        "imageAlt": "Benen in witte sokken en lichtblauwe sneakers op een basketbal, tegen een rode achtergrond"
       },
       "product": {
-        "title": "Product Content",
-        "body": "Productvideo’s, visuals en social content gemaakt met UGC, AI of een slimme combinatie van beide.",
-        "tags": {
-          "one": "UGC",
-          "two": "AI",
-          "three": "Hybrid"
-        },
-        "cta": "Bekijk Product Content"
+        "title": "Productfotografie",
+        "body": "Productfoto’s voor advertenties, social media en je webshop.",
+        "cta": "Meer over productfotografie",
+        "imageAlt": "Fles L’Occitane-doucheolie in een katoenen netje tussen amandelen op een roze handdoek"
       }
     },
     "allServices": "Bekijk alle diensten"
@@ -200,9 +184,9 @@
     "kicker": "Over mij",
     "title": "Hi, ik ben Monika.",
     "body1": "Ik begon als UGC creator en leerde hoe belangrijk authenticiteit, storytelling en timing zijn voor content die mensen echt willen bekijken.",
-    "body2": "Inmiddels combineer ik die ervaring met AI-productie en professionele postproductie. Zo kan ik zowel natuurlijke UGC als cinematische productcontent creëren — afhankelijk van wat het beste past bij jouw merk.",
+    "body2": "Inmiddels combineer ik die ervaring met AI-productie en professionele postproductie. Zo maak ik zowel natuurlijke UGC als cinematische AI-commercials en productfoto’s — afhankelijk van wat het beste past bij jouw merk.",
     "cta": "Meer over mij",
-    "portraitAlt": "Monika Mal",
+    "portraitAlt": "Portret van Monika Mal",
     "expectTitle": "Wat je kunt verwachten",
     "expect": {
       "contact": "Direct contact met mij",
@@ -211,23 +195,20 @@
       "personal": "Persoonlijke aanpak",
       "delivery": "Platform-ready oplevering",
       "revisions": "Revisierondes volgens pakket"
-    }
+    },
+    "portraitName": "Monika Mal",
+    "portraitRole": "Content creator"
   },
   "Pricing": {
     "kicker": "Prijzen",
     "title": "Contentpakketten",
     "intro": "Kies wat past bij jouw merk, campagne en contentritme.",
-    "badge": "Meest gekozen",
-    "introLabel": "Introductieprijs",
-    "regularPrice": "Normale prijs:",
     "packages": {
       "starter": {
         "name": "Eén video",
         "tagline": "Voor één product, campagne of eerste samenwerking.",
-        "oldPrice": "€400",
         "price": "€300",
-        "discount": "-25%",
-        "cta": "Vraag gratis demo aan",
+        "cta": "Bespreek jouw project",
         "features": {
           "video": "1 complete contentvideo",
           "mode": "UGC of AI, afhankelijk van concept",
@@ -239,10 +220,8 @@
       "growth": {
         "name": "Content Duo",
         "tagline": "Twee video’s om meerdere hooks, formats of creatieve richtingen te testen.",
-        "oldPrice": "€700",
         "price": "€500",
-        "discount": "-29%",
-        "cta": "Vraag gratis demo aan",
+        "cta": "Bespreek jouw project",
         "features": {
           "videos": "2 complete video’s",
           "directions": "Meerdere creatieve richtingen mogelijk",
@@ -255,13 +234,8 @@
       "partnership": {
         "name": "Brand Partner",
         "tagline": "Doorlopende content voor merken die zichtbaar willen blijven.",
-        "oldPrice": "€1.200",
-        "price": "€850",
-        "period": "/ maand",
-        "discount": "-29%",
-        "perUnit": "€212,50 per video",
-        "valueNote": "Bespaar €150 per maand t.o.v. 2× Content Duo",
-        "cta": "Bespreek samenwerking",
+        "price": "Op aanvraag",
+        "cta": "Bespreek jouw project",
         "features": {
           "videos": "4 contentvideo’s per maand",
           "mode": "UGC, AI of een passende mix",
@@ -274,136 +248,10 @@
       }
     }
   },
-  "Photography": {
-    "kicker": "AI Photography",
-    "title": "Professionele foto’s voor productpagina’s en socials",
-    "intro": "AI-fotografie voor merken — een sneller alternatief voor klassieke productfotografie, met dezelfde cinematische uitstraling als mijn videowerk.",
-    "badge": "Meest gekozen",
-    "cta": "Kies pakket",
-    "packages": {
-      "five": {
-        "name": "5 foto’s",
-        "price": "€100",
-        "perPhoto": "€20 / foto",
-        "features": {
-          "count": "5 AI-gegenereerde merkfoto’s",
-          "formats": "Vierkant & verticaal voor productkaarten en socials",
-          "revisions": "1 revisieronde inbegrepen",
-          "delivery": "Levering binnen 2–4 werkdagen"
-        }
-      },
-      "ten": {
-        "name": "10 foto’s",
-        "price": "€150",
-        "perPhoto": "€15 / foto",
-        "features": {
-          "count": "10 AI-gegenereerde merkfoto’s",
-          "formats": "Vierkant & verticaal voor productkaarten en socials",
-          "revisions": "1 revisieronde inbegrepen",
-          "delivery": "Levering binnen 2–4 werkdagen"
-        }
-      }
-    }
-  },
   "Pipeline": {
-    "kicker": "Hoe ik werk",
-    "title": "Van eerste idee tot oplevering",
-    "intro": "Een helder proces in vier stappen, afgestemd op je product en je contentbehoeften.",
-    "steps": {
-      "brief": {
-        "title": "Kennismaking & product",
-        "body": "Je vertelt me over je product, merk, doelgroep en platform. Een productnaam, link of korte uitleg is genoeg om te starten."
-      },
-      "concept": {
-        "title": "Concept & goedkeuring",
-        "body": "Hooks, storytelling en visuele stijl — waar nodig met storyboard of moodboard. Jij keurt de richting goed voordat de productie start."
-      },
-      "production": {
-        "title": "Productie",
-        "body": "Ik maak de afgesproken content — UGC, AI of productgericht — gevolgd door montage en professionele afwerking."
-      },
-      "delivery": {
-        "title": "Oplevering",
-        "body": "Platform-ready bestanden in de afgesproken formaten, met revisierondes volgens je pakket."
-      }
-    },
-    "moreLink": "Meer over de werkwijze"
-  },
-  "Contact": {
-    "kicker": "Gratis demo",
-    "title": "Zie jouw product eerst in actie.",
-    "intro": "Vertel me welk product je hebt of stuur een link. Ik maak een korte creatieve demo tot 10 seconden, zodat je eerst kunt zien welke richting bij jouw merk past voordat je beslist.",
-    "trustLine": "Gratis · max. 10 sec · vrijblijvend",
-    "stepOf": "Stap {step} van {total}",
-    "step1": {
-      "title": "Waar ben je naar op zoek?"
-    },
-    "contentTypes": {
-      "ugc": "UGC Video",
-      "ai": "AI Commercial",
-      "product": "Product Content",
-      "hybrid": "UGC + AI",
-      "unsure": "Ik weet het nog niet"
-    },
-    "step2": {
-      "title": "Waar wil je de content gebruiken?",
-      "hint": "Kies alles wat van toepassing is.",
-      "productLabel": "Wat is je product?",
-      "productHint": "Vul de productnaam in of plak een link.",
-      "placeholder": "bijv. Glow Serum of https://jouwmerk.nl/product"
-    },
-    "platforms": {
-      "instagram": "Instagram / Reels",
-      "metaAds": "Meta Ads",
-      "tiktok": "TikTok",
-      "webshop": "Webshop",
-      "organic": "Organische social",
-      "other": "Anders"
-    },
-    "step3": {
-      "title": "Waar kan ik de demo naartoe sturen?"
-    },
-    "name": "Naam",
-    "email": "E-mail",
-    "brand": "Merk",
-    "social": "Instagram / website",
-    "note": "Nog iets wat ik moet weten?",
-    "optional": "(optioneel)",
-    "next": "Volgende",
-    "back": "Vorige",
-    "cta": "Vraag mijn gratis demo aan",
-    "sending": "Versturen...",
-    "conditions": {
-      "one": "Gratis demo tot 10 sec.",
-      "two": "Eén concept, zonder revisierondes.",
-      "three": "De demo is bedoeld als preview en niet voor commercieel gebruik."
-    },
-    "success": {
-      "title": "Bedankt — ik bekijk je merk persoonlijk.",
-      "body": "Je aanvraag is ontvangen. Ik neem contact met je op via het opgegeven e-mailadres.",
-      "portfolio": "Bekijk portfolio",
-      "instagram": "Instagram",
-      "again": "Nieuwe aanvraag starten",
-      "tiktok": "TikTok",
-      "socialLabel": "Volg mijn werk"
-    },
-    "errors": {
-      "contentType": "Kies waar je naar op zoek bent.",
-      "product": "Vul een productnaam of link in.",
-      "name": "Vul je naam in.",
-      "email": "Vul je e-mailadres in."
-    },
-    "error": "Er ging iets mis. Probeer het opnieuw of mail me rechtstreeks.",
-    "invalidEmail": "Vul een geldig e-mailadres in.",
-    "packageChosen": "Gekozen pakket:",
-    "packageRemove": "Gekozen pakket verwijderen",
-    "packageOptions": {
-      "starter": "Eén video — €300",
-      "growth": "Content Duo — €500",
-      "partnership": "Brand Partner — €850/maand",
-      "photographyFive": "Fotografie — 5 foto’s (€100)",
-      "photographyTen": "Fotografie — 10 foto’s (€150)"
-    }
+    "kicker": "Werkwijze",
+    "title": "Van idee naar content.",
+    "moreLink": "Bekijk mijn werkwijze"
   },
   "About": {
     "kicker": "Over mij",
@@ -417,7 +265,7 @@
     "replay": "Opnieuw",
     "fullscreen": "Volledig scherm",
     "lead": "Ik begon als <hl>UGC creator</hl> en ontdekte hoe belangrijk <hl>authenticiteit, storytelling en timing</hl> zijn voor content die mensen echt willen bekijken.",
-    "body1": "Inmiddels combineer ik die ervaring met <hl><nw>AI-productie</nw></hl> en professionele postproductie. Zo help ik merken met zowel natuurlijke UGC-content, cinematische <hl><nw>AI-commercials</nw></hl> als sterke productcontent voor social media, ads en <nw>e-commerce</nw>.",
+    "body1": "Inmiddels combineer ik die ervaring met <hl><nw>AI-productie</nw></hl> en professionele postproductie. Zo help ik merken met zowel natuurlijke UGC-content, cinematische <hl><nw>AI-commercials</nw></hl> als sterke productfoto’s voor social media, ads en <nw>e-commerce</nw>.",
     "body2": "Per project kies ik wat het beste werkt: UGC voor vertrouwen en connectie, AI wanneer een idee groter, sneller of visueler mag worden, of een <hl>combinatie van beide</hl> wanneer dat het sterkste resultaat oplevert. Ik begeleid het hele proces — van concept en visuele richting tot productie, montage en oplevering.",
     "worksTitle": "Geselecteerd werk",
     "close": "Sluiten",
@@ -427,8 +275,8 @@
       "three": "Werk placeholder 03"
     },
     "ctaTitle": "Laten we je volgende content maken",
-    "ctaBody": "Stuur je product of webshop door — ik maak een gratis demo tot 10 seconden.",
-    "cta": "Vraag gratis demo aan",
+    "ctaBody": "Vertel me over je product of merk — in een gratis kennismaking bespreken we wat bij je past.",
+    "cta": "Bespreek jouw project",
     "allWork": "Bekijk al het werk",
     "closing": "Mijn aanpak is persoonlijk, helder en gericht op content die niet alleen mooi oogt, maar ook echt bruikbaar is voor je merk.",
     "cards": {
@@ -441,39 +289,38 @@
         "body": "Sterke visuele concepten voor merken die iets opvallends willen neerzetten."
       },
       "product": {
-        "title": "Productcontent",
-        "body": "Content voor webshops, socials en advertenties die direct inzetbaar is."
+        "title": "Productfotografie",
+        "body": "Productfoto’s voor webshops, socials en advertenties."
       }
     },
     "ctaQuestion": "Benieuwd welke stijl het beste past bij jouw merk?",
-    "ctaButton": "Vraag gratis demo aan"
+    "ctaButton": "Bespreek jouw project"
   },
   "Footer": {
     "brand": "Monika Mal",
-    "tagline": "UGC, AI-commercials & productcontent voor e-commerce merken.",
+    "tagline": "UGC, AI-commercials & productfotografie voor merken.",
     "location": "Gevestigd in Nederland • Werkt wereldwijd",
     "navLabel": "Footer",
     "portfolio": "Portfolio",
     "about": "Over mij",
-    "pipeline": "Hoe ik werk",
-    "pricing": "Prijzen",
     "instagram": "Instagram",
     "linkedin": "LinkedIn",
     "tiktok": "TikTok",
-    "whatsapp": "WhatsApp",
     "privacy": "Privacybeleid",
     "copyright": "© {year} Monika Mal. Alle rechten voorbehouden.",
     "services": "Diensten",
-    "process": "Werkwijze"
+    "process": "Werkwijze",
+    "columns": {
+      "services": "Diensten",
+      "pages": "Pagina’s",
+      "contact": "Contact"
+    }
   },
   "Faq": {
-    "kicker": "FAQ",
-    "title": "Vragen voordat we starten",
-    "intro": "Heldere antwoorden voor e-commerce merken die UGC, AI-commercials of productcontent plannen.",
     "items": {
       "turnaround": {
         "question": "Wat is de gebruikelijke doorlooptijd?",
-        "answer": "<hl>Eén video</hl>: meestal 3–5 werkdagen nadat de creatieve richting en benodigde input zijn goedgekeurd. <hl>Content Duo</hl>: meestal 5–8 werkdagen, afhankelijk van complexiteit en feedback. <hl>Brand Partner</hl>: de planning wordt per maand afgestemd. Bij de start spreken we samen een vaste contentplanning en levermomenten af. Doorlooptijden zijn indicatief en kunnen variëren afhankelijk van feedback, complexiteit en beschikbare assets."
+        "answer": "<hl>Eén video</hl>: meestal 3–5 werkdagen nadat de creatieve richting en benodigde input zijn goedgekeurd. Bij meerdere video’s of maatwerk spreken we de planning vooraf samen af. Doorlooptijden zijn indicatief en kunnen variëren afhankelijk van feedback, complexiteit en beschikbare assets."
       },
       "product": {
         "question": "Komt de AI-video overeen met mijn fysieke product?",
@@ -485,7 +332,7 @@
       },
       "revisions": {
         "question": "Hoe werken revisies en oplevering?",
-        "answer": "Elk pakket bevat twee revisierondes per video. Ik begeleid het project van de eerste briefing tot sound design en definitieve export. Ik lever content aan in het formaat en de resolutie die bij het platform en project passen. 4K kan worden afgesproken wanneer het bronmateriaal en de productie dit toelaten."
+        "answer": "De vaste videopakketten bevatten twee revisierondes per video; bij maatwerk spreken we dit vooraf af. Ik begeleid het project van de eerste briefing tot sound design en definitieve export. Ik lever content aan in het formaat en de resolutie die bij het platform en project passen. 4K kan worden afgesproken wanneer het bronmateriaal en de productie dit toelaten."
       },
       "payment": {
         "question": "Hoe werken betaling en onboarding?",
@@ -593,116 +440,45 @@
     "body": "Deze pagina staat niet op het storyboard.",
     "cta": "Terug naar home"
   },
-  "WhatsApp": {
-    "label": "Chat via WhatsApp",
-    "greeting": "Hoi Monika, ik ben geïnteresseerd in content voor mijn merk"
-  },
   "ServicePages": {
     "common": {
       "home": "Home",
       "breadcrumbLabel": "Kruimelpad",
-      "demoCta": "Vraag gratis demo aan",
       "examplesCta": "Bekijk voorbeelden",
       "fullPortfolio": "Bekijk het volledige portfolio",
-      "allPackages": "Bekijk alle pakketten",
-      "introPrice": "introductieprijs",
-      "regularPrice": "normaal",
-      "faqTitle": "Veelgestelde vragen",
-      "relatedTitle": "Andere diensten",
-      "aboutLink": "Wie maakt je content? Lees meer over mij",
-      "more": "Meer lezen",
-      "casesTitle": "Cases"
+      "contactCta": "Bespreek jouw project",
+      "contactNote": "Een eerste gesprek is gratis en vrijblijvend."
     },
     "ugc": {
       "meta": {
-        "title": "UGC content voor e-commerce merken | Monika Mal",
-        "description": "Authentieke UGC-video’s voor e-commerce merken, social media en paid ads. Van concept tot platform-ready content voor Instagram, TikTok en Meta."
+        "title": "UGC-video’s voor jouw merk | Monika Mal",
+        "description": "UGC-video’s met een persoonlijke uitstraling voor social media, advertenties en je webshop. Eén video €300, drie video’s €700 of een samenwerking op maat."
       },
-      "breadcrumb": "UGC content",
+      "breadcrumb": "UGC-video’s",
       "serviceType": "UGC content creation",
       "hero": {
-        "kicker": "UGC-content",
-        "title": "UGC content voor e-commerce merken",
-        "intro": "Authentieke video’s waarin je product wordt gebruikt zoals een echte klant dat zou doen. Gemaakt voor Instagram, TikTok, Meta Ads en je productpagina’s — van concept tot platform-ready bestand."
-      },
-      "context": {
-        "title": "Wat is UGC?",
-        "body1": "UGC staat voor user-generated content: video’s die eruitzien en klinken alsof een gebruiker ze zelf heeft gemaakt. Geen gepolijste reclamefilm, maar iemand die je product uitpakt, gebruikt en vertelt waarom het bevalt.",
-        "body2": "Voor merken is UGC geen toevalstreffer meer. Ik maak het als creator in opdracht: met een doordacht concept, een sterke eerste seconde en een opbouw die past bij het platform waar de video terechtkomt."
-      },
-      "audience": {
-        "title": "Voor wie is UGC geschikt?",
-        "items": {
-          "one": "Webshops die hun productpagina’s levendiger willen maken met herkenbare gebruiksbeelden",
-          "two": "Merken die op Meta en TikTok adverteren en regelmatig nieuwe creatives nodig hebben",
-          "three": "Nieuwe producten die vertrouwen moeten opbouwen bij een publiek dat het merk nog niet kent",
-          "four": "Teams zonder tijd of budget voor een volledige videoshoot"
-        }
-      },
-      "benefits": {
-        "title": "Waarom merken UGC gebruiken",
-        "items": {
-          "one": {
-            "title": "Vertrouwen",
-            "body": "Mensen zien je product in een herkenbare situatie. Dat voelt dichterbij dan een klassieke advertentie."
-          },
-          "two": {
-            "title": "Organische social",
-            "body": "UGC past vanzelf in de feed van Instagram en TikTok en voelt daardoor minder als reclame."
-          },
-          "three": {
-            "title": "Meta Ads & TikTok",
-            "body": "Voor paid social maak ik video’s met een duidelijke hook, zodat je verschillende invalshoeken naast elkaar kunt zetten."
-          },
-          "four": {
-            "title": "Product storytelling",
-            "body": "Een goede UGC-video vertelt een klein verhaal: het probleem, het moment van gebruik en wat het product oplost."
-          }
-        }
+        "kicker": "UGC",
+        "title": "UGC-video’s voor jouw merk.",
+        "intro": "Productvideo’s met een persoonlijke uitstraling, gemaakt voor social media, advertenties en je webshop."
       },
       "examples": {
         "title": "Voorbeelden",
-        "intro": "Een selectie van mijn UGC-werk: productvideo’s die ik zelf heb opgenomen. Onafhankelijke concepten zijn als zodanig gemarkeerd.",
+        "intro": "UGC-video’s die ik zelf heb opgenomen. Onafhankelijke concepten zijn als zodanig gemarkeerd.",
         "social": "Bekijk eerdere UGC-content op TikTok"
       },
-      "process": {
-        "title": "Zo werk ik",
-        "steps": {
-          "one": {
-            "title": "Kennismaking & product",
-            "body": "Je vertelt me over je product, je doelgroep en waar de video gebruikt gaat worden."
-          },
-          "two": {
-            "title": "Concept & goedkeuring",
-            "body": "Ik werk openingszinnen en een opbouw uit. Jij keurt de richting goed voordat de productie start."
-          },
-          "three": {
-            "title": "Productie",
-            "body": "Ik film de video met je product en monteer hem, inclusief geluid en kleur."
-          },
-          "four": {
-            "title": "Oplevering",
-            "body": "Je ontvangt platform-ready bestanden, met revisierondes volgens je pakket."
-          }
+      "use": {
+        "title": "Wat is UGC?",
+        "body": "UGC is een productvideo met een persoonlijke uitstraling. Ik laat zien hoe jouw product werkt en wordt gebruikt, voor social media, advertenties of je webshop.",
+        "itemsTitle": "Waar je de video’s gebruikt",
+        "items": {
+          "one": "Instagram, TikTok en Reels",
+          "two": "Advertenties op Meta en TikTok",
+          "three": "Productpagina’s in je webshop"
         }
       },
-      "pricing": {
-        "title": "Wat kost UGC?",
-        "body": "UGC valt onder mijn contentpakketten. Per video kiezen we samen of UGC, AI of een mix het beste werkt."
-      },
-      "faq": {
-        "one": {
-          "q": "Wat is het verschil tussen UGC en een AI-commercial?",
-          "a": "UGC draait om een echt persoon en een herkenbare gebruikssituatie. Een AI-commercial is een cinematische productvideo die zonder traditionele shoot wordt gemaakt. Per concept kijk ik wat het beste past — soms is een combinatie het sterkst."
-        },
-        "two": {
-          "q": "Voor welke platforms maak je UGC?",
-          "a": "Voor Instagram en Reels, TikTok, Meta Ads, organische social en je webshop. Je ontvangt de video in het formaat van het platform waar hij gebruikt wordt."
-        },
-        "three": {
-          "q": "Hoeveel revisierondes zijn inbegrepen?",
-          "a": "Bij elk contentpakket zijn twee revisierondes per video inbegrepen."
-        }
+      "cta": {
+        "title": "Klaar voor jouw UGC-video?",
+        "button": "Bespreek jouw project"
       }
     },
     "ai": {
@@ -713,179 +489,60 @@
       "breadcrumb": "AI commercial laten maken",
       "serviceType": "AI commercial production",
       "hero": {
-        "kicker": "AI-commercials",
-        "title": "AI commercial laten maken",
-        "intro": "Cinematische productvideo’s zonder filmset, crew of locatie. Ik ontwikkel het concept, bewaak de look van je product en lever een afgewerkte commercial voor Meta, TikTok, Reels en je webshop."
-      },
-      "context": {
-        "title": "Wat is een AI-commercial?",
-        "body1": "Een AI-commercial is een productvideo waarvan de beelden met AI worden gegenereerd en geregisseerd, en daarna professioneel worden gemonteerd. Zo kun je sets, sferen en camerabewegingen laten zien die met een traditionele shoot duur of onhaalbaar zouden zijn.",
-        "body2": "AI is daarbij gereedschap, geen vervanging voor creatieve keuzes. Het verschil zit in de regie: een helder concept, een consistente look en afwerking met sound design en color grading."
-      },
-      "audience": {
-        "title": "Voor wie?",
-        "items": {
-          "one": "E-commerce merken die een premium uitstraling willen zonder het productiebudget van een reclamebureau",
-          "two": "Merken met een lancering of campagne die snel beeldmateriaal nodig hebben",
-          "three": "Adverteerders die meerdere visuele richtingen willen uitproberen op Meta en TikTok",
-          "four": "Webshops die hun productpagina’s willen aanvullen met bewegend beeld"
-        }
-      },
-      "benefits": {
-        "title": "Wat een AI-commercial oplevert",
-        "items": {
-          "one": {
-            "title": "Creative direction",
-            "body": "Elke video begint met een concept en een visuele richting die bij je merk past — niet met een willekeurige prompt."
-          },
-          "two": {
-            "title": "Productconsistentie",
-            "body": "Je product moet herkenbaar blijven. Ik werk vanuit je eigen productbeelden en controleer vorm, kleur en details in elke fase."
-          },
-          "three": {
-            "title": "Storyboard vooraf",
-            "body": "Voordat de productie start zie je de opbouw van de video, zodat er achteraf geen verrassingen zijn."
-          },
-          "four": {
-            "title": "Formats per platform",
-            "body": "Verticaal voor Reels en TikTok, andere verhoudingen voor feed of webshop — afgestemd op waar de video draait."
-          }
-        }
+        "kicker": "AI Commercials",
+        "title": "AI-commercials die jouw idee tot leven brengen.",
+        "intro": "Cinematografische video’s en visuele concepten, gemaakt met AI en afgestemd op jouw merk."
       },
       "examples": {
         "title": "Recent AI-werk",
         "intro": "Een selectie uit het portfolio. Onafhankelijke concepten zijn als zodanig gemarkeerd."
       },
-      "process": {
-        "title": "Van concept tot oplevering",
-        "steps": {
-          "one": {
-            "title": "Kennismaking & product",
-            "body": "Product, doelgroep, platform en de uitstraling die je voor ogen hebt."
-          },
-          "two": {
-            "title": "Concept & goedkeuring",
-            "body": "Hooks, scènes en visuele stijl in een storyboard, ter goedkeuring voordat de productie start."
-          },
-          "three": {
-            "title": "Productie",
-            "body": "AI-productie van de beelden met controle op productdetails, gevolgd door montage, sound design en color grading."
-          },
-          "four": {
-            "title": "Oplevering",
-            "body": "Levering in de formats die je nodig hebt, met revisierondes volgens je pakket."
-          }
-        }
-      },
       "pricing": {
         "title": "Wat kost een AI-commercial?",
-        "body": "AI-commercials vallen onder dezelfde contentpakketten als UGC. De prijs hangt af van het aantal video’s, niet van de techniek."
+        "body": "De prijs hangt af van het aantal video’s. Planning en gebruik spreken we vooraf af."
       },
-      "faq": {
-        "one": {
-          "q": "Blijft mijn product herkenbaar?",
-          "a": "Dat is het uitgangspunt. Ik werk vanuit je echte productbeelden en controleer tijdens de productie of vorm, kleur en details kloppen. Lukt een detail niet goed genoeg met AI, dan pas ik het concept daarop aan."
-        },
-        "two": {
-          "q": "Wat heb je van mij nodig om te starten?",
-          "a": "Een link naar je product of webshop is genoeg voor een eerste gesprek of demo. Goede productfoto’s en eventuele merkrichtlijnen helpen om het resultaat nauwkeuriger te maken."
-        },
-        "three": {
-          "q": "Kan ik eerst zien hoe het eruitziet?",
-          "a": "Ja. Je kunt een gratis demo tot 10 seconden aanvragen: één concept, zonder revisierondes, bedoeld als preview en niet voor commercieel gebruik."
+      "use": {
+        "title": "Wat je krijgt",
+        "body": "Een complete video, van concept en beeld tot montage en geluid — zonder traditionele filmset.",
+        "itemsTitle": "Waar je de video’s gebruikt",
+        "items": {
+          "one": "Lanceringen en campagnes",
+          "two": "Advertenties en social media",
+          "three": "Je webshop en merkverhaal"
         }
+      },
+      "cta": {
+        "title": "Klaar om jouw idee te bespreken?",
+        "button": "Bespreek jouw project"
       }
     },
     "product": {
       "meta": {
-        "title": "Product content voor webshops & social media | Monika Mal",
-        "description": "Productvideo’s, UGC en AI-visuals voor webshops, social media en advertenties. Content afgestemd op jouw product, platform en campagne."
+        "title": "Productfotografie voor webshops & social media | Monika Mal",
+        "description": "Professionele productfoto’s voor advertenties, social media en je webshop. Van een heldere productpresentatie tot een sfeervol campagnebeeld."
       },
-      "breadcrumb": "Product content",
-      "serviceType": "Product content creation",
+      "breadcrumb": "Productfotografie",
+      "serviceType": "Product photography",
       "hero": {
-        "kicker": "Productcontent",
-        "title": "Product content voor webshops en social media",
-        "intro": "Productvideo’s, UGC en AI-visuals die laten zien wat je product is en doet. Voor je webshop, je socials en je advertenties — afgestemd op elk kanaal."
-      },
-      "context": {
-        "title": "Wat valt onder productcontent?",
-        "body1": "Productcontent is al het beeld waarmee je een product verkoopt: korte productvideo’s, sfeerbeelden, detailshots en visuals voor productpagina’s, carrousels en advertenties.",
-        "body2": "Afhankelijk van het product kies ik voor UGC, AI of een hybride aanpak. Een huidverzorgingsproduct vraagt om iets anders dan schoenen of een woonaccessoire."
-      },
-      "audience": {
-        "title": "Voor wie?",
-        "items": {
-          "one": "Webshops die per product meer en betere beelden willen",
-          "two": "Merken die één lancering willen ondersteunen op webshop, social en ads",
-          "three": "Merken die hun organische content en advertenties visueel op elkaar willen laten aansluiten",
-          "four": "Kleine teams die niet per campagne een fotograaf en videograaf kunnen inhuren"
-        }
-      },
-      "benefits": {
-        "title": "Wat je krijgt",
-        "items": {
-          "one": {
-            "title": "Productvideo",
-            "body": "Korte video’s die het product in gebruik of in een passende sfeer laten zien."
-          },
-          "two": {
-            "title": "Productvisuals",
-            "body": "AI-beelden voor productpagina’s, banners en carrousels, in de look van je merk."
-          },
-          "three": {
-            "title": "UGC, AI of hybride",
-            "body": "Menselijke content, gecombineerd met AI-visuals, productshots en motion waar dat meer oplevert."
-          },
-          "four": {
-            "title": "Organisch én paid",
-            "body": "Eén set content die werkt in je feed én als advertentie, met formats per kanaal."
-          }
-        }
+        "kicker": "Productfotografie",
+        "title": "Productfoto’s die jouw merk laten spreken.",
+        "intro": "Professionele productfoto’s voor advertenties, social media en je webshop. Van een heldere productpresentatie tot een sfeervol campagnebeeld."
       },
       "examples": {
-        "title": "Productbeelden uit het portfolio",
-        "intro": "AI-productvisuals uit eigen, onafhankelijke concepten — geen klantopdrachten."
+        "title": "Voorbeelden",
+        "intro": "Een selectie van mijn productbeelden. Deze voorbeelden zijn onafhankelijke concepten, gemaakt met AI."
       },
-      "process": {
-        "title": "Werkwijze",
-        "steps": {
-          "one": {
-            "title": "Kennismaking & product",
-            "body": "Welke producten, welke kanalen en welke formats heb je nodig?"
-          },
-          "two": {
-            "title": "Concept & goedkeuring",
-            "body": "UGC, AI of een mix — met een moodboard of concept als basis, vooraf door jou goedgekeurd."
-          },
-          "three": {
-            "title": "Productie",
-            "body": "Video’s en visuals maken, met aandacht voor de details van je product."
-          },
-          "four": {
-            "title": "Oplevering",
-            "body": "Bestanden per kanaal: webshop, social en advertenties."
-          }
+      "use": {
+        "title": "Waar je de beelden gebruikt",
+        "items": {
+          "one": "Advertenties en campagnes",
+          "two": "Webshops en productpagina’s",
+          "three": "Social media en merkcontent"
         }
       },
-      "pricing": {
-        "title": "Prijzen voor productcontent",
-        "body": "Voor video werk je met de contentpakketten. Voor losse AI-productbeelden zijn er fotopakketten.",
-        "photoTitle": "AI-productfoto’s"
-      },
-      "faq": {
-        "one": {
-          "q": "Productvideo of productfoto’s — wat heb ik nodig?",
-          "a": "Video laat zien hoe een product werkt en voelt; beelden zijn sneller te scannen op een productpagina of in een carrousel. Veel merken gebruiken beide: foto’s voor de webshop, korte video’s voor social en advertenties."
-        },
-        "two": {
-          "q": "Kan ik UGC en AI combineren?",
-          "a": "Ja. Een hybride aanpak combineert menselijke content met AI-visuals, productshots en motion. Welke mix past, bespreken we samen op basis van je product en platform."
-        },
-        "three": {
-          "q": "Welk pakket past bij mij?",
-          "a": "Voor één product of een eerste samenwerking is het pakket Eén video een logische start. Wil je meerdere hooks of richtingen testen, dan past Content Duo. Voor doorlopende content is er Brand Partner, en voor losse productbeelden zijn er fotopakketten."
-        }
+      "cta": {
+        "title": "Klaar om jouw product in beeld te brengen?",
+        "button": "Bespreek jouw project"
       }
     }
   },
@@ -907,7 +564,10 @@
       "objective": "Creatief doel",
       "approach": "Productieaanpak",
       "deliverables": "Deliverables",
-      "finalWork": "Eindresultaat"
+      "finalWork": "Eindresultaat",
+      "result": "Resultaat",
+      "details": "Projectdetails",
+      "stills": "Beelden uit de film"
     },
     "service": {
       "title": "Bijbehorende dienst",
@@ -927,19 +587,21 @@
     },
     "independentProject": "Onafhankelijk creatief concept",
     "closing": {
-      "title": "Wil je zien wat ik voor jouw product kan maken?",
-      "cta": "Vraag gratis demo aan"
-    }
+      "title": "Ook een visueel concept voor jouw merk?",
+      "body": "Tijdens een gratis kennismaking bespreken we jouw product, doelgroep en de mogelijkheden.",
+      "cta": "Bespreek jouw project"
+    },
+    "next": "Volgend project"
   },
   "Hub": {
     "meta": {
-      "title": "Diensten: UGC, AI-commercials & productcontent | Monika Mal",
-      "description": "UGC-video’s, cinematische AI-commercials en productcontent voor e-commerce merken. Bekijk welke aanpak past bij jouw product, doelgroep en platform."
+      "title": "Diensten: UGC, AI-commercials & productfotografie | Monika Mal",
+      "description": "UGC-video’s, cinematische AI-commercials en productfoto’s voor merken. Bekijk welke aanpak past bij jouw product, doelgroep en platform."
     },
     "breadcrumb": "Diensten",
     "kicker": "Diensten",
     "title": "Content voor e-commerce merken",
-    "intro": "Van authentieke UGC tot cinematische AI-commercials en productcontent — ik kies de aanpak die past bij jouw product, doelgroep en platform.",
+    "intro": "Van authentieke UGC tot cinematische AI-commercials en professionele productfoto’s — ik kies de aanpak die past bij jouw product, doelgroep en platform.",
     "bestFor": "Ideaal voor",
     "allWork": "Bekijk al het werk",
     "sections": {
@@ -966,93 +628,172 @@
         "link": "Meer over AI-commercials"
       },
       "product": {
-        "kicker": "Product Content / Hybrid",
-        "title": "Productvideo’s en visuals voor elk kanaal",
-        "body": "Productvideo’s, UGC en AI-visuals voor je webshop, socials en advertenties — en waar het meer oplevert een combinatie van menselijke content en AI.",
+        "kicker": "Productfotografie",
+        "title": "Productfoto’s voor elk kanaal",
+        "body": "Professionele productfoto’s voor je webshop, socials en advertenties — van een heldere productpresentatie tot een sfeervol campagnebeeld.",
         "bestFor": {
-          "one": "Webshops die per product meer beeld nodig hebben",
-          "two": "Eén lancering op webshop, social en ads",
-          "three": "Productvisuals in de look van je merk"
+          "one": "Productpagina’s in je webshop",
+          "two": "Advertenties en campagnes",
+          "three": "Social media en merkcontent"
         },
-        "link": "Meer over productcontent"
+        "link": "Meer over productfotografie"
       }
-    },
-    "links": {
-      "process": "Zo werk ik"
     }
   },
   "HowItWorks": {
     "meta": {
-      "title": "Werkwijze: van idee tot oplevering | Monika Mal",
-      "description": "Zo werk ik in vier stappen: kennismaking & product, concept & goedkeuring, productie en oplevering. Met indicatieve doorlooptijden, revisies en formats."
+      "title": "Werkwijze: van idee tot content | Monika Mal",
+      "description": "Zo werk ik in vier stappen: kennismaking, concept & afspraken, creatie en oplevering. Het eerste gesprek is gratis en vrijblijvend."
     },
     "breadcrumb": "Werkwijze",
     "kicker": "Werkwijze",
-    "title": "Van eerste idee tot platform-ready content",
-    "intro": "Een helder proces in vier stappen. Je weet vooraf wat je krijgt, wanneer je feedback geeft en wat ik van je nodig heb.",
-    "process": {
-      "title": "Het proces",
-      "steps": {
-        "intro": {
-          "title": "Kennismaking & product",
-          "body": "Je vertelt me over je product, merk, doelgroep en waar je de content wilt gebruiken. Een productnaam, link of korte uitleg is genoeg om te starten."
-        },
-        "concept": {
-          "title": "Concept & goedkeuring",
-          "body": "Ik werk de creatieve richting uit: hooks, storytelling, visuele stijl en waar nodig storyboard of moodboard. Jij keurt de richting goed voordat de productie start."
-        },
-        "production": {
-          "title": "Productie",
-          "body": "Afhankelijk van het concept maak ik UGC, AI-content of een combinatie daarvan. Daarna volgen montage, sound design, color finishing en de technische afwerking."
-        },
-        "delivery": {
-          "title": "Oplevering",
-          "body": "Je ontvangt platform-ready bestanden in de afgesproken formaten. Eventuele revisierondes worden uitgevoerd volgens het gekozen pakket."
-        }
-      }
+    "title": "Een helder proces. Ruimte voor sterke ideeën.",
+    "intro": "Van ons eerste gesprek tot de uiteindelijke beelden: je weet wat we maken en wat de volgende stap is.",
+    "closing": {
+      "title": "Klaar om jouw idee te bespreken?",
+      "cta": "Bespreek jouw project"
     },
-    "timeline": {
-      "title": "Indicatieve doorlooptijden",
-      "items": {
-        "starter": "Meestal 3–5 werkdagen nadat de creatieve richting en benodigde input zijn goedgekeurd.",
-        "growth": "Meestal 5–8 werkdagen, afhankelijk van complexiteit en feedback.",
-        "partnership": "Planning per maand, met een vaste contentplanning en levermomenten die we bij de start samen afspreken."
-      },
-      "note": "Doorlooptijden zijn indicatief en kunnen variëren afhankelijk van feedback, complexiteit en beschikbare assets."
-    },
-    "revisions": {
-      "title": "Revisies",
-      "body": "Elk contentpakket bevat twee revisierondes per video. De gratis demo is één concept zonder revisierondes, bedoeld als preview en niet voor commercieel gebruik."
-    },
-    "needs": {
-      "title": "Wat ik van je nodig heb",
-      "items": {
-        "product": "Je productnaam of een link naar je product of webshop",
-        "audience": "Voor wie het product bedoeld is",
-        "platform": "Waar de content gebruikt wordt: Reels, TikTok, Meta Ads of je webshop",
-        "brand": "Eventuele merkrichtlijnen, logo’s of productfoto’s",
-        "deadline": "Een gewenste deadline of lanceringsdatum"
-      }
-    },
-    "formats": {
-      "title": "Formats",
-      "body1": "Ik lever content aan in het formaat en de resolutie die bij het platform en project passen — meestal verticaal 9:16 voor Reels en TikTok, en andere verhoudingen voor feed of webshop waar nodig.",
-      "body2": "4K kan worden afgesproken wanneer het bronmateriaal en de productie dit toelaten."
-    },
-    "links": {
-      "services": "Bekijk alle diensten",
-      "work": "Bekijk al het werk"
-    }
+    "faqTitle": "Veelgestelde vragen"
   },
   "PortfolioPage": {
     "meta": {
-      "title": "Portfolio: UGC, AI-commercials & productcontent | Monika Mal",
-      "description": "Bekijk UGC-video’s, AI-commercials en productcontent voor e-commerce merken. Klantwerk en onafhankelijke concepten, duidelijk gelabeld."
+      "title": "Portfolio: UGC, AI-commercials & productfotografie | Monika Mal",
+      "description": "Bekijk UGC-video’s, AI-commercials en productfoto’s. Klantwerk en onafhankelijke concepten, duidelijk gelabeld."
     },
     "breadcrumb": "Portfolio",
     "title": "Werk voor e-commerce merken",
-    "intro": "UGC, AI-commercials en productcontent — klantopdrachten en onafhankelijke concepten, telkens duidelijk gelabeld.",
-    "servicesLink": "Bekijk alle diensten",
-    "processLink": "Zo werk ik"
+    "intro": "UGC, AI-commercials en productfotografie — klantopdrachten en onafhankelijke concepten, telkens duidelijk gelabeld."
+  },
+  "UgcPricing": {
+    "kicker": "Prijzen",
+    "title": "Wat kost UGC?",
+    "packages": {
+      "one": {
+        "name": "Eén video",
+        "price": "€300",
+        "tagline": "Eén UGC-video voor jouw product of campagne.",
+        "features": {
+          "finish": "Sound design & color finishing",
+          "revisions": "2 revisierondes",
+          "export": "Platform-ready export"
+        }
+      },
+      "three": {
+        "name": "Drie video’s",
+        "price": "€700",
+        "tagline": "Drie UGC-video’s met verschillende invalshoeken voor jouw merk.",
+        "features": {
+          "finish": "Sound design & color finishing",
+          "revisions": "2 revisierondes per video",
+          "export": "Platform-ready exports"
+        }
+      },
+      "custom": {
+        "name": "Op maat",
+        "price": "Prijs in overleg",
+        "tagline": "Een samenwerking afgestemd op jouw wensen en de hoeveelheid content."
+      }
+    },
+    "note": "Elk project is anders. De inhoud, planning en gebruiksrechten bespreken we vooraf, zodat het voorstel past bij jouw merk.",
+    "cta": "Bespreek jouw project"
+  },
+  "ContactDialog": {
+    "title": "Vertel me over jouw project.",
+    "note": "Een eerste gesprek is gratis en vrijblijvend.",
+    "closeLabel": "Contactformulier sluiten",
+    "serviceLabel": "Waar gaat het om?",
+    "services": {
+      "ugc": "UGC",
+      "ai": "AI commercial",
+      "product": "Productfotografie",
+      "unsure": "Nog niet zeker"
+    },
+    "name": "Naam",
+    "email": "E-mailadres",
+    "company": "Bedrijfsnaam",
+    "optional": "(optioneel)",
+    "message": "Vertel kort over jouw idee",
+    "submit": "Verstuur je aanvraag",
+    "sending": "Versturen…",
+    "success": "Bedankt! Je aanvraag is verzonden.",
+    "close": "Sluiten",
+    "error": "Er ging iets mis bij het versturen. Je tekst staat nog in het formulier: probeer het opnieuw of mail naar {email}.",
+    "errors": {
+      "service": "Kies waar het om gaat.",
+      "name": "Vul je naam in.",
+      "email": "Vul een geldig e-mailadres in.",
+      "message": "Vertel kort over je idee."
+    },
+    "packageChosen": "Gekozen pakket:",
+    "packageRemove": "Pakket verwijderen",
+    "packageOptions": {
+      "starter": "AI-commercial — Eén video (€300)",
+      "growth": "AI-commercial — Content Duo (€500)",
+      "partnership": "AI-commercial — Brand Partner (op aanvraag)",
+      "ugcOne": "UGC — Eén video (€300)",
+      "ugcThree": "UGC — Drie video’s (€700)",
+      "ugcCustom": "UGC — Op maat (prijs in overleg)",
+      "photoFive": "Productfotografie — 5 foto’s (€100)",
+      "photoTen": "Productfotografie — 10 foto’s (€150)",
+      "photoCustom": "Productfotografie — Op maat (prijs in overleg)"
+    }
+  },
+  "ContactBlock": {
+    "kicker": "Contact",
+    "title": "Een idee voor jouw merk?",
+    "body": "Vertel me wat je wilt maken. Samen bespreken we een passende creatieve richting.",
+    "primary": "Bespreek jouw project",
+    "emailLabel": "Of mail naar",
+    "call": "Bel mij"
+  },
+  "Process": {
+    "steps": {
+      "meet": {
+        "title": "Kennismaken",
+        "body": "We bespreken jouw merk, doel en ideeën. Daarna bepalen we een richting die bij jouw project past.",
+        "detail": "Het eerste gesprek is gratis en vrijblijvend. Een productnaam, link of korte uitleg is genoeg om te starten.",
+        "imageAlt": "Hand in een witte handschoen die met potlood en liniaal een ontwerp op papier schetst"
+      },
+      "create": {
+        "title": "Creëren",
+        "body": "Ik werk het concept uit en maak de video’s of productfoto’s. Je feedback helpt om de content verder aan te scherpen.",
+        "detail": "De aanpak hangt af van de dienst: UGC, een AI-commercial of productfotografie. Inhoud, planning en gebruik spreken we vooraf af.",
+        "imageAlt": "Conceptcollage voor een schoenencampagne: detailbeelden van bruine schoenen, bordeauxrode stof en een kleurenpalet"
+      },
+      "deliver": {
+        "title": "Opleveren",
+        "body": "Je ontvangt de afgesproken bestanden, klaar voor de gekozen kanalen.",
+        "detail": "Feedback en eventuele aanpassingen verwerken we volgens onze afspraken.",
+        "imageAlt": "Eindbeeld: handen in bordeauxrode handschoenen houden bruine schoenen voor een bordeauxrode jas"
+      }
+    },
+    "stepsLabel": "Het proces in drie stappen"
+  },
+  "PageLinks": {
+    "label": "Meer op deze site",
+    "process": "Werkwijze",
+    "work": "Bekijk mijn werk",
+    "about": "Over mij",
+    "services": "Diensten"
+  },
+  "PhotoPricing": {
+    "kicker": "Prijzen",
+    "title": "Wat kost productfotografie?",
+    "packages": {
+      "five": {
+        "name": "5 foto’s",
+        "price": "€100"
+      },
+      "ten": {
+        "name": "10 foto’s",
+        "price": "€150"
+      },
+      "custom": {
+        "name": "Op maat",
+        "price": "Prijs in overleg"
+      }
+    },
+    "note": "Elk project is anders. We bespreken de mogelijkheden en stemmen de prijs af op jouw wensen.",
+    "cta": "Bespreek jouw project"
   }
 }

@@ -7,8 +7,15 @@ import type { Locale } from "@/lib/services";
  */
 export const CASE_READY = `publishCasePage == true && defined(slug.current)
   && defined(summaryNl) && defined(summaryEn)
-  && defined(conceptNl) && defined(conceptEn)
-  && defined(approachNl) && defined(approachEn)`;
+  && defined(conceptNl) && defined(conceptEn)`;
+
+/**
+ * Portfolio order everywhere (All, categories, homepage, services): newest first.
+ * publishedAt is set when a work is created in Studio; older works without it use the
+ * document's creation date. Never _updatedAt, so editing an old work doesn't move it up.
+ * _id breaks ties so equal dates keep a stable order.
+ */
+export const PORTFOLIO_ORDER = `order(coalesce(publishedAt, _createdAt) desc, _id asc)`;
 
 export const PLATFORM_KEYS = [
   "instagram",
@@ -44,8 +51,25 @@ export type CaseDoc = {
   conceptEn: string;
   objectiveNl: string | null;
   objectiveEn: string | null;
-  approachNl: string;
-  approachEn: string;
+  approachNl: string | null;
+  approachEn: string | null;
+  resultNl: string | null;
+  resultEn: string | null;
+  conceptHeadingNl: string | null;
+  conceptHeadingEn: string | null;
+  visualHeadingNl: string | null;
+  visualHeadingEn: string | null;
+  resultHeadingNl: string | null;
+  resultHeadingEn: string | null;
+  pullQuoteNl: string | null;
+  pullQuoteEn: string | null;
+  applicationsNl: string | null;
+  applicationsEn: string | null;
+  projectDetailsNl: string[] | null;
+  projectDetailsEn: string[] | null;
+  disclaimerNl: string | null;
+  disclaimerEn: string | null;
+  stills: { url: string | null; altNl: string | null; altEn: string | null }[] | null;
   deliverablesNl: string[] | null;
   deliverablesEn: string[] | null;
 };
@@ -63,7 +87,16 @@ export type LocalizedCase = {
   summary: string;
   concept: string;
   objective: string | null;
-  approach: string;
+  approach: string | null;
+  result: string | null;
+  /** Per-case heading overrides; null = the standard heading. */
+  headings: { concept: string | null; visual: string | null; result: string | null };
+  pullQuote: string | null;
+  /** "Label: value" facts for the details grid; entries without a label are shown as lines. */
+  details: { label: string | null; value: string }[];
+  applications: string | null;
+  disclaimer: string | null;
+  stills: { url: string; alt: string | null }[];
   deliverables: string[];
 };
 
@@ -73,7 +106,11 @@ const CASE_FIELDS = `
   title, caseTitleNl, caseTitleEn, eyebrowNl, eyebrowEn, seoTitleNl, seoTitleEn,
   seoDescriptionNl, seoDescriptionEn, visualNl, visualEn, industryNl, industryEn, platforms,
   summaryNl, summaryEn, conceptNl, conceptEn, objectiveNl, objectiveEn,
-  approachNl, approachEn, deliverablesNl, deliverablesEn
+  approachNl, approachEn, resultNl, resultEn, deliverablesNl, deliverablesEn,
+  conceptHeadingNl, conceptHeadingEn, visualHeadingNl, visualHeadingEn, resultHeadingNl, resultHeadingEn,
+  projectDetailsNl, projectDetailsEn, disclaimerNl, disclaimerEn,
+  pullQuoteNl, pullQuoteEn, applicationsNl, applicationsEn,
+  "stills": stills[]{ "url": asset->url, altNl, altEn }
 `;
 
 export function localizeCase(doc: CaseDoc, locale: Locale): LocalizedCase {
@@ -94,7 +131,24 @@ export function localizeCase(doc: CaseDoc, locale: Locale): LocalizedCase {
     summary: (nl ? doc.summaryNl : doc.summaryEn).trim(),
     concept: (nl ? doc.conceptNl : doc.conceptEn).trim(),
     objective: clean(nl ? doc.objectiveNl : doc.objectiveEn),
-    approach: (nl ? doc.approachNl : doc.approachEn).trim(),
+    approach: clean(nl ? doc.approachNl : doc.approachEn),
+    result: clean(nl ? doc.resultNl : doc.resultEn),
+    headings: {
+      concept: clean(nl ? doc.conceptHeadingNl : doc.conceptHeadingEn),
+      visual: clean(nl ? doc.visualHeadingNl : doc.visualHeadingEn),
+      result: clean(nl ? doc.resultHeadingNl : doc.resultHeadingEn),
+    },
+    pullQuote: clean(nl ? doc.pullQuoteNl : doc.pullQuoteEn),
+    details: ((nl ? doc.projectDetailsNl : doc.projectDetailsEn) ?? [])
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => {
+        const match = item.match(/^([^:]{1,32}):\s+(.+)$/);
+        return match ? { label: match[1].trim(), value: match[2].trim() } : { label: null, value: item };
+      }),
+    applications: clean(nl ? doc.applicationsNl : doc.applicationsEn),
+    disclaimer: clean(nl ? doc.disclaimerNl : doc.disclaimerEn),
+    stills: (doc.stills ?? []).flatMap((still) => (still.url ? [{ url: still.url, alt: clean(nl ? still.altNl : still.altEn) }] : [])),
     deliverables: ((nl ? doc.deliverablesNl : doc.deliverablesEn) ?? [])
       .map((item) => item.trim())
       .filter(Boolean),
@@ -116,7 +170,7 @@ export async function fetchCase(slug: string): Promise<CaseDoc | null> {
 export async function fetchCaseSlugs(): Promise<string[]> {
   try {
     return await client.fetch<string[]>(
-      `*[_type == "caseStudy" && ${CASE_READY}] | order(displayOrder asc).slug.current`,
+      `*[_type == "caseStudy" && ${CASE_READY}] | ${PORTFOLIO_ORDER}.slug.current`,
       {},
       // The sitemap is static + hourly ISR; without this the fetch is cached for a year.
       { next: { revalidate: 3600 } },

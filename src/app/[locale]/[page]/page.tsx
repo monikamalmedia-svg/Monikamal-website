@@ -94,7 +94,7 @@ export default async function LocalizedPageRoute({ params }: Props) {
         {route.key === "hub" ? (
           <ServicesHub locale={locale} portfolioItems={portfolioItems} />
         ) : (
-          <HowItWorks locale={locale} />
+          <HowItWorks />
         )}
       </>
     );

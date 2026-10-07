@@ -81,10 +81,13 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
 
   return (
     <section
+      data-nav-caption="hero"
       data-hero-section
-      className="relative z-20 h-screen min-h-[650px] w-full max-h-[1080px] overflow-hidden bg-[#0d0509]"
+      // Grows with its content; the extra --hero-dissolve below the fold is where the video fades out.
+      className="hero relative z-20 flex min-h-[calc(100svh+var(--hero-dissolve))] w-full flex-col justify-end overflow-hidden bg-background pt-28 pb-[calc(var(--hero-dissolve)+3.5rem+env(safe-area-inset-bottom))] md:pb-[calc(var(--hero-dissolve)+clamp(4rem,9svh,5.5rem))]"
     >
-      <div className="pointer-events-none absolute inset-0 z-[2]">
+      {/* Not the full hero height: the bottom 30% of the dissolve zone is plain background. */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 bottom-[var(--hero-video-cut)] z-[2]">
         {mediaSrc ? (
           <ProtectedVideo
             ref={videoRef}
@@ -106,101 +109,62 @@ export function Hero({ kicker, headline, subheadline, videoUrl }: HeroProps) {
         )}
       </div>
 
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-[#0d0509] via-[#0d0509]/50 to-black/30"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute bottom-10 left-1/2 z-10 h-[250px] w-[600px] max-w-[90vw] -translate-x-1/2 rounded-full bg-gold/15 blur-[140px]"
-      />
+      {/* Light overall tint, a local shade behind the bottom copy, then the dissolve into the page. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 z-10 bg-gradient-to-b from-black/30 via-transparent to-transparent" />
+      <div aria-hidden className="hero-shade pointer-events-none absolute inset-0 z-10" />
+      <div aria-hidden className="hero-dissolve pointer-events-none absolute inset-x-0 bottom-0 z-10" />
 
-      <p
-        aria-hidden
-        className="pointer-events-none absolute right-0 bottom-14 z-[15] select-none pr-4 text-right font-sans text-[11px] leading-none font-medium tracking-widest whitespace-nowrap text-white/70 uppercase sm:pr-6 md:bottom-6"
+      <motion.div
+        style={reduceMotion ? undefined : { opacity: copyOpacity, y: copyY }}
+        className={`relative z-20 grid w-full gap-8 px-5 sm:px-6 md:px-[3.5vw] lg:grid-cols-[minmax(0,60%)_minmax(0,clamp(360px,34vw,500px))] lg:items-end lg:justify-between lg:gap-x-0 lg:gap-y-6 ${
+          reduceMotion || copyInteractive ? "" : "pointer-events-none"
+        }`}
       >
-        {t("adWatermark")}
-      </p>
-
-      <div className="relative z-20 mx-auto flex h-full max-w-5xl flex-col items-center justify-end px-6 pb-28 text-center md:pb-32">
-        <motion.div
-          style={reduceMotion ? undefined : { opacity: copyOpacity, y: copyY }}
-          className={`flex w-full flex-col items-center ${
-            reduceMotion || copyInteractive ? "" : "pointer-events-none"
-          }`}
-        >
-          <div className="flex w-full flex-col items-center">
+        {/* Left: eyebrow + headline */}
+        <div>
           <p
             style={revealDelay(0)}
-            className="hero-reveal mb-4 w-full max-w-[22rem] px-2 text-center font-mono text-[11px] leading-snug tracking-[0.1em] text-gold uppercase drop-shadow-[0_0_16px_rgba(212,175,55,0.35)] sm:max-w-none sm:text-lg sm:tracking-[0.26em] md:text-xl md:tracking-[0.28em]"
+            className="hero-reveal mb-4 text-sm tracking-[0.12em] text-gold uppercase drop-shadow-[0_1px_10px_rgba(0,0,0,0.6)] md:text-base"
           >
             {kicker}
           </p>
-
           <h1
             style={revealDelay(1)}
-            className="hero-reveal font-display mb-4 max-w-[11.5ch] px-2 text-center text-[clamp(2.4rem,7.2vw,5.75rem)] leading-[0.95] font-medium tracking-tight text-balance text-white drop-shadow-lg md:max-w-none"
+            className="hero-reveal font-display text-[clamp(2.5rem,4.9vw,5.25rem)] leading-[1.02] font-light tracking-tight text-pretty text-ivory-strong drop-shadow-[0_2px_24px_rgba(0,0,0,0.45)]"
           >
             {headline}
           </h1>
+        </div>
 
-          <p
-            style={revealDelay(2)}
-            className="hero-reveal mb-8 max-w-2xl text-base font-light text-neutral-300 drop-shadow sm:text-lg md:text-2xl"
-          >
+        {/* Right: description, buttons, note */}
+        <div style={revealDelay(2)} className="hero-reveal">
+          <p className="max-w-[30rem] text-lg leading-relaxed text-ivory drop-shadow-[0_1px_12px_rgba(0,0,0,0.55)]">
             {keepEcommerce(subheadline)}
           </p>
-
-          <div
-            style={revealDelay(3)}
-            className="hero-reveal flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-4"
-          >
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <button
               type="button"
-              onClick={() => scrollToId("gratis-demo")}
-              className="cursor-pointer rounded-full border border-gold/40 bg-[#1a0f16]/40 px-8 py-3.5 text-center text-sm font-medium tracking-wide text-gold uppercase backdrop-blur-sm transition-[border-color,box-shadow,background-color,transform] duration-300 ease-out hover:scale-[1.02] hover:border-gold hover:bg-gold/10 hover:shadow-[0_0_22px_rgba(212,175,55,0.28)] active:scale-[0.99] sm:px-9"
+              data-contact-open
+              className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full border border-gold/70 bg-[#1a0f16]/55 px-6 text-center text-base text-gold backdrop-blur-sm transition-[border-color,background-color] duration-300 hover:border-gold hover:bg-gold/15 focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none"
             >
               {t("cta")}
             </button>
             <button
               type="button"
               onClick={() => scrollToId("portfolio")}
-              className="cursor-pointer rounded-full border border-gold/25 bg-transparent px-8 py-3.5 text-center text-sm font-medium tracking-wide text-stone-200 uppercase transition-[border-color,box-shadow,background-color,color,transform] duration-300 ease-out hover:scale-[1.02] hover:border-gold/70 hover:bg-gold/5 hover:text-gold hover:shadow-[0_0_18px_rgba(212,175,55,0.18)] active:scale-[0.99] sm:px-9"
+              className="inline-flex h-12 cursor-pointer items-center justify-center rounded-full border border-white/30 bg-black/20 px-6 text-center text-base text-ivory-strong backdrop-blur-sm transition-[border-color,color,background-color] duration-300 hover:border-gold/70 hover:text-gold focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none"
             >
               {t("ctaSecondary")}
             </button>
           </div>
+          <p className="mt-4 text-sm text-ivory/90 italic drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)]">{t("ctaNote")}</p>
+        </div>
 
-          <p
-            style={revealDelay(4)}
-            className="hero-reveal mt-4 text-[11px] tracking-[0.18em] text-stone-300/80 uppercase drop-shadow sm:text-xs"
-          >
-            {t("ctaNote")}
-          </p>
-          </div>
-        </motion.div>
-      </div>
-
-      <motion.button
-        type="button"
-        onClick={() => scrollToId("brands")}
-        aria-label={t("scrollHint")}
-        animate={
-          reduceMotion
-            ? undefined
-            : { y: [0, 6, 0], opacity: [0.5, 1, 0.5] }
-        }
-        transition={
-          reduceMotion
-            ? undefined
-            : { duration: 2, repeat: Infinity, ease: "easeInOut" }
-        }
-        className="absolute bottom-3 left-1/2 z-30 -translate-x-1/2 cursor-pointer px-4 py-3 text-center"
-      >
-        <span className="block text-xs tracking-[0.4em] text-foreground-muted uppercase">
-          {t("scrollHint")}
-        </span>
-      </motion.button>
+        {/* Label for the background video: under the CTA note on mobile, bottom right on desktop. */}
+        <p className="text-xs text-ivory/80 drop-shadow-[0_1px_8px_rgba(0,0,0,0.6)] lg:col-span-2 lg:text-right">
+          {t("adWatermark")}
+        </p>
+      </motion.div>
     </section>
   );
 }

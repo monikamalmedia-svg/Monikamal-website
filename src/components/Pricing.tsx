@@ -8,23 +8,30 @@ import {
 } from "@/lib/cms-pricing";
 import { client } from "@/lib/sanity";
 
-const FEATURE_KEYS = {
+/** Video packages (AI commercials). */
+const VIDEO_FEATURES = {
   starter: ["video", "mode", "finish", "revisions", "export"] as const,
   growth: ["videos", "directions", "mode", "finish", "revisions", "export"] as const,
-  partnership: [
-    "videos",
-    "mode",
-    "planning",
-    "priority",
-    "hooks",
-    "delivery",
-    "revisions",
-  ] as const,
+  partnership: ["videos", "mode", "planning", "priority", "hooks", "delivery", "revisions"] as const,
 };
 
-const TAGGED_PACKAGES = ["starter", "growth", "partnership"] as const;
+const VIDEO_PACKAGES = ["starter", "growth", "partnership"] as const;
 
-type TaggedPackage = (typeof TAGGED_PACKAGES)[number];
+type VideoPackage = (typeof VIDEO_PACKAGES)[number];
+
+/** UGC packages; keys double as the package option in the intro-call form. */
+const UGC_PACKAGES = [
+  { key: "ugcOne", messageKey: "one", features: ["finish", "revisions", "export"] },
+  { key: "ugcThree", messageKey: "three", features: ["finish", "revisions", "export"] },
+  { key: "ugcCustom", messageKey: "custom", features: [] },
+] as const;
+
+/** Product photography packages (photo count and price only). */
+const PHOTO_PACKAGES = [
+  { key: "photoFive", messageKey: "five" },
+  { key: "photoTen", messageKey: "ten" },
+  { key: "photoCustom", messageKey: "custom" },
+] as const;
 
 type Translator = Awaited<ReturnType<typeof getTranslations>>;
 
@@ -32,30 +39,18 @@ function optional(t: Translator, key: string): string | null {
   return t.has(key) ? t(key) : null;
 }
 
-/** Copy, intro pricing and CTA for the three known packages come from messages. */
-function localizedCopy(key: TaggedPackage, t: Translator) {
-  const base = `packages.${key}`;
-  return {
-    tagline: t(`${base}.tagline`),
-    features: FEATURE_KEYS[key].map((feature) =>
-      t(`${base}.features.${feature}`),
-    ),
-    oldPrice: optional(t, `${base}.oldPrice`),
-    discount: optional(t, `${base}.discount`),
-    period: optional(t, `${base}.period`),
-    valueNote: optional(t, `${base}.valueNote`),
-    cta: t(`${base}.cta`),
-  };
-}
-
-function withLocalizedPackageCopy(
-  packages: DisplayPackage[],
-  t: Translator,
-): DisplayPackage[] {
+/** Copy, price period and CTA for the known video packages come from messages. */
+function withVideoCopy(packages: DisplayPackage[], t: Translator): DisplayPackage[] {
   return packages.map((pack) => {
-    const tagged = TAGGED_PACKAGES.includes(pack.key as TaggedPackage);
-    if (!tagged) return pack;
-    return { ...pack, ...localizedCopy(pack.key as TaggedPackage, t) };
+    if (!VIDEO_PACKAGES.includes(pack.key as VideoPackage)) return pack;
+    const base = `packages.${pack.key}`;
+    return {
+      ...pack,
+      tagline: t(`${base}.tagline`),
+      features: VIDEO_FEATURES[pack.key as VideoPackage].map((feature) => t(`${base}.features.${feature}`)),
+      period: optional(t, `${base}.period`),
+      cta: t(`${base}.cta`),
+    };
   });
 }
 
@@ -67,37 +62,84 @@ async function fetchPricingSection(): Promise<PricingSectionDoc | null> {
   }
 }
 
-export async function Pricing() {
+/**
+ * Packages on a service page: "ugc" shows the UGC packages (one video / three videos / custom),
+ * "photo" the product photography packages (5 / 10 photos / custom), "video" the content packages
+ * used for AI commercials. Prices never appear on the homepage.
+ */
+export async function Pricing({
+  variant,
+  heading,
+  intro,
+}: {
+  variant: "ugc" | "photo" | "video";
+  heading?: string;
+  intro?: string;
+}) {
+  if (variant === "ugc") {
+    const t = await getTranslations("UgcPricing");
+    const packages: DisplayPackage[] = UGC_PACKAGES.map(({ key, messageKey, features }) => ({
+      key,
+      name: t(`packages.${messageKey}.name`),
+      price: t(`packages.${messageKey}.price`),
+      pricePerUnit: null,
+      tagline: t(`packages.${messageKey}.tagline`),
+      features: features.map((feature) => t(`packages.${messageKey}.features.${feature}`)),
+      cta: t("cta"),
+    }));
+    return (
+      <PricingView
+        heading={heading ?? t("title")}
+        intro={intro}
+        kicker={t("kicker")}
+        defaultCta={t("cta")}
+        packages={packages}
+        note={t("note")}
+      />
+    );
+  }
+
+  if (variant === "photo") {
+    const t = await getTranslations("PhotoPricing");
+    const packages: DisplayPackage[] = PHOTO_PACKAGES.map(({ key, messageKey }) => ({
+      key,
+      name: t(`packages.${messageKey}.name`),
+      price: t(`packages.${messageKey}.price`),
+      pricePerUnit: null,
+      features: [],
+      cta: t("cta"),
+    }));
+    return (
+      <PricingView
+        heading={heading ?? t("title")}
+        intro={intro}
+        kicker={t("kicker")}
+        defaultCta={t("cta")}
+        packages={packages}
+        note={t("note")}
+      />
+    );
+  }
+
   const locale = await getLocale();
-  const isNl = locale === "nl";
   const t = await getTranslations("Pricing");
   const doc = await fetchPricingSection();
-
-  const fallbackPackages: DisplayPackage[] = TAGGED_PACKAGES.map((key) => ({
+  const fallback: DisplayPackage[] = VIDEO_PACKAGES.map((key) => ({
     key,
     name: t(`packages.${key}.name`),
     price: t(`packages.${key}.price`),
     pricePerUnit: optional(t, `packages.${key}.perUnit`),
     features: [],
-    featured: key === "growth",
   }));
-
-  const cmsPackages = mapVideoPackages(isNl, doc?.videoPackages);
-  const packages = withLocalizedPackageCopy(
-    cmsPackages.length > 0 ? cmsPackages : fallbackPackages,
-    t,
-  );
+  const cmsPackages = mapVideoPackages(locale === "nl", doc?.videoPackages);
 
   return (
     <PricingView
-      heading={t("title")}
-      intro={t("intro")}
+      heading={heading ?? t("title")}
+      intro={intro ?? t("intro")}
       kicker={t("kicker")}
-      badge={t("badge")}
-      introLabel={t("introLabel")}
-      regularPriceLabel={t("regularPrice")}
       defaultCta={t("packages.starter.cta")}
-      packages={packages}
+      packages={withVideoCopy(cmsPackages.length > 0 ? cmsPackages : fallback, t)}
     />
   );
 }

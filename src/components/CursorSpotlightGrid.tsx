@@ -3,10 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 
 const PAGE_GRID =
-  "repeating-linear-gradient(to right, rgba(212, 175, 55, 0.04) 0, rgba(212, 175, 55, 0.04) 1px, transparent 1px, transparent 48px), repeating-linear-gradient(to bottom, rgba(212, 175, 55, 0.04) 0, rgba(212, 175, 55, 0.04) 1px, transparent 1px, transparent 48px)";
+  "repeating-linear-gradient(to right, rgba(212, 175, 55, 0.022) 0, rgba(212, 175, 55, 0.022) 1px, transparent 1px, transparent 48px), repeating-linear-gradient(to bottom, rgba(212, 175, 55, 0.022) 0, rgba(212, 175, 55, 0.022) 1px, transparent 1px, transparent 48px)";
 
 const PAGE_GRID_LIT =
-  "repeating-linear-gradient(to right, rgba(212, 175, 55, 0.28) 0, rgba(212, 175, 55, 0.28) 1px, transparent 1px, transparent 48px), repeating-linear-gradient(to bottom, rgba(212, 175, 55, 0.28) 0, rgba(212, 175, 55, 0.28) 1px, transparent 1px, transparent 48px)";
+  "repeating-linear-gradient(to right, rgba(212, 175, 55, 0.12) 0, rgba(212, 175, 55, 0.12) 1px, transparent 1px, transparent 48px), repeating-linear-gradient(to bottom, rgba(212, 175, 55, 0.12) 0, rgba(212, 175, 55, 0.12) 1px, transparent 1px, transparent 48px)";
 
 export function CursorSpotlightGrid() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -63,7 +63,7 @@ export function CursorSpotlightGrid() {
     <div
       ref={rootRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[1]"
+      className="page-grid pointer-events-none fixed inset-0 z-[1]"
       style={{
         ["--mouse-x" as string]: "-400px",
         ["--mouse-y" as string]: "-400px",

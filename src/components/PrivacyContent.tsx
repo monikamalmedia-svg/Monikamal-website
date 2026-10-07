@@ -10,7 +10,7 @@ export async function PrivacyContent() {
       <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase">
         {t("kicker")}
       </p>
-      <h1 className="font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.05] font-medium tracking-tight text-foreground">
+      <h1 className="font-display text-[clamp(2.25rem,5vw,3.5rem)] leading-[1.05] font-light tracking-tight text-foreground">
         {t("title")}
       </h1>
       <p className="mt-6 text-sm text-foreground-muted">{t("updated")}</p>
@@ -73,7 +73,7 @@ export async function PrivacyContent() {
                     key={row.name}
                     className="border-t border-glass-border align-top"
                   >
-                    <td className="px-4 py-3 font-mono text-xs text-foreground">
+                    <td className="px-4 py-3 text-xs text-foreground">
                       {row.name}
                     </td>
                     <td className="px-4 py-3">{row.provider}</td>

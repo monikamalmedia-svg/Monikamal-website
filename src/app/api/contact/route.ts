@@ -73,14 +73,14 @@ export async function POST(request: Request) {
   // Product name or link, free text.
   const product =
     asTrimmedString(payload.product, 1000) || asTrimmedString(payload.productUrl, 1000);
-  // Demo requests come from the multi-step form, where the note is optional.
-  const isDemoRequest = Boolean(contentType || product);
+  // Intro-call requests come from the multi-step form, where the note is optional.
+  const isIntroRequest = Boolean(contentType || product);
 
   if (websiteUrl) {
     return Response.json({ ok: true });
   }
 
-  if (!name || !email || (!isDemoRequest && !message)) {
+  if (!name || !email || (!isIntroRequest && !message)) {
     return Response.json({ error: "Missing required fields" }, { status: 400 });
   }
 
@@ -102,12 +102,12 @@ export async function POST(request: Request) {
     hour: "2-digit",
     minute: "2-digit",
   });
-  const subject = `${isDemoRequest ? "[Gratis demo]" : "[Inquiry]"} ${name || "Client"} — ${brand || "New Project"} (${sentAt})`;
+  const subject = `${isIntroRequest ? "[Kennismaking]" : "[Inquiry]"} ${name || "Client"} — ${brand || "New Project"} (${sentAt})`;
 
   const html = `
     <div style="background:#1E040C;color:#EDE6E8;font-family:Georgia,serif;padding:32px;">
       <p style="margin:0 0 8px;color:#D4AF37;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;">Monika Mal</p>
-      <h1 style="margin:0 0 24px;font-size:28px;font-weight:500;">${isDemoRequest ? "Заявка на бесплатное демо" : "Новая заявка с сайта"}</h1>
+      <h1 style="margin:0 0 24px;font-size:28px;font-weight:500;">${isIntroRequest ? "Заявка на знакомство (kennismaking)" : "Новая заявка с сайта"}</h1>
       <table style="width:100%;border-collapse:collapse;">
         ${row("Тип контента", contentType)}
         ${row("Платформы", platforms.join(", "))}
@@ -116,7 +116,7 @@ export async function POST(request: Request) {
         ${row("Бренд", brand)}
         ${row("Email", email)}
         ${row("Instagram / сайт", social)}
-        ${row("Интересующий пакет", selectedPackage || (isDemoRequest ? "" : "Custom request"))}
+        ${row("Интересующий пакет", selectedPackage || (isIntroRequest ? "" : "Custom request"))}
         ${row("Сообщение", message)}
       </table>
     </div>

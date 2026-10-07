@@ -389,7 +389,7 @@ function AboutWorkCard({
             aria-hidden
             className="pointer-events-none absolute inset-x-6 bottom-8 h-24 rounded-full bg-amber-500/15 blur-[60px]"
           />
-          <p className="relative z-10 font-mono text-[10px] tracking-[0.22em] text-white/50 uppercase">
+          <p className="relative z-10 text-[10px] tracking-[0.22em] text-white/50 uppercase">
             {placeholderLabel}
           </p>
         </div>

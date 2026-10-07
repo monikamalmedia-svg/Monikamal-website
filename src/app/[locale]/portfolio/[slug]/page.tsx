@@ -23,6 +23,13 @@ function toDescription(text: string) {
   return `${flat.slice(0, flat.lastIndexOf(" ", DESCRIPTION_MAX - 1))}…`;
 }
 
+/** The case after this one in portfolio order (wrapping round), for the "Next project" link. */
+function nextOf<T extends { id: string }>(cases: T[], id: string): T | null {
+  if (cases.length < 2) return null;
+  const index = cases.findIndex((entry) => entry.id === id);
+  return cases[(index + 1) % cases.length];
+}
+
 /** Published case (CMS text in both languages) + its portfolio media, or null → 404. */
 async function loadCase(locale: string, slug: string) {
   if (!hasLocale(routing.locales, locale)) return null;
@@ -34,6 +41,7 @@ async function loadCase(locale: string, slug: string) {
     item,
     data: localizeCase(doc, locale as Locale),
     otherCases: items.filter((entry) => entry.caseSlug && entry.id !== item.id),
+    nextCase: nextOf(items.filter((entry) => entry.caseSlug), item.id),
   };
 }
 
@@ -75,6 +83,7 @@ export default async function CaseRoute({ params }: Props) {
         data={found.data}
         locale={found.locale}
         otherCases={found.otherCases}
+        nextCase={found.nextCase}
       />
     </>
   );

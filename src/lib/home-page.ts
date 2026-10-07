@@ -1,6 +1,6 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { type HomePortfolioItem } from "@/components/HomeMain";
-import { CASE_READY } from "@/lib/cases";
+import { CASE_READY, PORTFOLIO_ORDER } from "@/lib/cases";
 import { toContentType, toMediaType, toProjectType, uniqueProjectSlugs } from "@/lib/portfolio";
 import {
   isPlayableVideoUrl,
@@ -21,6 +21,7 @@ type HeroSectionDoc = {
 
 type CaseStudyDoc = {
   _id: string;
+  _createdAt: string;
   title: string | null;
   category: string | null;
   contentType: string | null;
@@ -28,7 +29,6 @@ type CaseStudyDoc = {
   format: string | null;
   caseSlug: string | null;
   slug: string | null;
-  featuredOrder: number | null;
   year: number | string | null;
   featured: boolean | null;
   mediaType: string | null;
@@ -43,14 +43,15 @@ type CaseStudyDoc = {
 
 const HERO_SECTION_QUERY = `*[_type == "heroSection"][0]{kickerEn, kickerNl, headlineEn, headlineNl, subheadlineEn, subheadlineNl, "videoUrl": showreelVideo.asset->url}`;
 
-const CASE_STUDIES_QUERY = `*[_type == "caseStudy"] | order(displayOrder asc) {
+// Sorted in the query, before any filter or homepage limit is applied.
+const CASE_STUDIES_QUERY = `*[_type == "caseStudy" && !(_id in path("drafts.**"))] | ${PORTFOLIO_ORDER} {
   _id,
+  _createdAt,
   title,
   category,
   contentType,
   projectType,
   format,
-  featuredOrder,
   "caseSlug": select(${CASE_READY} => slug.current, null),
   "slug": slug.current,
   year,
@@ -102,7 +103,7 @@ function toPortfolioItem(caseItem: CaseStudyDoc, projectSlug: string): HomePortf
     format: caseItem.format?.trim() || "",
     caseSlug: caseItem.caseSlug ?? null,
     projectSlug,
-    featuredOrder: typeof caseItem.featuredOrder === "number" ? caseItem.featuredOrder : null,
+    featured: caseItem.featured !== false,
     year: caseItem.year != null ? String(caseItem.year) : "",
     mediaType,
     imageUrl,
@@ -111,8 +112,14 @@ function toPortfolioItem(caseItem: CaseStudyDoc, projectSlug: string): HomePortf
 }
 
 function toPortfolioItems(docs: CaseStudyDoc[]): HomePortfolioItem[] {
-  const fallbackSlugs = uniqueProjectSlugs(docs.map((doc) => doc.title?.trim() || "project"));
-  return docs.map((doc, index) => toPortfolioItem(doc, doc.slug?.trim() || fallbackSlugs[index]));
+  // Title-based fallback slugs are numbered oldest first, so a newer work with the same title
+  // never takes over an existing /projects/[slug] link.
+  const oldestFirst = [...docs].sort(
+    (a, b) => a._createdAt.localeCompare(b._createdAt) || a._id.localeCompare(b._id),
+  );
+  const fallbackSlugs = uniqueProjectSlugs(oldestFirst.map((doc) => doc.title?.trim() || "project"));
+  const fallbackById = new Map(oldestFirst.map((doc, index) => [doc._id, fallbackSlugs[index]]));
+  return docs.map((doc) => toPortfolioItem(doc, doc.slug?.trim() || fallbackById.get(doc._id)!));
 }
 
 /** Portfolio items for service pages (same mapping as the homepage grid). */

@@ -1,112 +1,81 @@
 "use client";
 
-import type { MouseEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { Reveal } from "@/components/Reveal";
+import { SitePicture } from "@/components/SitePicture";
 import { Link } from "@/i18n/navigation";
 import { pagePath, servicePath, type Locale, type ServiceKey } from "@/lib/services";
 
-// Card titles link to the service pages. CTA `service` targets a service page;
-// `anchor` targets live on the homepage.
+/** Homepage: what each service is, linking to its own page (packages and prices live there). */
 const SERVICES = [
-  { key: "ugc", page: "ugc", target: { service: "ugc" } },
-  { key: "ai", page: "ai", target: { anchor: "portfolio" } },
-  { key: "product", page: "product", target: { service: "product" } },
-] as const satisfies readonly {
-  key: string;
-  page: ServiceKey;
-  target: { service: ServiceKey } | { anchor: string };
-}[];
+  { key: "ugc", page: "ugc", image: "dienst-ugc" },
+  { key: "ai", page: "ai", image: "dienst-ai" },
+  { key: "product", page: "product", image: "dienst-product" },
+] as const satisfies readonly { key: string; page: ServiceKey; image: string }[];
 
-const TAGS = ["one", "two", "three"] as const;
-
-const ctaClass =
-  "mt-5 inline-flex items-center gap-2 self-start py-3 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline";
-
-function scrollToAnchor(event: MouseEvent<HTMLAnchorElement>, id: string) {
-  const target = document.getElementById(id);
-  if (!target) return;
-  event.preventDefault();
-  target.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
+/** Burgundy-black section (#160F14): ivory text, small champagne accents; the page grid fades out before it. */
 export function Services() {
   const t = useTranslations("Services");
   const locale = useLocale() as Locale;
 
   return (
     <section
+      data-nav-caption="services"
       id="diensten"
-      className="relative z-20 scroll-mt-24 bg-transparent px-6 pt-12 pb-16 md:px-10 md:pt-16 md:pb-20 lg:px-12"
+      className="tone tone-services tone-after-grid z-20 scroll-mt-24 px-6 pt-[calc(var(--blend)+1rem)] pb-16 md:px-10 md:pt-[calc(var(--blend)+1.25rem)] md:pb-24 lg:px-12"
     >
       <div className="mx-auto max-w-6xl">
-        <header className="relative z-20 mb-10 max-w-2xl rounded-xl text-left backdrop-blur-sm md:mb-14">
-          <p className="mb-4 text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
-            {t("kicker")}
-          </p>
-          <h2 className="font-display text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.05] font-medium tracking-tight text-balance text-foreground">
-            {t("title")}
-          </h2>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-foreground-muted md:text-lg">
-            {t("intro")}
-          </p>
-        </header>
+        <Reveal className="mb-8 grid gap-4 md:mb-12 lg:grid-cols-[1fr_1fr] lg:items-end lg:gap-16">
+          <div>
+            <p className="mb-3 text-sm tracking-[0.04em] text-gold">{t("kicker")}</p>
+            <h2 className="font-display text-[clamp(2rem,4vw,3.25rem)] leading-[1.06] font-light text-balance text-ivory-strong">
+              {t("title")}
+            </h2>
+          </div>
+          <p className="max-w-xl text-base text-foreground-muted md:text-lg">{t("intro")}</p>
+        </Reveal>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3 lg:gap-6">
-          {SERVICES.map(({ key, page, target }) => {
-            const cta = (
-              <>
-                {t(`items.${key}.cta`)}
-                <span aria-hidden>→</span>
-              </>
-            );
-
-            return (
-              <article
-                key={key}
-                className="relative z-20 flex h-full flex-col rounded-2xl border border-glass-border bg-graphite p-6 backdrop-blur-sm transition-colors duration-300 hover:border-gold/40 md:p-8"
+        {/* Title → description → photo → link; on desktop the rows line up across the columns. */}
+        <ul className="grid grid-cols-1 border-t border-white/12 md:grid-cols-3">
+          {SERVICES.map(({ key, page, image }) => (
+            <li
+              key={key}
+              className="group relative flex flex-col border-b border-white/12 py-7 md:row-span-4 md:grid md:grid-rows-subgrid md:gap-0 md:border-b-0 md:border-l md:border-white/12 md:px-7 md:py-8 md:first:border-l-0"
+            >
+              <h3 className="font-display text-2xl font-normal text-ivory-strong md:text-[1.75rem]">
+                <Link
+                  href={servicePath(page, locale)}
+                  // The whole column is clickable; the title link stretches over it.
+                  className="after:absolute after:inset-0 after:content-[''] focus-visible:outline-none"
+                >
+                  {t(`items.${key}.title`)}
+                </Link>
+              </h3>
+              <p className="mt-3 text-base text-foreground-muted">{t(`items.${key}.body`)}</p>
+              <div className="mt-5 aspect-[4/3] self-start overflow-hidden rounded-xl border border-white/10 bg-[#0d080b] group-focus-within:ring-2 group-focus-within:ring-gold/60">
+                <SitePicture
+                  name={image}
+                  alt={t(`items.${key}.imageAlt`)}
+                  sizes="(min-width: 1152px) 360px, (min-width: 768px) 30vw, 92vw"
+                  className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025] motion-reduce:transition-none"
+                />
+              </div>
+              <span
+                className="mt-5 inline-flex items-center gap-2 text-base text-ivory underline-offset-[5px] group-hover:text-gold group-hover:underline"
+                aria-hidden
               >
-                <h3 className="font-display text-2xl font-medium tracking-tight text-foreground md:text-[1.75rem]">
-                  <Link
-                    href={servicePath(page, locale)}
-                    className="underline-offset-[6px] transition-colors duration-300 hover:text-gold hover:underline"
-                  >
-                    {t(`items.${key}.title`)}
-                  </Link>
-                </h3>
-                <p className="mt-3 flex-1 text-sm leading-relaxed text-foreground-muted">
-                  {t(`items.${key}.body`)}
-                </p>
+                {t(`items.${key}.cta`)}{" "}
+                <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+              </span>
+            </li>
+          ))}
+        </ul>
 
-                <ul className="mt-6 flex flex-wrap gap-2">
-                  {TAGS.map((tag) => (
-                    <li
-                      key={tag}
-                      className="rounded-full border border-glass-border px-2.5 py-1 text-[10px] tracking-[0.16em] text-foreground-muted uppercase"
-                    >
-                      {t(`items.${key}.tags.${tag}`)}
-                    </li>
-                  ))}
-                </ul>
-
-                {"service" in target ? (
-                  <Link href={servicePath(target.service, locale)} className={ctaClass}>
-                    {cta}
-                  </Link>
-                ) : (
-                  <a
-                    href={`#${target.anchor}`}
-                    onClick={(event) => scrollToAnchor(event, target.anchor)}
-                    className={ctaClass}
-                  >
-                    {cta}
-                  </a>
-                )}
-              </article>
-            );
-          })}
-        </div>
-        <div className="mt-8">
-          <Link href={pagePath("hub", locale)} className="inline-flex items-center gap-2 py-3 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline">
+        <div className="mt-6">
+          <Link
+            href={pagePath("hub", locale)}
+            className="inline-flex items-center gap-2 py-2 text-base text-gold underline-offset-[6px] hover:text-ivory-strong hover:underline focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:outline-none"
+          >
             {t("allServices")} <span aria-hidden>→</span>
           </Link>
         </div>

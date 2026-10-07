@@ -1,33 +1,41 @@
 "use client";
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type RefObject } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
-import { AnimatePresence, motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { ChevronDown, Menu, X } from "lucide-react";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { ArrowRight, Phone, X } from "lucide-react";
+import { useContactDialog } from "@/components/ContactDialog";
+import { NavCaption } from "@/components/NavCaption";
+import { InstagramIcon, LinkedInIcon, TikTokIcon } from "@/components/SocialIcons";
+import { LOCALE_COOKIE, LOCALE_COOKIE_MAX_AGE } from "@/i18n/locale";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import {
   SERVICE_KEYS,
   pagePath,
   routeFromSlug,
   servicePath,
+  translatePath,
   type Locale,
   type ServiceKey,
 } from "@/lib/services";
 
-const DEMO_ID = "gratis-demo";
-/** Header height on desktop (md:h-[4.25rem]); the hero counts as passed once its bottom reaches it. */
-const HEADER_HEIGHT = 68;
-const DESKTOP_MQ = "(min-width: 1024px)";
-
 // /projects/[slug] serves About works and portfolio videos; the page content says which one.
 const subscribeToNothing = () => () => {};
+const isClientSnapshot = () => true;
+const isServerSnapshot = () => false;
+
+/** Remember the chosen language (same cookie the middleware reads). */
+function persistLocale(code: Locale) {
+  document.cookie = `${LOCALE_COOKIE}=${code}; path=/; max-age=${LOCALE_COOKIE_MAX_AGE}; samesite=lax`;
+}
+const LANG_FOCUS_KEY = "mm-lang-focus";
 const isPortfolioPage = () => Boolean(document.querySelector('main[data-page="portfolio"]'));
 
-// No outline after a mouse click; a clear gold ring for keyboard focus only.
 const FOCUS_RING =
-  "outline-none focus-visible:ring-2 focus-visible:ring-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0F0206]";
+  "outline-none focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0b0e0d]";
+const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 const SERVICE_LABEL_KEYS: Record<ServiceKey, "serviceUgc" | "serviceAi" | "serviceProduct"> = {
   ugc: "serviceUgc",
@@ -35,16 +43,38 @@ const SERVICE_LABEL_KEYS: Record<ServiceKey, "serviceUgc" | "serviceAi" | "servi
   product: "serviceProduct",
 };
 
-export function Navbar() {
+/**
+ * Compact floating header: a fully rounded pill (logo · short description · menu button), and a
+ * full-screen menu with large links, the services, "Discuss your project" (opens the contact
+ * dialog) and "Call me" (tel:). The NL/EN toggle sits in the pill, left of Menu. The phone number
+ * itself is never shown.
+ */
+export type SocialLinks = { instagramUrl: string; linkedinUrl: string; tiktokUrl: string };
+
+export function Navbar({ phone, socials }: { phone: string; socials: SocialLinks }) {
   const t = useTranslations("Navbar");
   const locale = useLocale() as Locale;
   const pathname = usePathname();
   const router = useRouter();
-  const { scrollY } = useScroll();
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(false);
-  const [overHero, setOverHero] = useState(true);
+  const reduceMotion = useReducedMotion();
+  const { openContact } = useContactDialog();
+  const [open, setOpen] = useState(false);
+  const isClient = useSyncExternalStore(subscribeToNothing, isClientSnapshot, isServerSnapshot);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocus = useRef(true);
+  const langRef = useRef<HTMLButtonElement>(null);
+  const menuLangRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem(LANG_FOCUS_KEY)) {
+        sessionStorage.removeItem(LANG_FOCUS_KEY);
+        const target = langRef.current?.offsetParent ? langRef.current : toggleRef.current;
+        target?.focus({ preventScroll: true });
+      }
+    } catch {}
+  }, [locale]);
 
   const isHome = pathname === "/";
   const firstSegment = pathname.split("/")[1] ?? "";
@@ -58,78 +88,64 @@ export function Navbar() {
     about: firstSegment === "about" || (firstSegment === "projects" && !portfolioProject),
   };
 
-  // Homepage on desktop: the header lies over the hero (transparent, ivory on hover/focus via
-  // .site-header[data-hero] in globals.css) until the hero has scrolled past.
-  const heroMode = isHome && isDesktop && overHero;
-  const solid = heroMode ? false : scrolled;
-
-  const syncOverHero = useCallback(() => {
-    const hero = document.querySelector("[data-hero-section]");
-    setOverHero(hero ? hero.getBoundingClientRect().bottom > HEADER_HEIGHT : false);
-  }, []);
-
-  useMotionValueEvent(scrollY, "change", (value) => {
-    setScrolled(value > 50);
-    if (isHome) syncOverHero();
-  });
-
+  // Open menu: page inert, no background scroll, Escape closes, Tab stays inside, focus returns.
   useEffect(() => {
-    const media = window.matchMedia(DESKTOP_MQ);
-    const sync = () => {
-      setIsDesktop(media.matches);
-      syncOverHero();
-    };
-    sync();
-    media.addEventListener("change", sync);
-    window.addEventListener("resize", syncOverHero);
-    return () => {
-      media.removeEventListener("change", sync);
-      window.removeEventListener("resize", syncOverHero);
-    };
-  }, [pathname, syncOverHero]);
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 768px)");
-    const closeOnDesktop = () => {
-      if (media.matches) setMobileOpen(false);
-    };
-
-    closeOnDesktop();
-    media.addEventListener("change", closeOnDesktop);
-    return () => media.removeEventListener("change", closeOnDesktop);
-  }, []);
-
-  useEffect(() => {
-    if (!mobileOpen) return;
-
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (!open) return;
+    restoreFocus.current = true;
+    const toggle = toggleRef.current;
+    const others = [...document.body.children].filter((node) => node !== panelRef.current) as HTMLElement[];
+    const wasInert = others.map((node) => node.inert);
+    others.forEach((node) => (node.inert = true));
+    const html = document.documentElement;
+    const previousOverflow = html.style.overflow;
+    html.style.overflow = "hidden";
+    const focusFirst = window.setTimeout(() => panelRef.current?.querySelector<HTMLElement>("[data-autofocus]")?.focus(), 30);
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMobileOpen(false);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const items = [...panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE)].filter((node) => node.offsetParent !== null);
+      if (items.length === 0) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
+    document.addEventListener("keydown", onKeyDown);
 
-    window.addEventListener("keydown", onKeyDown);
     return () => {
-      document.body.style.overflow = previous;
-      window.removeEventListener("keydown", onKeyDown);
+      window.clearTimeout(focusFirst);
+      document.removeEventListener("keydown", onKeyDown);
+      others.forEach((node, index) => (node.inert = wasInert[index]));
+      html.style.overflow = previousOverflow;
+      if (restoreFocus.current) toggle?.focus({ preventScroll: true });
     };
-  }, [mobileOpen]);
+  }, [open]);
 
-  // Service, case and other pages have their own demo form; otherwise go to the homepage form.
-  const goToDemo = useCallback(() => {
-    setMobileOpen(false);
-    const target = document.getElementById(DEMO_ID);
-    if (target) {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
-      return;
-    }
-    router.push(`/#${DEMO_ID}`);
-  }, [router]);
+  const close = useCallback(() => setOpen(false), []);
+  // Only platforms with a real URL in the site settings.
+  const socialLinks = [
+    { key: "instagram" as const, href: socials.instagramUrl, Icon: InstagramIcon },
+    { key: "linkedin" as const, href: socials.linkedinUrl, Icon: LinkedInIcon },
+    { key: "tiktok" as const, href: socials.tiktokUrl, Icon: TikTokIcon },
+  ].filter((link) => /^https?:\/\//.test(link.href?.trim() ?? ""));
+  const leave = useCallback(() => {
+    restoreFocus.current = false;
+    setOpen(false);
+  }, []);
 
   const goHome = useCallback(
     (event?: { preventDefault: () => void }) => {
-      setMobileOpen(false);
+      setOpen(false);
       if (isHome) {
         event?.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -138,229 +154,222 @@ export function Navbar() {
     [isHome],
   );
 
-  const contactGhostClass =
-    `box-border inline-flex h-8 shrink-0 items-center whitespace-nowrap justify-center rounded-full border border-glass-border bg-black/30 bg-clip-padding px-3.5 text-[11px] font-medium tracking-[0.08em] text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold ${FOCUS_RING}`;
+  // Menu → contact dialog: close the menu first; the dialog then takes over inert/scroll lock and
+  // returns focus to the menu button when it closes.
+  const discuss = () => {
+    setOpen(false);
+    openContact({ opener: toggleRef.current });
+  };
 
-  const brandLockup = (
-    <Link href="/" onClick={goHome} className={`flex min-w-0 items-center gap-2 rounded-sm sm:gap-2.5 ${FOCUS_RING}`}>
-      <span className="relative inline-flex shrink-0">
-        <Image
-          src="/logo.png"
-          alt="Monika Mal"
-          width={36}
-          height={36}
-          priority
-          data-logo-img
-          className="h-7 w-auto shrink-0 object-contain opacity-95"
-        />
-        <span
-          aria-hidden
-          data-logo-gold
-          className="pointer-events-none absolute inset-0 bg-gold opacity-0 [mask:url(/logo.png)_center/contain_no-repeat]"
-        />
-      </span>
-      <span data-brand-text className="whitespace-nowrap font-serif text-[0.95rem] tracking-wide text-stone-200 sm:text-lg">
-        {t("brand")}
-      </span>
+  // Same page in the other language (service/page slugs are translated; case studies and
+  // projects keep their slug).
+  const otherLocale: Locale = locale === "nl" ? "en" : "nl";
+  const switchLocale = () => {
+    persistLocale(otherLocale);
+    // The header re-mounts under the new locale: put focus back on the toggle afterwards.
+    try {
+      sessionStorage.setItem(LANG_FOCUS_KEY, "1");
+    } catch {}
+    router.replace(translatePath(pathname, otherLocale), { locale: otherLocale, scroll: false });
+  };
+
+  // NL ◯ EN; display:none (so also out of the tab order) where the other copy is shown.
+  const langToggle = (className: string, ref: RefObject<HTMLButtonElement | null>) => (
+          <button
+            ref={ref}
+            type="button"
+            onClick={switchLocale}
+            aria-label={t("languageSwitch")}
+            className={`group ${className} h-11 shrink-0 items-center gap-2 rounded-full px-2 text-sm ${FOCUS_RING}`}
+          >
+            <span lang="nl" aria-hidden className={locale === "nl" ? "text-ivory-strong" : "text-[#8d8a86] transition-colors group-hover:text-ivory"}>
+              NL
+            </span>
+            <span aria-hidden className="relative h-[18px] w-[32px] rounded-full border border-white/15 bg-white/[0.07]">
+              <span
+                className={`absolute top-[2px] left-[2px] h-3 w-3 rounded-full bg-ivory-strong shadow-[0_1px_3px_rgba(0,0,0,0.5)] transition-transform duration-300 motion-reduce:transition-none ${
+                  locale === "en" ? "translate-x-[14px]" : ""
+                }`}
+              />
+            </span>
+            <span lang="en" aria-hidden className={locale === "en" ? "text-ivory-strong" : "text-[#8d8a86] transition-colors group-hover:text-ivory"}>
+              EN
+            </span>
+          </button>
+  );
+
+  const current = (isActive: boolean) => (isActive ? ("page" as const) : undefined);
+  const bigLinks = [
+    { key: "work", href: "/portfolio", label: t("work"), isActive: active.work },
+    { key: "services", href: pagePath("hub", locale), label: t("services"), isActive: active.services },
+    { key: "process", href: pagePath("howItWorks", locale), label: t("process"), isActive: active.process },
+    { key: "about", href: "/about", label: t("about"), isActive: active.about },
+    { key: "contact", href: "/#contact", label: t("contact"), isActive: false },
+  ];
+
+  const brand = (
+    <Link href="/" onClick={goHome} className={`flex min-w-0 items-center gap-2.5 rounded-full ${FOCUS_RING}`}>
+      <Image src="/logo.png" alt="" width={36} height={36} priority className="h-7 w-auto shrink-0 object-contain opacity-95" />
+      <span className="font-serif text-[1.0625rem] whitespace-nowrap text-ivory-strong">{t("brand")}</span>
     </Link>
   );
 
-  const linkClass = (isActive: boolean, large = false) =>
-    large
-      ? `font-display rounded-sm text-3xl tracking-tight transition-colors ${FOCUS_RING} ${
-          isActive ? "text-gold" : "text-foreground"
-        }`
-      : `rounded-sm text-sm tracking-[0.04em] transition-colors ${FOCUS_RING} ${
-          isActive ? "text-gold" : "text-foreground/90 hover:text-gold"
-        }`;
+  const fade = (index: number) =>
+    reduceMotion
+      ? {}
+      : {
+          initial: { opacity: 0, y: 10 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.45, delay: 0.08 + index * 0.05, ease: [0.22, 1, 0.36, 1] as const },
+        };
 
-  const close = () => setMobileOpen(false);
-  const current = (isActive: boolean) => (isActive ? ("page" as const) : undefined);
+  const overlay = (
+    <AnimatePresence>
+      {open ? (
+        <motion.div
+          key="site-menu"
+          ref={panelRef}
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("navLabel")}
+          className="fixed inset-0 z-[70] overflow-y-auto overscroll-contain bg-[radial-gradient(90%_75%_at_0%_100%,rgba(32,53,43,0.8)_0%,rgba(32,53,43,0.28)_45%,transparent_78%),radial-gradient(55%_50%_at_100%_0%,rgba(41,37,31,0.55)_0%,transparent_72%),linear-gradient(160deg,#141a17_0%,#0b0e0d_55%)] text-ivory"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: reduceMotion ? 0 : 0.28 }}
+        >
+          <div className="mx-auto flex min-h-full w-full max-w-6xl flex-col px-5 pt-5 pb-[max(2rem,env(safe-area-inset-bottom))] sm:px-8 md:pt-6">
+            <div className="flex items-center justify-between gap-4">
+              {brand}
+              <button
+                type="button"
+                data-autofocus
+                onClick={close}
+                className={`inline-flex h-11 items-center gap-2 rounded-full border border-white/20 px-4 text-base text-ivory transition-colors hover:border-gold/70 hover:text-gold ${FOCUS_RING}`}
+              >
+                {t("closeMenu")} <X className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+              </button>
+            </div>
 
-  const serviceLinks = SERVICE_KEYS.map((key) => ({
-    key,
-    href: servicePath(key, locale),
-    label: t(SERVICE_LABEL_KEYS[key]),
-    isActive: route?.kind === "service" && route.key === key,
-  }));
+            <div className="mt-10 grid flex-1 gap-12 md:mt-16 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] lg:gap-20">
+              <nav aria-label={t("navLabel")}>
+                <ul className="space-y-1 md:space-y-2">
+                  {bigLinks.map((link, index) => (
+                    <motion.li key={link.key} {...fade(index)}>
+                      <Link
+                        href={link.href}
+                        onClick={leave}
+                        aria-current={current(link.isActive)}
+                        className={`font-display inline-block rounded-sm text-[clamp(2.4rem,7vw,4.5rem)] leading-[1.08] font-light tracking-tight transition-colors ${FOCUS_RING} ${
+                          link.isActive ? "text-gold" : "text-ivory-strong hover:text-gold"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.li>
+                  ))}
+                </ul>
+              </nav>
 
-  const navItems = (large: boolean) => (
-    <>
-      <Link href="/portfolio" onClick={close} aria-current={current(active.work)} data-nav-link={large ? undefined : ""} className={linkClass(active.work, large)}>
-        {t("work")}
-      </Link>
-      {large ? (
-        <div className="flex flex-col items-center gap-3">
-          <Link href={pagePath("hub", locale)} onClick={close} aria-current={current(active.services)} className={linkClass(active.services, true)}>
-            {t("services")}
-          </Link>
-          <ul className="flex flex-col items-center gap-2">
-            {serviceLinks.map((item) => (
-              <li key={item.key}>
-                <Link
-                  href={item.href}
-                  onClick={close}
-                  aria-current={current(item.isActive)}
-                  className={`text-base transition-colors ${item.isActive ? "text-gold" : "text-foreground-muted hover:text-foreground"}`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        // Understated dropdown on hover/focus; clicking the label itself opens the hub page.
-        <div className="group relative">
-          <Link
-            href={pagePath("hub", locale)}
-            aria-current={current(active.services)}
-            data-nav-link
-            className={`inline-flex items-center gap-1 ${linkClass(active.services)}`}
-          >
-            {t("services")}
-            <ChevronDown
-              className="h-3.5 w-3.5 opacity-60 transition-transform duration-200 group-focus-within:rotate-180 group-hover:rotate-180"
-              strokeWidth={1.5}
-              aria-hidden
-            />
-          </Link>
-          <div className="invisible absolute top-full left-1/2 z-50 -translate-x-1/2 pt-3 opacity-0 transition-opacity duration-200 group-focus-within:visible group-focus-within:opacity-100 group-hover:visible group-hover:opacity-100">
-            <ul
-              aria-label={t("servicesMenuLabel")}
-              data-nav-dropdown
-              className="min-w-52 rounded-xl border border-glass-border bg-graphite/95 p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.45)] backdrop-blur-md"
-            >
-              {serviceLinks.map((item) => (
-                <li key={item.key}>
-                  <Link
-                    href={item.href}
-                    aria-current={current(item.isActive)}
-                    data-nav-dropdown-link
-                    className={`block rounded-lg px-3 py-2.5 text-sm whitespace-nowrap transition-colors hover:bg-white/[0.06] focus-visible:bg-white/[0.06] focus-visible:outline-none ${item.isActive ? "text-gold" : "text-foreground/90 hover:text-gold focus-visible:text-gold"}`}
+              <motion.div className="flex flex-col gap-10 lg:pt-4" {...fade(bigLinks.length)}>
+                <div>
+                  <p className="text-sm tracking-[0.04em] text-gold">{t("servicesMenuLabel")}</p>
+                  <ul className="mt-3 border-t border-white/12">
+                    {SERVICE_KEYS.map((key) => (
+                      <li key={key} className="border-b border-white/12">
+                        <Link
+                          href={servicePath(key, locale)}
+                          onClick={leave}
+                          aria-current={current(route?.kind === "service" && route.key === key)}
+                          className={`group flex items-center justify-between gap-4 rounded-sm py-3.5 text-lg text-ivory transition-colors hover:text-gold aria-[current=page]:text-gold ${FOCUS_RING}`}
+                        >
+                          {t(SERVICE_LABEL_KEYS[key])}{" "}
+                          <ArrowRight className="h-4 w-4 shrink-0 opacity-70 transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none" strokeWidth={1.5} aria-hidden />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="font-display max-w-sm text-2xl leading-snug font-light text-ivory-strong">{t("phrase")}</p>
+
+                <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                  <button
+                    type="button"
+                    onClick={discuss}
+                    className={`inline-flex h-12 items-center justify-center gap-2 rounded-full bg-ivory-strong px-6 text-base text-[#241018] transition-colors hover:bg-white ${FOCUS_RING}`}
                   >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                    {t("discuss")} <ArrowRight className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+                  </button>
+                  <a
+                    href={`tel:+${phone}`}
+                    className={`inline-flex h-12 items-center justify-center gap-2 rounded-full border border-white/25 px-6 text-base text-ivory transition-colors hover:border-gold/70 hover:text-gold ${FOCUS_RING}`}
+                  >
+                    <Phone className="h-4 w-4" strokeWidth={1.5} aria-hidden /> {t("call")}
+                  </a>
+                </div>
+
+                {socialLinks.length > 0 ? (
+                  <div>
+                    <p className="text-sm tracking-[0.04em] text-gold">{t("follow")}</p>
+                    <ul className="mt-3 flex flex-wrap gap-2">
+                      {socialLinks.map(({ key, href, Icon }) => (
+                        <li key={key}>
+                          <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={`inline-flex h-11 items-center gap-2 rounded-full border border-white/15 px-4 text-base text-ivory transition-colors hover:border-white/45 hover:text-ivory-strong ${FOCUS_RING}`}
+                          >
+                            <Icon className="h-4 w-4" aria-hidden /> {t(key)}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+
+                {/* Mobile only: on wider screens the toggle sits in the header pill. */}
+                <div className="flex items-center gap-3 border-t border-white/12 pt-5 md:hidden">
+                  <span className="text-sm tracking-[0.04em] text-gold">{t("language")}</span>
+                  {langToggle("inline-flex -ml-2 text-base", menuLangRef)}
+                </div>
+              </motion.div>
+            </div>
           </div>
-        </div>
-      )}
-      <Link href={pagePath("howItWorks", locale)} onClick={close} aria-current={current(active.process)} data-nav-link={large ? undefined : ""} className={linkClass(active.process, large)}>
-        {t("process")}
-      </Link>
-      <Link href="/about" onClick={close} aria-current={current(active.about)} data-nav-link={large ? undefined : ""} className={linkClass(active.about, large)}>
-        {t("about")}
-      </Link>
-    </>
+        </motion.div>
+      ) : null}
+    </AnimatePresence>
   );
 
   return (
     <>
-      <motion.header
-        className="site-header fixed inset-x-0 top-0 z-50"
-        data-hero={heroMode ? "" : undefined}
-        initial={false}
-        animate={{
-          backgroundColor: solid ? "rgba(20, 7, 12, 0.8)" : "rgba(20, 7, 12, 0)",
-          borderBottomColor: solid
-            ? "rgba(245, 235, 232, 0.12)"
-            : "rgba(245, 235, 232, 0)",
-          backdropFilter: solid ? "blur(12px)" : "blur(0px)",
-        }}
-        transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        style={{ borderBottomWidth: 1 }}
-      >
-        <div className="mx-auto grid h-16 w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 sm:px-6 md:h-[4.25rem] md:grid-cols-[auto_minmax(0,1fr)_auto] md:px-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:px-12">
-          {brandLockup}
-
-          {/* Tablet: sits in the middle grid column; desktop: centered in the bar. */}
-          <nav
-            aria-label={t("navLabel")}
-            className="hidden items-center justify-center gap-5 md:flex lg:absolute lg:left-1/2 lg:-translate-x-1/2 lg:gap-8"
+      <header className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 md:pt-4">
+        <div className="pointer-events-auto flex h-14 w-full max-w-[52rem] items-center justify-between gap-2 rounded-full border border-white/15 bg-[rgba(11,14,13,0.92)] py-1.5 pr-1.5 pl-4 shadow-[0_12px_40px_rgba(0,0,0,0.45)] backdrop-blur-md sm:gap-4 sm:pl-5">
+          {brand}
+          {/* Section / page caption; gives way first when space runs out (hidden below md, truncated above). */}
+          <NavCaption className="hidden min-w-0 flex-1 truncate text-center text-[0.9375rem] text-ivory/80 md:block" />
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          {langToggle("hidden md:inline-flex", langRef)}
+          <button
+            ref={toggleRef}
+            type="button"
+            aria-haspopup="dialog"
+            aria-expanded={open}
+            aria-label={t("openMenu")}
+            onClick={() => setOpen(true)}
+            className={`inline-flex h-11 shrink-0 items-center gap-2.5 rounded-full bg-ivory-strong/95 px-4 text-base sm:px-5 text-[#241018] transition-colors hover:bg-white ${FOCUS_RING}`}
           >
-            {navItems(false)}
-          </nav>
-
-          <div className="flex shrink-0 items-center justify-end">
-            <div className="hidden items-center justify-end gap-3 md:flex">
-              <LanguageSwitcher className="relative z-10" />
-              <button
-                type="button"
-                onClick={() => goToDemo()}
-                data-header-cta
-                className={contactGhostClass}
-              >
-                {t("demoCta")}
-              </button>
-            </div>
-
-            <div className="flex items-center justify-end gap-2 md:hidden">
-              <button
-                type="button"
-                onClick={() => goToDemo()}
-                className={contactGhostClass}
-              >
-                {t("demoCta")}
-              </button>
-              <button
-                type="button"
-                aria-label={t("openMenu")}
-                aria-expanded={mobileOpen}
-                onClick={() => setMobileOpen(true)}
-                className={`box-border inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/20 bg-black/30 bg-clip-padding text-white backdrop-blur-md transition-[border-color,color,background-color] duration-300 hover:bg-black/45 hover:text-gold ${FOCUS_RING}`}
-              >
-                <Menu className="h-4 w-4" strokeWidth={1.5} />
-              </button>
-            </div>
+            {t("menu")}
+            <span aria-hidden className="flex flex-col gap-[3px]">
+              <span className="block h-px w-4 bg-current" />
+              <span className="block h-px w-4 bg-current" />
+            </span>
+          </button>
           </div>
         </div>
-      </motion.header>
-
-      <AnimatePresence>
-        {mobileOpen ? (
-          <motion.div
-            key="mobile-nav"
-            role="dialog"
-            aria-modal="true"
-            aria-label={t("navLabel")}
-            className="fixed inset-0 z-[60] flex flex-col bg-graphite/98 backdrop-blur-md md:hidden"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <div className="flex items-center justify-between gap-3 px-4 py-5 sm:px-6">
-              {brandLockup}
-              <button
-                type="button"
-                aria-label={t("closeMenu")}
-                onClick={() => setMobileOpen(false)}
-                className={`inline-flex h-10 w-10 items-center justify-center rounded-full border border-glass-border bg-graphite text-foreground ${FOCUS_RING}`}
-              >
-                <X className="h-5 w-5" strokeWidth={1.5} />
-              </button>
-            </div>
-
-            <nav className="flex flex-1 flex-col items-center justify-center px-6 pb-12">
-              <div className="flex flex-col items-center gap-7">
-                {navItems(true)}
-              </div>
-              <button
-                type="button"
-                onClick={() => goToDemo()}
-                className={`mt-10 inline-flex items-center justify-center rounded-full border border-gold/60 ${FOCUS_RING} bg-gold/10 px-9 py-3.5 text-sm font-medium tracking-[0.12em] text-gold uppercase transition-[border-color,background-color,box-shadow] duration-300 hover:border-gold hover:bg-gold/15 hover:shadow-[0_0_22px_rgba(212,175,55,0.28)]`}
-              >
-                {t("demoCta")}
-              </button>
-              <div className="mt-8">
-                <LanguageSwitcher />
-              </div>
-            </nav>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+      </header>
+      {isClient ? createPortal(overlay, document.body) : null}
     </>
   );
 }

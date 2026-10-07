@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent, type Ref } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type MouseEvent, type Ref } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
-import { Play, Volume2, VolumeX, X } from "lucide-react";
+import { Pause, Play, Volume2, VolumeX, X } from "lucide-react";
 import { ProtectedImage } from "@/components/ProtectedImage";
 import { ProtectedVideo } from "@/components/ProtectedVideo";
 import { isPlayableVideoUrl, sizedImageUrl } from "@/lib/sanity-media";
@@ -16,7 +17,7 @@ import {
 import { videoControlButtonClass } from "@/components/videoControlStyles";
 import { Link } from "@/i18n/navigation";
 
-type PortfolioItem = {
+export type PortfolioItem = {
   id: string;
   title: string;
   contentType: ContentType;
@@ -24,7 +25,6 @@ type PortfolioItem = {
   format: string;
   caseSlug?: string | null;
   projectSlug?: string;
-  featuredOrder?: number | null;
   year: string;
   mediaType: PortfolioType;
   imageUrl: string | null;
@@ -56,7 +56,7 @@ const FILTERS: { id: FilterId; labelKey: "filterAll" | "filterUgc" | "filterAi" 
     { id: "productContent", labelKey: "filterProduct" },
   ];
 
-const TYPE_LABEL_KEYS: Record<ContentType, "typeUgc" | "typeAiCommercial" | "typeProductContent"> = {
+export const TYPE_LABEL_KEYS: Record<ContentType, "typeUgc" | "typeAiCommercial" | "typeProductContent"> = {
   ugc: "typeUgc",
   aiCommercial: "typeAiCommercial",
   productContent: "typeProductContent",
@@ -142,7 +142,9 @@ function PortfolioMedia({
   return <div className={`bg-[#0d0509] ${className}`} aria-hidden />;
 }
 
-function PortfolioModal({
+const subscribeNever = () => () => {};
+
+export function PortfolioModal({
   item,
   title,
   onClose,
@@ -160,10 +162,15 @@ function PortfolioModal({
   const isVideo = item.mediaType === "video" && Boolean(videoUrl);
   const [isPaused, setIsPaused] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [failed, setFailed] = useState(false);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const isClient = useSyncExternalStore(subscribeNever, () => true, () => false);
 
   useEffect(() => {
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Keyboard users land on "Close"; the opener gets focus back when the player closes.
+    closeRef.current?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
@@ -219,7 +226,10 @@ function PortfolioModal({
     setIsMuted(next);
   };
 
-  return (
+  // Portalled to <body>: inside a section it would sit in that section's stacking context, and the
+  // sections after it (also z-20) would paint over the lower part of the player and its controls.
+  if (!isClient) return null;
+  return createPortal(
     <motion.div
       role="dialog"
       aria-modal="true"
@@ -232,6 +242,7 @@ function PortfolioModal({
       onClick={onClose}
     >
       <button
+        ref={closeRef}
         type="button"
         onClick={onClose}
         aria-label={closeLabel}
@@ -253,7 +264,12 @@ function PortfolioModal({
         onClick={isVideo ? togglePlay : (event) => event.stopPropagation()}
         onDragStart={(event) => event.preventDefault()}
       >
-        {isVideo && videoUrl ? (
+        {isVideo && videoUrl && failed ? (
+          // Clear message instead of an empty player when the file cannot be loaded.
+          <div role="alert" className="flex h-full w-full items-center justify-center p-8 text-center text-base text-ivory">
+            {t("videoError")}
+          </div>
+        ) : isVideo && videoUrl ? (
           <>
             <ProtectedVideo
               ref={videoRef}
@@ -268,6 +284,7 @@ function PortfolioModal({
               className={`pointer-events-none h-full w-full rounded-2xl object-cover ${videoHiddenNativeControls}`}
               onPlay={() => setIsPaused(false)}
               onPause={() => setIsPaused(true)}
+              onError={() => setFailed(true)}
             />
 
             {isPaused ? (
@@ -278,6 +295,18 @@ function PortfolioModal({
               </span>
             ) : null}
 
+            <button
+              type="button"
+              onClick={(event) => togglePlay(event)}
+              aria-label={isPaused ? t("play") : t("pause")}
+              className={`absolute bottom-3 left-3 z-20 h-11 w-11 ${videoControlButtonClass}`}
+            >
+              {isPaused ? (
+                <Play className="ml-0.5 h-5 w-5 fill-current" strokeWidth={1.25} />
+              ) : (
+                <Pause className="h-5 w-5" strokeWidth={1.5} />
+              )}
+            </button>
             <button
               type="button"
               onClick={toggleMute}
@@ -301,7 +330,8 @@ function PortfolioModal({
           />
         )}
       </motion.div>
-    </motion.div>
+    </motion.div>,
+    document.body,
   );
 }
 
@@ -397,7 +427,7 @@ function PortfolioCard({
       </div>
 
       <div className="mt-3 w-full shrink-0 text-center">
-        <p className="text-[10px] font-medium tracking-[0.18em] text-gray-300 uppercase">
+        <p className="text-xs tracking-[0.04em] text-gray-300">
           {t(TYPE_LABEL_KEYS[item.contentType])}
         </p>
         {meta ? (
@@ -414,7 +444,7 @@ function PortfolioCard({
           <Link
             href={`/portfolio/${item.caseSlug}`}
             // 44px touch target; the negative margins keep the text where the 17px-high link sat before.
-            className="-mt-1.5 -mb-3 inline-flex min-h-11 items-center gap-1.5 px-3 text-[11px] font-medium tracking-[0.16em] text-gold uppercase underline-offset-[5px] hover:underline"
+            className="-mt-1.5 -mb-3 inline-flex min-h-11 items-center gap-1.5 px-3 text-sm text-gold underline-offset-[5px] hover:underline"
           >
             {t("viewCase")} <span aria-hidden>→</span>
           </Link>
@@ -425,21 +455,18 @@ function PortfolioCard({
   );
 }
 
+/** Full portfolio page (/portfolio, /projects/[slug]): filters, grid and per-video deep links. */
 export function CommercialPortfolio({
   items,
-  preview,
   initialProjectSlug,
 }: {
   items: PortfolioItem[];
-  /** Homepage "selected work": first N of the curated order, no filters, link to the full portfolio page. */
-  preview?: { limit: number; label: string; ctaLabel: string };
   /** /projects/[slug] deep link: open this video on load. */
   initialProjectSlug?: string;
 }) {
   const t = useTranslations("Portfolio");
   const locale = useLocale();
   const [filter, setFilter] = useState<FilterId>("all");
-  const deepLinks = !preview;
   const findBySlug = useCallback(
     (slug: string | null | undefined) =>
       (slug && items.find((item) => item.projectSlug === slug && hasDeepLink(item))) || null,
@@ -451,46 +478,36 @@ export function CommercialPortfolio({
 
   // Back / Forward between /portfolio and /projects/[slug] closes or reopens the video.
   useEffect(() => {
-    if (!deepLinks) return;
     const onPopState = () => {
       steppingBack.current = false;
       setActive(findBySlug(projectSlugFromPath(window.location.pathname)));
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, [deepLinks, findBySlug]);
+  }, [findBySlug]);
 
   // Hide filters without projects (e.g. UGC until real UGC work is added) instead of showing an empty state.
   const visibleFilters = FILTERS.filter(
     (tab) => tab.id === "all" || (items ?? []).some((item) => item.contentType === tab.id),
   );
 
-  // "Alles" uses the curated featuredOrder (deterministic, set in Studio); category filters keep
-  // the CMS display order. Unnumbered items follow in display order (stable sort).
-  const curated = [...(items ?? [])].sort(
-    (a, b) => (a.featuredOrder ?? Infinity) - (b.featuredOrder ?? Infinity),
-  );
-  const visibleItems = preview
-    ? curated.slice(0, preview.limit)
-    : filter === "all"
-      ? [...(items ?? [])].sort(
-          (a, b) => (a.featuredOrder ?? Infinity) - (b.featuredOrder ?? Infinity),
-        )
-      : (items ?? []).filter((item) => item.contentType === filter);
+  // Items arrive newest first (PORTFOLIO_ORDER); "All" and every category keep that order.
+  const visibleItems =
+    filter === "all" ? (items ?? []) : (items ?? []).filter((item) => item.contentType === filter);
 
   const openItem = useCallback(
     (item: PortfolioItem) => {
       setActive(item);
-      if (deepLinks && hasDeepLink(item)) {
+      if (hasDeepLink(item)) {
         window.history.pushState({ portfolioWork: item.projectSlug }, "", `/${locale}/projects/${item.projectSlug}`);
       }
     },
-    [deepLinks, locale],
+    [locale],
   );
 
   const closeItem = useCallback(() => {
     setActive(null);
-    if (!deepLinks || !projectSlugFromPath(window.location.pathname)) return;
+    if (!projectSlugFromPath(window.location.pathname)) return;
     // Opened from this page: step back to /portfolio, so Forward reopens the video.
     if (window.history.state?.portfolioWork) {
       if (steppingBack.current) return;
@@ -500,7 +517,7 @@ export function CommercialPortfolio({
     }
     // Arrived directly on /projects/[slug]: show the portfolio URL in place of the deep link.
     window.history.replaceState(null, "", `/${locale}/portfolio`);
-  }, [deepLinks, locale]);
+  }, [locale]);
 
   const selectFilter = useCallback((next: FilterId) => {
     setFilter(next);
@@ -515,15 +532,14 @@ export function CommercialPortfolio({
       >
         <div className="mx-auto max-w-7xl">
           <header className="relative z-20 mb-8 flex flex-col items-center gap-6 rounded-xl text-center backdrop-blur-sm md:mb-10 md:flex-row md:items-center md:justify-between md:text-left">
-            <p className="text-xs tracking-[0.28em] text-gold uppercase md:text-sm">
-              {preview?.label ?? t("label")}
+            <p className="text-sm tracking-[0.04em] text-gold">
+              {t("label")}
             </p>
 
-            {preview ? null : (
             <div
               role="tablist"
               aria-label={t("filterLabel")}
-              className="grid w-full max-w-[20rem] shrink-0 grid-cols-2 gap-1 rounded-2xl border border-glass-border bg-graphite p-1 sm:inline-flex sm:w-auto sm:max-w-none sm:gap-0 sm:rounded-full"
+              className="grid w-full max-w-[20rem] shrink-0 grid-cols-2 gap-1 rounded-2xl border border-white/12 bg-white/[0.04] p-1 sm:inline-flex sm:w-auto sm:max-w-none sm:gap-0 sm:rounded-full"
             >
               {visibleFilters.map((tab) => {
                 const selected = filter === tab.id;
@@ -536,16 +552,16 @@ export function CommercialPortfolio({
                     aria-controls="portfolio-grid"
                     id={`portfolio-tab-${tab.id}`}
                     onClick={() => selectFilter(tab.id)}
-                    className={`relative cursor-pointer whitespace-nowrap rounded-full px-3 py-2 odd:last:col-span-2 text-[11px] font-medium tracking-[0.12em] uppercase transition-colors duration-300 sm:px-4 sm:text-xs md:px-5 ${
+                    className={`relative cursor-pointer whitespace-nowrap rounded-full px-3 py-2 odd:last:col-span-2 text-sm tracking-[0.02em] transition-colors duration-300 sm:px-4 md:px-5 ${
                       selected
-                        ? "text-gold"
+                        ? "text-ivory-strong"
                         : "text-foreground-muted hover:text-foreground"
                     }`}
                   >
                     {selected ? (
                       <motion.span
                         layoutId="portfolio-filter-pill"
-                        className="absolute inset-0 rounded-full border border-gold bg-gold/10 shadow-[0_0_10px_rgba(212,175,55,0.15)]"
+                        className="absolute inset-0 rounded-full border border-white/20 bg-white/[0.09]"
                         transition={{ type: "spring", stiffness: 380, damping: 32 }}
                       />
                     ) : null}
@@ -554,43 +570,32 @@ export function CommercialPortfolio({
                 );
               })}
             </div>
-            )}
           </header>
 
           <div
             id="portfolio-grid"
-            role={preview ? undefined : "tabpanel"}
-            aria-labelledby={preview ? undefined : `portfolio-tab-${filter}`}
+            role="tabpanel"
+            aria-labelledby={`portfolio-tab-${filter}`}
           >
             <div className="grid grid-cols-1 justify-items-center gap-x-3 gap-y-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4 lg:gap-y-6">
               {visibleItems.map((item) => (
                 <PortfolioCard key={item.id} item={item} onOpen={openItem} />
               ))}
             </div>
-            {preview ? (
-              <div className="mt-10 flex justify-center">
-                <Link
-                  href="/portfolio"
-                  className="inline-flex items-center gap-2 rounded-full border border-gold/50 px-7 py-3 text-xs font-medium tracking-widest text-gold uppercase transition-colors hover:border-gold hover:bg-gold/10 focus-visible:ring-2 focus-visible:ring-gold/40 focus-visible:outline-none"
-                >
-                  {preview.ctaLabel} <span aria-hidden>→</span>
-                </Link>
-              </div>
-            ) : null}
             {visibleItems.length === 0 ? (
               <div className="mx-auto flex max-w-md flex-col items-center py-16 text-center">
                 <p className="text-base leading-relaxed text-foreground-muted">
                   {t("empty")}
                 </p>
                 <a
-                  href="#gratis-demo"
+                  href="#kennismaking"
                   onClick={(event) => {
-                    const target = document.getElementById("gratis-demo");
+                    const target = document.getElementById("kennismaking");
                     if (!target) return;
                     event.preventDefault();
                     target.scrollIntoView({ behavior: "smooth", block: "start" });
                   }}
-                  className="mt-5 text-xs font-medium tracking-[0.16em] text-gold uppercase underline-offset-[6px] transition-colors duration-300 hover:text-foreground hover:underline"
+                  className="mt-5 text-base text-gold underline-offset-[6px] transition-colors duration-300 hover:text-ivory-strong hover:underline"
                 >
                   {t("emptyCta")} <span aria-hidden>→</span>
                 </a>

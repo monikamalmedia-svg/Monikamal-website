@@ -1,20 +1,18 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import { Newsreader } from "next/font/google";
 import { getLocale } from "next-intl/server";
 import { SITE_URL } from "@/lib/site";
 import { CSPostHogProvider } from "./providers";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+// One typeface for the whole site: a high-contrast serif with an optical-size axis, so small
+// text automatically gets the sturdier text cut and large headings the fine display cut.
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin", "latin-ext"],
-});
-
-const cormorant = Cormorant_Garamond({
-  variable: "--font-cormorant",
-  subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  axes: ["opsz"],
 });
 
 type Props = {
@@ -52,10 +50,10 @@ export default async function RootLayout({ children }: Props) {
   return (
     <html
       lang={locale}
-      className={`${manrope.variable} ${cormorant.variable} h-full min-h-screen antialiased`}
+      className={`${newsreader.variable} h-full min-h-screen antialiased`}
     >
       <body
-        className={`${manrope.variable} ${cormorant.variable} flex min-h-full flex-col bg-background font-sans text-foreground`}
+        className={`${newsreader.variable} flex min-h-full flex-col bg-background font-sans text-foreground`}
       >
         <CSPostHogProvider>
           {children}

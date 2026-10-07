@@ -8,12 +8,14 @@ import { CursorSpotlightGrid } from "@/components/CursorSpotlightGrid";
 import { DisableRightClick } from "@/components/DisableRightClick";
 import { FilmGrainOverlay } from "@/components/FilmGrainOverlay";
 import { Footer } from "@/components/Footer";
+import { HtmlLang } from "@/components/HtmlLang";
 import { Navbar } from "@/components/Navbar";
 import { ScrollRoot } from "@/components/ScrollRoot";
-import { SelectedPackageProvider } from "@/context/SelectedPackageContext";
+import { ContactDialogProvider } from "@/components/ContactDialog";
 import { CookieConsentProvider } from "@/context/CookieConsentContext";
 import { routing } from "@/i18n/routing";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { fetchSiteSettings } from "@/lib/cms-site-settings";
+import { INQUIRY_EMAIL, SITE_NAME, SITE_URL } from "@/lib/site";
 
 type Props = {
   children: React.ReactNode;
@@ -82,16 +84,21 @@ export default async function LocaleLayout({ children, params }: Props) {
   }
 
   setRequestLocale(locale);
+  const settings = await fetchSiteSettings();
 
   return (
     <NextIntlClientProvider>
-      <SelectedPackageProvider>
+      <ContactDialogProvider email={settings.contactEmail ?? INQUIRY_EMAIL}>
         <CookieConsentProvider>
           <DisableRightClick>
             <ScrollRoot>
+              <HtmlLang />
               <FilmGrainOverlay />
               <CursorSpotlightGrid />
-              <Navbar />
+              <Navbar
+                phone={settings.whatsappNumber}
+                socials={{ instagramUrl: settings.instagramUrl, linkedinUrl: settings.linkedinUrl, tiktokUrl: settings.tiktokUrl }}
+              />
               <div className="relative z-20 isolate flex flex-1 flex-col">{children}</div>
               <Footer />
               <CookieBanner />
@@ -99,7 +106,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             </ScrollRoot>
           </DisableRightClick>
         </CookieConsentProvider>
-      </SelectedPackageProvider>
+      </ContactDialogProvider>
     </NextIntlClientProvider>
   );
 }
